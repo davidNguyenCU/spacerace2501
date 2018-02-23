@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Player *playerEntity)
-	: GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), player(playerEntity)
+	: Ship(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), player(playerEntity)
 {
 }
 

@@ -151,22 +151,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameEntity.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Hazard.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="MachineBullet.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="RocketBullet.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="SpeedBoost.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameEntity.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Hazard.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MachineBullet.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PowerUp.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="RocketBullet.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="SpeedBoost.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

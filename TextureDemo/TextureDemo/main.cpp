@@ -162,7 +162,7 @@ int main(void){
 
 		// Set event callbacks
 		glfwSetKeyCallback(window.getWindow(), KeyCallback);
-		glfwSetFramebufferSizeCallback(window.getWindow(), ResizeCallback);
+		//glfwSetFramebufferSizeCallback(window.getWindow(), ResizeCallback);
 
 		setallTexture();
 
