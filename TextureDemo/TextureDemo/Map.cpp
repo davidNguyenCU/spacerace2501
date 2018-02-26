@@ -5,6 +5,7 @@ Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 {
 }
 //Arbitrary Comment
+//Second arbitrary comment
 void Map::update(double deltaTime) {
 	position.x = 0.8f * sin(glfwGetTime());
 }
