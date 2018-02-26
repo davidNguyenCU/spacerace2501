@@ -4,7 +4,7 @@ Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmoun
 	: GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 }
-
+//Arbitrary Comment
 void Map::update(double deltaTime) {
 	position.x = 0.8f * sin(glfwGetTime());
 }
