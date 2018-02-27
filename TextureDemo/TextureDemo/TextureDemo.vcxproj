@@ -165,6 +165,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="RenderedObject.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RocketBullet.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="MachineBullet.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="RenderedObject.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="ResourceManager.h" />

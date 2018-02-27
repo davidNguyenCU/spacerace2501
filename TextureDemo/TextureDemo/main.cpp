@@ -15,6 +15,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "HUD.h"
+#include "GameManager.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -34,6 +36,9 @@ bool PRESSING_FORWARD;
 bool PRESSING_BACK;
 bool PRESSING_BASH_R;
 bool PRESSING_BASH_L;
+
+bool PRESSING_SHOOT_GUN;
+bool PRESSING_SHOOT_ROCKET;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -94,10 +99,11 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[3];
-	glGenTextures(3, tex);
+	glGenTextures(4, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
+	setthisTexture(tex[3], "crosshairs.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -167,8 +173,18 @@ int main(void){
 		setallTexture();
 
 		// Setup game objects
+
+		//GameManager * gameManager = new GameManager();
+		GameManager gameManager = GameManager::GameManager(shader, size);
+		gameManager.setTextures(tex[3]);
+
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
 		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+
+		Enemy enemies[] = { enemy };
+		
+		gameManager.setPlayer(&player);
+		gameManager.setEnemies(enemies);
 
         // Run the main loop
         bool animating = 1;
@@ -185,6 +201,7 @@ int main(void){
 			glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
 			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
+			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
 			// Update entities
 			double currentTime = glfwGetTime();
@@ -192,10 +209,12 @@ int main(void){
 			lastTime = currentTime;
 			player.update(deltaTime);
 			enemy.update(deltaTime);
+			gameManager.updateUI();
 
 			// Render entities
 			player.render(shader);
 			enemy.render(shader);
+			gameManager.renderAll(shader);
 			
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 
