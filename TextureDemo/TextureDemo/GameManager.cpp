@@ -34,6 +34,20 @@ void GameManager::setTextures(GLuint& mouseTex) {
 }
 
 void GameManager::renderAll(Shader& shader) {
-	std::cout << "Mouse: (" << mouseX << "," << mouseY << ")" << std::endl;
+	//std::cout << "Mouse: (" << mouseX << "," << mouseY << ")" << std::endl;
 	mousePointerTexture.render(glm::vec3(mouseX, mouseY, 0.0f), mouseScale, 0.0f, squareGeometry, shader);
+}
+
+void GameManager::playerShoot(bool readyGun, bool readyRocket) {
+	Ship::GunType currentGun = player->getCurrentGun();
+	glm::vec2 target = glm::vec2(mouseX, mouseY);
+
+	//std::cout << "Pressing down: " << pressingDown << "Holding down" << holdingDown << std::endl;
+
+	if (readyRocket /*&& currentGun == Ship::Rocket*/) {
+		player->shootRocket(target);
+	}
+	else if (readyGun /*&& currentGun == Ship::MachineGun*/) {
+		player->shootGun(target);
+	}
 }

@@ -11,7 +11,7 @@ RenderedObject::RenderedObject(GLuint& aTexture)
 }
 
 void RenderedObject::render(glm::vec3 position, glm::vec3 scale, float rotationAmount, float numElements, Shader& shader) {
-	std::cout << "Render" << std::endl;
+	//std::cout << "Render" << std::endl;
 	glBindTexture(GL_TEXTURE_2D, *texture);
 
 	// Setup the transformation matrix for the shader 

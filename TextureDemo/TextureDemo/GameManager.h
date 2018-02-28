@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "HUD.h"
 #include "RenderedObject.h"
+#include "Ship.h"
 
 class GameManager {
 public:
@@ -12,10 +13,11 @@ public:
 	void setPlayer(Player * player);
 	void setEnemies(Enemy * enemies);
 	void setMousePos(float aMouseX, float aMouseY);
+
+	void playerShoot(bool pressingDown, bool holdingDown);
+
 	void setTextures(GLuint& mouseTexture);
-
 	void updateUI();
-
 	void renderAll(Shader& shader);
 
 private:

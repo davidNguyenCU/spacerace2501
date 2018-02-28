@@ -37,8 +37,12 @@ bool PRESSING_BACK;
 bool PRESSING_BASH_R;
 bool PRESSING_BASH_L;
 
+/*bool PRESSING_SHOOT_GUN_DOWN;
+bool PRESSING_SHOOT_GUN_HOLD;*/
+
 bool PRESSING_SHOOT_GUN;
 bool PRESSING_SHOOT_ROCKET;
+bool PRESSING_SWITCH_WEAPONS;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -115,36 +119,16 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		PRESSING_FORWARD = true;
-	}
-	else {
-		PRESSING_FORWARD = false;
-	}
-
-	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		PRESSING_BACK = true;
-	}
-	else {
-		PRESSING_BACK = false;
-	}
-
-	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		PRESSING_BASH_R = true;
-	}
-	else {
-		PRESSING_BASH_R = false;
-	}
-
-	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		PRESSING_BASH_L = true;
-	}
-	else {
-		PRESSING_BASH_L = false;
-	}
+	PRESSING_FORWARD = (key == GLFW_KEY_W && action == GLFW_PRESS);
+	PRESSING_BACK = (key == GLFW_KEY_S && action == GLFW_PRESS);
+	PRESSING_BASH_R = (key == GLFW_KEY_D && action == GLFW_PRESS);
+	PRESSING_BASH_L = (key == GLFW_KEY_A && action == GLFW_PRESS);
 }
 
-
+void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+	PRESSING_SHOOT_GUN = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
+	PRESSING_SHOOT_ROCKET = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
+}
 
 // Main function that builds and runs the game
 int main(void){
@@ -168,6 +152,7 @@ int main(void){
 
 		// Set event callbacks
 		glfwSetKeyCallback(window.getWindow(), KeyCallback);
+		glfwSetMouseButtonCallback(window.getWindow(), mouseButtonCallback);
 		//glfwSetFramebufferSizeCallback(window.getWindow(), ResizeCallback);
 
 		setallTexture();
@@ -202,6 +187,9 @@ int main(void){
 			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
+
+			// Shoot
+			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
 			// Update entities
 			double currentTime = glfwGetTime();
