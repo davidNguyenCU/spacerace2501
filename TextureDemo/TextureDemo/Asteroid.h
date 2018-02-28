@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameEntity.h"
+#include "DynamicGameEntity.h"
 
 class Asteroid : public GameEntity {
 public:

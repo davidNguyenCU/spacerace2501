@@ -1,7 +1,7 @@
 #include "MachineBullet.h"
 
-MachineBullet::MachineBullet(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, glm::vec3 &bulletVelocity)
-	: Bullet(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements, bulletVelocity)
+MachineBullet::MachineBullet(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
+	: Bullet(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 }
 

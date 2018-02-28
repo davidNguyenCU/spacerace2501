@@ -1,12 +1,11 @@
 #pragma once
 
-#include "GameEntity.h"
+#include "DynamicGameEntity.h"
 
-class Bullet : public GameEntity {
+class Bullet : public DynamicGameEntity {
 public:
-	Bullet(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, glm::vec3 &bulletVelocity);
+	Bullet(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 
 	virtual void update(double deltaTime) override;
 private:
-	glm::vec3 velocity;
 };

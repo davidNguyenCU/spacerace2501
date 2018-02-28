@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GameEntity.h"
+#include "DynamicGameEntity.h"
 
-class Ship : public GameEntity {
+class Ship : public DynamicGameEntity {
 public:
-	Ship(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
+	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 
-	virtual void update(double deltaTime) override;
+	void update(double deltaTime) override;
 
 	enum GunType
 	{
@@ -21,5 +21,6 @@ public:
 
 private:
 	GunType currentGun;
-	int gunAmmo, rocketAmmo;
+	int gunAmmo;
+	int rocketAmmo;
 };

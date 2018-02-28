@@ -44,6 +44,8 @@ bool PRESSING_SHOOT_GUN;
 bool PRESSING_SHOOT_ROCKET;
 bool PRESSING_SWITCH_WEAPONS;
 
+int PLAYER_ACCELERATION = 0;
+
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
 int CreateSquare(void) {
@@ -123,6 +125,7 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	PRESSING_BACK = (key == GLFW_KEY_S && action == GLFW_PRESS);
 	PRESSING_BASH_R = (key == GLFW_KEY_D && action == GLFW_PRESS);
 	PRESSING_BASH_L = (key == GLFW_KEY_A && action == GLFW_PRESS);
+
 }
 
 void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -163,8 +166,8 @@ int main(void){
 		GameManager gameManager = GameManager::GameManager(shader, size);
 		gameManager.setTextures(tex[3]);
 
-		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
-		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
+		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
 
 		Enemy enemies[] = { enemy };
 		
@@ -180,7 +183,18 @@ int main(void){
 
             // Select proper shader program to use
 			shader.enable();
+
+			// Update time
+			double currentTime = glfwGetTime();
+			double deltaTime = currentTime - lastTime;
+			lastTime = currentTime;
 			
+			// Acceleration
+			if	(PRESSING_FORWARD == true)	PLAYER_ACCELERATION =  1;
+			else if (PRESSING_BACK == true) PLAYER_ACCELERATION = -1;
+			else							PLAYER_ACCELERATION =  0;
+			player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+
 			// Get mouse input for turret
 			double mouseX, mouseY;
 			glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
@@ -192,9 +206,6 @@ int main(void){
 			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
 			// Update entities
-			double currentTime = glfwGetTime();
-			double deltaTime = currentTime - lastTime;
-			lastTime = currentTime;
 			player.update(deltaTime);
 			enemy.update(deltaTime);
 			gameManager.updateUI();
