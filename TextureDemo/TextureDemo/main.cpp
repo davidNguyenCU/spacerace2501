@@ -234,27 +234,15 @@ int main(void){
 
 
 			// BASHING MOVEMENT
-			player.ableToBashAgain = true;
-			if (BASH_RIGHT >= 1 || BASH_LEFT >= 1 && BASHING == false && player.ableToBashAgain == true) { 
-				BASHING_STARTED = true;
-				BASHING = true; 
+			
+			if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
+			else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
+			else BASH_LEFT_RIGHT = 0;
 
-
-			    if (BASH_LEFT >= 1 && BASH_RIGHT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = -1; }
-				else if (BASH_RIGHT >= 1 && BASH_LEFT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = 1; }
-				else { BASH_LEFT_RIGHT = 0; }
-			}
-
-
-			if (BASHING_STARTED == true) {
-				//save ship position +- 5metres
-				player.recordShipBashStart(player.getPosition().x, glfwGetTime());
-				BASHING_STARTED = false;
-			}
-			BASHING = player.sideBash(BASHING, BASH_LEFT_RIGHT, deltaTime, glfwGetTime());
+			player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
 			//player.checkBashCoolDown(glfwGetTime());
 
-			printf("%d", player.ableToBashAgain);
+			printf("%d", player.bashCooldown);
 			printf("\n");
 
 			// Get mouse input for turret

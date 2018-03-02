@@ -12,13 +12,12 @@ public:
 	double timeOfBashStart;
 	bool bashStarted;
 	bool isBashing;
-	bool ableToBashAgain;
+	bool bashCooldown;
+	int bashDirection;
 
 	void update(double deltaTime, glm::vec3 playerPosition);
 	void sideMovement(int state, double deltaTime);
-	void recordShipBashStart(float startBashPosition, double bashTimeStart);
-	bool sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime);
-	void checkBashCoolDown(double currentTime);
+	void sideBash(int state, double currentTime, double deltaTime);
 
 	enum GunType
 	{

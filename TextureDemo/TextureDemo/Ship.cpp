@@ -10,6 +10,11 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	bashStartPosition = 0;
 	bashVelocity = 0;
 	bashAccler = 50;
+	bashDirection = 0;
+
+	bashStarted = false;
+	isBashing = false;
+	bashCooldown = false;
 }
 
 void Ship::update(double deltaTime, glm::vec3 playerPosition) {
@@ -66,37 +71,43 @@ void Ship::sideMovement(int state, double deltaTime) {
 	else if (state == -1) { position.x -= 0.55 * deltaTime; }
 }
 
-void Ship::recordShipBashStart(float bashingStartPosition, double bashTimeStart) {
-	bashStartPosition = bashingStartPosition;
-	timeOfBashStart = bashTimeStart;
-}
+void Ship::sideBash(int state, double currentTime, double deltaTime) {
 
-bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime) {
+	if (state != 0
+		&& isBashing == false
+		&& bashStarted == false
+		&& bashCooldown == false) {
+	
+		isBashing = true;
+		bashStarted = true;
+		bashCooldown = true;
+		bashDirection = state;
+	}
 
-	if (bashing == true) {
+	if (bashStarted == true) {
+		bashStartPosition = position.x;
+		timeOfBashStart = currentTime;
+		bashStarted = false;
+	}
 
-		if(bashDirection == 1) bashVelocity += bashAccler * deltaTime;
-		else if (bashDirection == -1) bashVelocity -= bashAccler * deltaTime;
-		position.x += bashVelocity * deltaTime;
-		if (position.x > bashStartPosition + 0.25 || position.x < bashStartPosition - 0.25) {
+	if (bashCooldown == true){
+		if (currentTime - timeOfBashStart > 4.0)
+			bashCooldown = false;
+	}
+
+	if (isBashing == true) {
+
+		if (bashDirection == 1 && position.x < bashStartPosition + 0.35)
+			bashVelocity += bashAccler * deltaTime;
+		else if (bashDirection == -1 && position.x > bashStartPosition - 0.35)
+			bashVelocity -= bashAccler * deltaTime;
+		else if(position.x < bashStartPosition - 0.35 || position.x > bashStartPosition + 0.35){
 			bashVelocity = 0;
-			return false;
+			isBashing = false;
 		}
 	}
-	else if (bashing == false) {
-		bashVelocity = 0;
-		position.x += bashVelocity;
-		return false;
-	}
-	else { return true; }
-}
+
+	position.x += bashVelocity * deltaTime;
 
 
-void Ship::checkBashCoolDown(double currentTime) {
-	if (currentTime - timeOfBashStart > 2){
-		ableToBashAgain = true;
-	}
-	else{
-		ableToBashAgain = false;
-	}
 }
