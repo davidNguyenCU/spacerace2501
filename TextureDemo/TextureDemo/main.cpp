@@ -168,6 +168,9 @@ int main(void){
 
 		setallTexture();
 
+		// Disable cursor
+		glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 		// Setup game objects
 
 		//GameManager * gameManager = new GameManager();

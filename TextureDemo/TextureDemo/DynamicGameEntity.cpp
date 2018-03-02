@@ -10,6 +10,7 @@ DynamicGameEntity::DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVeloc
 
 void DynamicGameEntity::update(double deltaTime) {
 	//forward = glm::normalize(position);
+	//cout << "Updating" << endl;
 	position += velocity * (float)deltaTime;
 	//std::cout << "Updating" << std::endl;
 }
