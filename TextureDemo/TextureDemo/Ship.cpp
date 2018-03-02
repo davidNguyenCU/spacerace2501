@@ -7,8 +7,9 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
+	bashStartPosition = 0;
 	bashVelocity = 0;
-	bashAccler = 5;
+	bashAccler = 50;
 }
 
 void Ship::update(double deltaTime) {
@@ -73,4 +74,25 @@ void Ship::sideMovement(int state, double deltaTime) {
 	else if (state == -1) { position.x -= 0.55 * deltaTime; }
 }
 
-//void Ship::sideBash(int state, double deltaTime, )
+void Ship::recordShipBashRange(float bashingStartPosition) {
+	bashStartPosition = bashingStartPosition;
+}
+
+bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime) {
+	if (bashing == true) {
+
+		if(bashDirection == 1) bashVelocity += bashAccler * deltaTime;
+		else if (bashDirection == -1) bashVelocity -= bashAccler * deltaTime;
+		position.x += bashVelocity * deltaTime;
+		if (position.x > bashStartPosition + 0.25 || position.x < bashStartPosition - 0.25) {
+			bashVelocity = 0;
+			return false;
+		}
+	}
+	else if (bashing == false) {
+		bashVelocity = 0;
+		position.x += bashVelocity;
+		return false;
+	}
+	else { return true; }
+}

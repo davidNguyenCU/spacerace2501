@@ -8,9 +8,12 @@ class Ship : public DynamicGameEntity {
 public:
 	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 
+	float bashStartPosition;
+
 	void update(double deltaTime) override;
 	void sideMovement(int state, double deltaTime);
-	void sideBash(int state, double deltaTime);
+	void recordShipBashRange(float startBashPosition);
+	bool sideBash(bool bashing, int bashDirection, double deltaTime);
 
 	enum GunType
 	{
