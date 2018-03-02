@@ -7,6 +7,9 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
+	width = 0.175;
+	height = 0.175;
+
 	bashStartPosition = 0;
 	bashVelocity = 0;
 	bashAccler = 50;
@@ -108,6 +111,4 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	}
 
 	position.x += bashVelocity * deltaTime;
-
-
 }

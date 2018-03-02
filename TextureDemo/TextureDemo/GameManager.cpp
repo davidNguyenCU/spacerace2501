@@ -34,6 +34,27 @@ void GameManager::updateUI() {
 	
 }
 
+void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
+	float playerWidth = player->width;
+	float playerHeight = player->height;
+	float playerXpos = player->getPosition().x;
+	float playerYpos = player->getPosition().y;
+
+	float enemyWidth = theEnemy->width;
+	float enemyHeight = theEnemy->height;
+	float enemyXpos = theEnemy->getPosition().x;
+	float enemyYpos = theEnemy->getPosition().y;
+
+	if (playerXpos < enemyXpos + enemyWidth &&
+		enemyXpos < playerXpos + playerWidth &&
+		playerYpos < enemyYpos + enemyHeight &&
+		enemyYpos < playerYpos + playerHeight) {
+		
+		printf("COLLIDING");
+
+	}
+}
+
 void GameManager::setPlayer(Player * aPlayer) {
 	player = aPlayer;
 }

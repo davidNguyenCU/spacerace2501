@@ -15,6 +15,9 @@ public:
 	bool bashCooldown;
 	int bashDirection;
 
+	float width;
+	float height;
+
 	void update(double deltaTime, glm::vec3 playerPosition);
 	void sideMovement(int state, double deltaTime);
 	void sideBash(int state, double currentTime, double deltaTime);

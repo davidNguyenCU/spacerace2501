@@ -259,7 +259,8 @@ int main(void){
 			enemy.update(deltaTime);*/
 
 			gameManager.update(deltaTime);
-			cout << enemy.getPosition().x << endl;
+			gameManager.checkCollisions(&player, &enemy);
+			//cout << enemy.getPosition().x << endl;
 			enemy.update(deltaTime);
 			// Render entities
 			//player.render(shader);
