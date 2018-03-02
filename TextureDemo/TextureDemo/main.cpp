@@ -24,7 +24,7 @@
 	std::cerr << exception_object.what() << std::endl
 
 // Globals that define the OpenGL window and viewport
-const std::string window_title_g = "Multiple Sprites Demo";
+const std::string window_title_g = "Space Race Prototype 0.1";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
@@ -37,8 +37,6 @@ bool PRESSING_FORWARD;
 bool PRESSING_BACK;
 bool PRESSING_BASH_R;
 bool PRESSING_BASH_L;
-bool BASHING;
-bool BASHING_STARTED;
 
 /*bool PRESSING_SHOOT_GUN_DOWN;
 bool PRESSING_SHOOT_GUN_HOLD;*/
