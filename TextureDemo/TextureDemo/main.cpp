@@ -2,11 +2,11 @@
 #include <stdexcept>
 #include <string>
 #define GLEW_STATIC
-#include <GL/glew.h> // window management library
-#include <GL/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> //
-#include <SOIL/SOIL.h> // read image file
+#include <../../Libraries/include/GL/glew.h> // window management library
+#include <../../Libraries/include/GL/glfw3.h>
+#include <../../Libraries/include/glm/glm.hpp>
+#include <../../Libraries/include/glm/gtc/matrix_transform.hpp> //
+#include <../../Libraries/include/SOIL/SOIL.h> // read image file
 #include <chrono>
 #include <thread>
 
