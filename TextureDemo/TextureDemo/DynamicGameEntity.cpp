@@ -4,15 +4,21 @@
 DynamicGameEntity::DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
 	: GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), velocity(entityVelocity), acceleration(entityAcceleration)
 {
-	velocity = entityVelocity;
-	acceleration = entityAcceleration;
+	//velocity = entityVelocity;
+	//acceleration = entityAcceleration;
 }
 
 void DynamicGameEntity::update(double deltaTime) {
 	//forward = glm::normalize(position);
 	//cout << "Updating" << endl;
-	position += velocity * (float)deltaTime;
+	//position += velocity * (float)deltaTime;
 	//std::cout << "Updating" << std::endl;
+	cout << "Do not call" << endl;
+}
+
+void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
+	position += velocity * (float) deltaTime;
+	screenPosition = position - playerPosition;
 }
 
 void DynamicGameEntity::goFASTER(int yesSPD, double deltaTime) {

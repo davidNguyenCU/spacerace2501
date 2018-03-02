@@ -1,10 +1,15 @@
 #include "Enemy.h"
 
-Enemy::Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Player *playerEntity)
-	: Ship(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements), player(playerEntity)
+Enemy::Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Player *playerEntity )
+	: Ship(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements), player(playerEntity) 
 {
+
 }
 
 void Enemy::update(double deltaTime) {
-	position = player->getPosition() + glm::vec3(0.5f * glm::sin(glfwGetTime() * 3.0f), 0.5f * glm::cos(glfwGetTime() * 3.0f), 0.0f);
+	Ship::update(deltaTime, player->getPosition());
 }
+
+void Enemy::setPosition(glm::vec3 updatedPosition) { position = updatedPosition; }
+void Enemy::setVelocity(glm::vec3 updatedVelocity) { velocity = updatedVelocity; }
+void Enemy::setAcceleration(glm::vec3 updatedAcceleration) { acceleration = updatedAcceleration; }

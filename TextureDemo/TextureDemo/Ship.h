@@ -14,7 +14,7 @@ public:
 	bool isBashing;
 	bool ableToBashAgain;
 
-	void update(double deltaTime) override;
+	void update(double deltaTime, glm::vec3 playerPosition);
 	void sideMovement(int state, double deltaTime);
 	void recordShipBashStart(float startBashPosition, double bashTimeStart);
 	bool sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime);

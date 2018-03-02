@@ -14,7 +14,7 @@ public:
 
 	void setPlayer(Player * player);
 	void setEnemies(Enemy * enemies);
-	void addShip(Ship * ship);
+	void addEnemy(Enemy * enemies);
 	void setMousePos(float aMouseX, float aMouseY);
 
 	void playerShoot(bool pressingDown, bool holdingDown);
@@ -27,9 +27,8 @@ private:
 	const static int MAX_NUM_SHIPS = 10;
 	int numShips;
 
-	std::vector<Ship *> ships;
+	std::vector<Enemy *> enemies;
 	Player * player;
-	Enemy * enemies;
 	HUD hud;
 
 	int squareGeometry;
@@ -45,6 +44,6 @@ private:
 	vector<MachineBullet> bullets;
 	vector<RocketBullet> rockets;
 
-	void shootGun(Ship& source, glm::vec3 target);
-	void shootRocket(Ship& source, glm::vec3 target);
+	void shootGun(glm::vec3 source, glm::vec3 target);
+	void shootRocket(glm::vec3 source, glm::vec3 target);
 };

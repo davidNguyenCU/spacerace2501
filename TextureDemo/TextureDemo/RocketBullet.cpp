@@ -5,10 +5,3 @@ RocketBullet::RocketBullet(glm::vec3 &entityPos, glm::vec3 entityDirection, floa
 {
 	//cout << velocity.x << velocity.y << endl;
 }
-
-void RocketBullet::update(double deltaTime) {
-	Bullet::update(deltaTime);
-	//position = glm::vec3(0.0f);
-	//position += glm::vec3(0.02f, 0.02f, 0.0f);
-	//cout << "Position: (" << position.x << ", " << position.y << ")    (" << scale.x << ", " << scale.y << ")" << endl;
-}

@@ -17,6 +17,7 @@
 #include "Bullet.h"
 #include "HUD.h"
 #include "GameManager.h"
+#include "EnemyAi.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -179,9 +180,9 @@ int main(void){
 		//GameManager * gameManager = new GameManager();
 		GameManager gameManager = GameManager::GameManager();
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
-
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
-		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+		EnemyAi enemyaitest(&enemy, stupidChase);
 
 		Enemy enemies[] = { enemy };
 		
@@ -265,15 +266,18 @@ int main(void){
 
 			// Shoot
 			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
-
+			
+			enemyaitest.update(deltaTime);
 			// Update entities
 			/*player.update(deltaTime);
 			enemy.update(deltaTime);*/
-			gameManager.update(deltaTime);
 
+			gameManager.update(deltaTime);
+			cout << enemy.getPosition().x << endl;
+			enemy.update(deltaTime);
 			// Render entities
 			//player.render(shader);
-			//enemy.render(shader);
+			enemy.render(shader);
 			gameManager.renderAll(shader);
 
 			/*for (auto &bullet : player.getBullets()) {

@@ -23,6 +23,7 @@ public:
 	inline float getRotation() { return rotationAmount; }
 protected:
 	glm::vec3 position, scale;
+	glm::vec3 screenPosition;
 	float rotationAmount;
 
 	GLuint texture;

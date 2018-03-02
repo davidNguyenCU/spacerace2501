@@ -7,8 +7,12 @@ public:
 	DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 
 	virtual void update(double deltaTime) override;
+	void update(double deltaTime, glm::vec3 playerPosition);
 
 	void goFASTER(int yesSPD, double deltaTime);
+
+	inline glm::vec3 getAcceleration() { return acceleration; };
+	inline glm::vec3 getVelocity() { return velocity; };
 
 protected:
 	glm::vec3 velocity;
