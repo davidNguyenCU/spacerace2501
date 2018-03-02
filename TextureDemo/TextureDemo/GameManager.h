@@ -45,6 +45,6 @@ private:
 	vector<MachineBullet> bullets;
 	vector<RocketBullet> rockets;
 
-	void shootGun(Ship& source, glm::vec3 target);
-	void shootRocket(Ship& source, glm::vec3 target);
+	void shootGun(glm::vec3 source, glm::vec3 target);
+	void shootRocket(glm::vec3 source, glm::vec3 target);
 };

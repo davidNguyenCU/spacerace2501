@@ -11,19 +11,6 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	bashAccler = 5;
 }
 
-void Ship::update(double deltaTime) {
-	DynamicGameEntity::update(deltaTime);
-
-	/*for (auto &bullet : bullets) {
-		bullet.update(deltaTime);
-	}
-
-	for (auto &rocket : rockets) {
-		rocket.update(deltaTime);
-	}*/
-	//position.x = 0.8f * sin(glfwGetTime());
-} 
-
 Ship::GunType Ship::getCurrentGun() {
 	return currentGun;
 }

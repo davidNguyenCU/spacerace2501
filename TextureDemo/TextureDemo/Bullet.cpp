@@ -5,7 +5,3 @@ Bullet::Bullet(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 &entity
 {
 	//bulletTexture = RenderedObject(entityTexture);
 }
-
-void Bullet::update(double deltaTime) {
-	DynamicGameEntity::update(deltaTime);
-}
