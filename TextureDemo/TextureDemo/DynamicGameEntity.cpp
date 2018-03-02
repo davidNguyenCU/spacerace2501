@@ -4,8 +4,8 @@
 DynamicGameEntity::DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
 	: GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements), velocity(entityVelocity), acceleration(entityAcceleration)
 {
-	velocity = entityVelocity;
-	acceleration = entityAcceleration;
+	//velocity = entityVelocity;
+	//acceleration = entityAcceleration;
 }
 
 void DynamicGameEntity::update(double deltaTime) {

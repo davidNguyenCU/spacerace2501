@@ -17,6 +17,7 @@
 #include "Bullet.h"
 #include "HUD.h"
 #include "GameManager.h"
+#include "EnemyAi.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -179,9 +180,9 @@ int main(void){
 		//GameManager * gameManager = new GameManager();
 		GameManager gameManager = GameManager::GameManager();
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
-
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
-		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
+		EnemyAi enemyaitest(&enemy, stupidChase);
 
 		Enemy enemies[] = { enemy };
 		
@@ -233,19 +234,24 @@ int main(void){
 
 
 			// BASHING MOVEMENT
-			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false) { 
+			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false && player.ableToBashAgain == true) { 
 				BASHING_STARTED = true;
 				BASHING = true; 
+
+				if (BASH_RIGHT == 1 && BASH_LEFT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = 1; }
+				else if (BASH_LEFT == 1 && BASH_RIGHT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = -1; }
+				else { BASH_LEFT_RIGHT = 0; }
 			}
+
 
 			if (BASHING_STARTED == true) {
 				//save ship position +- 5metres
+				player.recordShipBashStart(player.getPosition().x, glfwGetTime());
 				BASHING_STARTED = false;
 			}
+			BASHING = player.sideBash(BASHING, BASH_LEFT_RIGHT, deltaTime, glfwGetTime());
 
-
-
-			printf("%d", PLAYER_LEFT_RIGHT);
+			printf("%d", player.ableToBashAgain);
 			printf("\n");
 
 			// Get mouse input for turret
@@ -257,15 +263,18 @@ int main(void){
 
 			// Shoot
 			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
-
+			
+			enemyaitest.update(deltaTime);
 			// Update entities
 			/*player.update(deltaTime);
 			enemy.update(deltaTime);*/
-			gameManager.update(deltaTime);
 
+			gameManager.update(deltaTime);
+			cout << enemy.getPosition().x << endl;
+			enemy.update(deltaTime);
 			// Render entities
 			//player.render(shader);
-			//enemy.render(shader);
+			enemy.render(shader);
 			gameManager.renderAll(shader);
 
 			/*for (auto &bullet : player.getBullets()) {
