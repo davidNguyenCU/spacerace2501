@@ -181,6 +181,9 @@ int main(void){
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
 
+		//TESTING FOR PUSHING
+
+
         // Run the main loop
         bool animating = 1;
 		double lastTime = glfwGetTime();
