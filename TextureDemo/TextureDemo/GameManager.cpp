@@ -90,21 +90,22 @@ void GameManager::playerShoot(bool readyGun, bool readyRocket) {
 
 	if (readyRocket /*&& currentGun == Ship::Rocket*/) {
 		//player->shootRocket(target, rocketTexture.getTexture(), squareGeometry);
-		shootRocket((Ship&) player, (Ship&) target);
+		shootRocket((Ship&) player, target);
 	}
 	else if (readyGun /*&& currentGun == Ship::MachineGun*/) {
-		shootGun((Ship&) player, (Ship&) target);
+		shootGun((Ship&) player, target);
 		//player->shootGun(target, bulletTexture.getTexture(), squareGeometry);
 	}
 }
 
-void GameManager::shootRocket(Ship& source, Ship& target) {
-	glm::vec3 direction = glm::normalize(target.getPosition() - source.getPosition());
-	rockets.push_back(RocketBullet(/*source.getPosition()*/glm::vec3(0.0f), direction, source.getRotation(), rocketTexture.getTexture(), squareGeometry));
+void GameManager::shootRocket(Ship& source, glm::vec3 target) {
+	glm::vec3 direction = glm::normalize(target - source.getPosition());
+	cout << direction.x << ", " << direction.y << endl;
+	rockets.push_back(RocketBullet(/*source.getPosition()*/glm::vec3(0.0f, 0.0f, 0.0f), direction, source.getRotation(), rocketTexture.getTexture(), squareGeometry));
 }
 
-void GameManager::shootGun(Ship& source, Ship& target) {
-	glm::vec3 direction = glm::normalize(target.getPosition() - source.getPosition());
+void GameManager::shootGun(Ship& source, glm::vec3 target) {
+	glm::vec3 direction = glm::normalize(target - source.getPosition());
 	
-	bullets.push_back(MachineBullet(/*source.getPosition()*/glm::vec3(0.0f), direction, source.getRotation(), rocketTexture.getTexture(), squareGeometry));
+	bullets.push_back(MachineBullet(/*source.getPosition()*/glm::vec3(0.0f, 0.0f, 0.0f), direction, source.getRotation(), rocketTexture.getTexture(), squareGeometry));
 }

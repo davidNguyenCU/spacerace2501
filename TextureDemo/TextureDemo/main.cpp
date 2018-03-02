@@ -2,11 +2,11 @@
 #include <stdexcept>
 #include <string>
 #define GLEW_STATIC
-#include <GL/glew.h> // window management library
-#include <GL/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp> //
-#include <SOIL/SOIL.h> // read image file
+#include <../../Libraries/include/GL/glew.h> // window management library
+#include <../../Libraries/include/GL/glfw3.h>
+#include <../../Libraries/include/glm/glm.hpp>
+#include <../../Libraries/include/glm/gtc/matrix_transform.hpp> //
+#include <../../Libraries/include/SOIL/SOIL.h> // read image file
 #include <chrono>
 #include <thread>
 
@@ -37,6 +37,8 @@ bool PRESSING_FORWARD;
 bool PRESSING_BACK;
 bool PRESSING_BASH_R;
 bool PRESSING_BASH_L;
+bool BASHING;
+bool BASHING_STARTED;
 
 /*bool PRESSING_SHOOT_GUN_DOWN;
 bool PRESSING_SHOOT_GUN_HOLD;*/
@@ -46,6 +48,8 @@ bool PRESSING_SHOOT_ROCKET;
 bool PRESSING_SWITCH_WEAPONS;
 
 int PLAYER_ACCELERATION = 0;
+int PLAYER_LEFT_RIGHT = 0;
+int BASH_LEFT_RIGHT = 0;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -125,7 +129,7 @@ void setallTexture(void)
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	// Quit the program when pressing 'q'
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
 
@@ -168,6 +172,9 @@ int main(void){
 
 		setallTexture();
 
+		// Disable cursor
+		glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 		// Setup game objects
 
 		//GameManager * gameManager = new GameManager();
@@ -181,6 +188,14 @@ int main(void){
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
+
+		//TESTING FOR PUSHING
+		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
+		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
+		int GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
+		int GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
+		int BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
+		int BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
 
         // Run the main loop
         bool animating = 1;
@@ -196,12 +211,48 @@ int main(void){
 			double currentTime = glfwGetTime();
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
-			
-			// Acceleration
-			if	(PRESSING_FORWARD == true)	PLAYER_ACCELERATION =  1;
-			else if (PRESSING_BACK == true) PLAYER_ACCELERATION = -1;
-			else							PLAYER_ACCELERATION =  0;
+
+			// KEY PRESS/RELEASE HANDLING
+			GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
+			GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
+			GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
+			GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
+			BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
+			BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
+
+			// Acceleration FORWARD AND BACK
+			if	(GO_FORWARD == 1)	   PLAYER_ACCELERATION =  1;
+			else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
+			else					   PLAYER_ACCELERATION =  0;
 			player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+
+			// SIDEWAYS MOVEMENT (NON BASHING)
+			if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
+			else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
+			else					   PLAYER_LEFT_RIGHT = 0;
+			player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
+
+
+			// BASHING MOVEMENT
+			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false && player.ableToBashAgain == true) { 
+				BASHING_STARTED = true;
+				BASHING = true; 
+
+				if (BASH_RIGHT == 1 && BASH_LEFT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = 1; }
+				else if (BASH_LEFT == 1 && BASH_RIGHT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = -1; }
+				else { BASH_LEFT_RIGHT = 0; }
+			}
+
+
+			if (BASHING_STARTED == true) {
+				//save ship position +- 5metres
+				player.recordShipBashStart(player.getPosition().x, glfwGetTime());
+				BASHING_STARTED = false;
+			}
+			BASHING = player.sideBash(BASHING, BASH_LEFT_RIGHT, deltaTime, glfwGetTime());
+
+			printf("%d", player.ableToBashAgain);
+			printf("\n");
 
 			// Get mouse input for turret
 			double mouseX, mouseY;

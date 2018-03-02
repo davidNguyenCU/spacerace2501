@@ -1,9 +1,9 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GL/glfw3.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/glm.hpp>
+#include <../../Libraries/include/GL/glew.h> // window management library
+#include <../../Libraries/include/GL/glfw3.h>
+#include <../../Libraries/include/glm/glm.hpp>
+#include <../../Libraries/include/glm/gtc/matrix_transform.hpp> //
 
 #include "Shader.h"
 #include "RenderedObject.h"
