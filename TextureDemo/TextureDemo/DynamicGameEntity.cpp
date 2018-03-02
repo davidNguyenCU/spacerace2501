@@ -18,10 +18,10 @@ void DynamicGameEntity::goFASTER(int yesSPD, double deltaTime) {
 
 
 	if (yesSPD == 1) {
-		acceleration += 0.9 * deltaTime;
+		acceleration += 1.5 * deltaTime;
 	}
 	else if (yesSPD == -1) {
-		acceleration.y -= 0.9 * deltaTime;
+		acceleration.y -= 1.5 * deltaTime;
 	}
 	else if (yesSPD == 0) {
 		acceleration.y = 0;

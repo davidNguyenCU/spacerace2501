@@ -65,3 +65,8 @@ void Ship::render(Shader& shader) {
 }
 
 
+void Ship::sideMovement(int state, double deltaTime) {
+	if (state == 1) { position.x += 0.55 * deltaTime; }
+	else if (state == -1) { position.x -= 0.55 * deltaTime; }
+	
+}

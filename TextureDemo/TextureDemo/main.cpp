@@ -45,6 +45,7 @@ bool PRESSING_SHOOT_ROCKET;
 bool PRESSING_SWITCH_WEAPONS;
 
 int PLAYER_ACCELERATION = 0;
+int PLAYER_LEFT_RIGHT = 0;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -182,7 +183,10 @@ int main(void){
 		gameManager.setEnemies(enemies);
 
 		//TESTING FOR PUSHING
-
+		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
+		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
+		int GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
+		int GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
 
         // Run the main loop
         bool animating = 1;
@@ -198,12 +202,25 @@ int main(void){
 			double currentTime = glfwGetTime();
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
+
+			GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
+			GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
+			GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
+			GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
 			
 			// Acceleration
-			if	(PRESSING_FORWARD == true)	PLAYER_ACCELERATION =  1;
-			else if (PRESSING_BACK == true) PLAYER_ACCELERATION = -1;
-			else							PLAYER_ACCELERATION =  0;
+			if	(GO_FORWARD == 1)	   PLAYER_ACCELERATION =  1;
+			else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
+			else					   PLAYER_ACCELERATION =  0;
 			player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+
+			if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
+			else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
+			else					   PLAYER_LEFT_RIGHT = 0;
+			player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
+
+			printf("%d", PLAYER_LEFT_RIGHT);
+			printf("\n");
 
 			// Get mouse input for turret
 			double mouseX, mouseY;
