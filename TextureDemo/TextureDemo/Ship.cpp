@@ -74,11 +74,18 @@ void Ship::sideMovement(int state, double deltaTime) {
 	else if (state == -1) { position.x -= 0.55 * deltaTime; }
 }
 
-void Ship::recordShipBashRange(float bashingStartPosition) {
+void Ship::recordShipBashStart(float bashingStartPosition, double bashTimeStart) {
 	bashStartPosition = bashingStartPosition;
+	timeOfBashStart = bashTimeStart;
 }
 
-bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime) {
+bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime) {
+	if (currentTime - timeOfBashStart > 2)
+		ableToBashAgain = true;
+	else
+		ableToBashAgain = false;
+
+
 	if (bashing == true) {
 
 		if(bashDirection == 1) bashVelocity += bashAccler * deltaTime;
