@@ -36,6 +36,8 @@ bool PRESSING_FORWARD;
 bool PRESSING_BACK;
 bool PRESSING_BASH_R;
 bool PRESSING_BASH_L;
+bool BASHING;
+bool BASHING_STARTED;
 
 /*bool PRESSING_SHOOT_GUN_DOWN;
 bool PRESSING_SHOOT_GUN_HOLD;*/
@@ -46,6 +48,7 @@ bool PRESSING_SWITCH_WEAPONS;
 
 int PLAYER_ACCELERATION = 0;
 int PLAYER_LEFT_RIGHT = 0;
+int BASH_LEFT_RIGHT = 0;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -125,7 +128,7 @@ void setallTexture(void)
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	// Quit the program when pressing 'q'
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
 
@@ -190,6 +193,8 @@ int main(void){
 		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
 		int GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
 		int GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
+		int BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
+		int BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
 
         // Run the main loop
         bool animating = 1;
@@ -206,21 +211,39 @@ int main(void){
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
 
+			// KEY PRESS/RELEASE HANDLING
 			GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
 			GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
 			GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
 			GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
-			
-			// Acceleration
+			BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
+			BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
+
+			// Acceleration FORWARD AND BACK
 			if	(GO_FORWARD == 1)	   PLAYER_ACCELERATION =  1;
 			else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
 			else					   PLAYER_ACCELERATION =  0;
 			player.goFASTER(PLAYER_ACCELERATION, deltaTime);
 
+			// SIDEWAYS MOVEMENT (NON BASHING)
 			if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
 			else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
 			else					   PLAYER_LEFT_RIGHT = 0;
 			player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
+
+
+			// BASHING MOVEMENT
+			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false) { 
+				BASHING_STARTED = true;
+				BASHING = true; 
+			}
+
+			if (BASHING_STARTED == true) {
+				//save ship position +- 5metres
+				BASHING_STARTED = false;
+			}
+
+
 
 			printf("%d", PLAYER_LEFT_RIGHT);
 			printf("\n");

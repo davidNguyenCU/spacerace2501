@@ -10,6 +10,7 @@ public:
 
 	void update(double deltaTime) override;
 	void sideMovement(int state, double deltaTime);
+	void sideBash(int state, double deltaTime);
 
 	enum GunType
 	{
@@ -31,5 +32,6 @@ private:
 	static const int MAX_GUN_AMMO = 1;
 	static const int MAX_ROCKET_AMMO = 1;
 
-
+	float bashVelocity;
+	float bashAccler;
 };

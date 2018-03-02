@@ -6,6 +6,9 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	currentGun = MachineGun;
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
+
+	bashVelocity = 0;
+	bashAccler = 5;
 }
 
 void Ship::update(double deltaTime) {
@@ -68,5 +71,6 @@ void Ship::render(Shader& shader) {
 void Ship::sideMovement(int state, double deltaTime) {
 	if (state == 1) { position.x += 0.55 * deltaTime; }
 	else if (state == -1) { position.x -= 0.55 * deltaTime; }
-	
 }
+
+//void Ship::sideBash(int state, double deltaTime, )
