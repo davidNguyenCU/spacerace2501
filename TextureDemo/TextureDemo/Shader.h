@@ -1,11 +1,11 @@
 #pragma once
 
-#include <GL/glew.h>
+#include <../../Libraries/include/GL/glew.h> // window management library
+#include <../../Libraries/include/glm/glm.hpp>
+#include <../../Libraries/include/glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "ResourceManager.h"
 

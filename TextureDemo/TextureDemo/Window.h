@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-#include <GL/glew.h> // window management library
-#include <GL/glfw3.h>
-#include <glm\common.hpp>
+#include <../../Libraries/include/GL/glew.h> // window management library
+#include <../../Libraries/include/GL/glfw3.h>
+#include <../../Libraries/include/glm/common.hpp>
 
 class Window {
 public:
