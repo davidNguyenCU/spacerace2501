@@ -12,8 +12,11 @@ GameManager::GameManager()
 }*/
 
 void GameManager::update(double deltaTime) {
-	for (auto& ship : ships) {
-		ship->update(deltaTime, player->getPosition());
+
+	player->update(deltaTime, player->getPosition());
+
+	for (auto& enemy : enemies) {
+		enemy->update(deltaTime);
 	}
 
 	for (auto& bullet : bullets) {
@@ -33,22 +36,20 @@ void GameManager::updateUI() {
 
 void GameManager::setPlayer(Player * aPlayer) {
 	player = aPlayer;
-	addShip(aPlayer);
 }
 
 // TO DO: Change to array of enemies
 void GameManager::setEnemies(Enemy * enemy) {
-	enemies = enemy;
-	addShip(enemy);
+	addEnemy(enemy);
 }
 
-void GameManager::addShip(Ship * ship) {
+void GameManager::addEnemy(Enemy * enemy) {
 	if (numShips >= MAX_NUM_SHIPS) {
 		//std::cout << "ShipArrayFullError" << std::endl;
 		return;
 	}
 
-	ships.push_back(ship);
+	enemies.push_back(enemy);
 	numShips++;
 	//std::cout << ships.size() << std::endl;
 }
@@ -69,8 +70,11 @@ void GameManager::setTextures(int texSize, GLuint& mouseTex, GLuint& bulletTex, 
 void GameManager::renderAll(Shader& shader) {
 	//std::cout << "Mouse: (" << mouseX << "," << mouseY << ")" << std::endl;
 	mousePointerTexture.render(glm::vec3(mouseX, mouseY, 0.0f), mouseScale, 0.0f, squareGeometry, shader);
-	for (auto &ship : ships) {
-		ship->render(shader);
+
+	player->render(shader);
+
+	for (auto &enemy : enemies) {
+		enemy->render(shader);
 	}
 
 	/*for (auto& bullet : bullets) {

@@ -5,9 +5,3 @@ Player::Player(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityA
 {
 
 }
-
-void Player::update(double deltaTime) {
-	Ship::update(deltaTime);
-
-	//std::cout << position.x << ", " << position.y << std::endl;
-}

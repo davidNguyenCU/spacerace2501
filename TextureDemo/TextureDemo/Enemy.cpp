@@ -6,9 +6,8 @@ Enemy::Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcc
 
 }
 
-void Enemy::update(double deltaTime)
-{
-	position += velocity * (float)deltaTime;
+void Enemy::update(double deltaTime) {
+	Ship::update(deltaTime, player->getPosition());
 }
 
 void Enemy::setPosition(glm::vec3 updatedPosition) { position = updatedPosition; }

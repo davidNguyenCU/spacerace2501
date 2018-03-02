@@ -11,6 +11,9 @@ public:
 
 	void goFASTER(int yesSPD, double deltaTime);
 
+	inline glm::vec3 getAcceleration() { return acceleration; };
+	inline glm::vec3 getVelocity() { return velocity; };
+
 protected:
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
