@@ -9,13 +9,16 @@ public:
 	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
 
 	float bashStartPosition;
-	bool ableToBashAgain;
 	double timeOfBashStart;
+	bool bashStarted;
+	bool isBashing;
+	bool ableToBashAgain;
 
 	void update(double deltaTime) override;
 	void sideMovement(int state, double deltaTime);
 	void recordShipBashStart(float startBashPosition, double bashTimeStart);
 	bool sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime);
+	void checkBashCoolDown(double currentTime);
 
 	enum GunType
 	{

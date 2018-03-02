@@ -233,12 +233,14 @@ int main(void){
 
 
 			// BASHING MOVEMENT
-			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false && player.ableToBashAgain == true) { 
+			player.ableToBashAgain = true;
+			if (BASH_RIGHT >= 1 || BASH_LEFT >= 1 && BASHING == false && player.ableToBashAgain == true) { 
 				BASHING_STARTED = true;
 				BASHING = true; 
 
-				if (BASH_RIGHT == 1 && BASH_LEFT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = 1; }
-				else if (BASH_LEFT == 1 && BASH_RIGHT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = -1; }
+
+			    if (BASH_LEFT >= 1 && BASH_RIGHT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = -1; }
+				else if (BASH_RIGHT >= 1 && BASH_LEFT == 0 && player.ableToBashAgain == true) { BASH_LEFT_RIGHT = 1; }
 				else { BASH_LEFT_RIGHT = 0; }
 			}
 
@@ -249,6 +251,7 @@ int main(void){
 				BASHING_STARTED = false;
 			}
 			BASHING = player.sideBash(BASHING, BASH_LEFT_RIGHT, deltaTime, glfwGetTime());
+			//player.checkBashCoolDown(glfwGetTime());
 
 			printf("%d", player.ableToBashAgain);
 			printf("\n");

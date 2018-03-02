@@ -80,11 +80,6 @@ void Ship::recordShipBashStart(float bashingStartPosition, double bashTimeStart)
 }
 
 bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime) {
-	if (currentTime - timeOfBashStart > 2)
-		ableToBashAgain = true;
-	else
-		ableToBashAgain = false;
-
 
 	if (bashing == true) {
 
@@ -102,4 +97,14 @@ bool Ship::sideBash(bool bashing, int bashDirection, double deltaTime, double cu
 		return false;
 	}
 	else { return true; }
+}
+
+
+void Ship::checkBashCoolDown(double currentTime) {
+	if (currentTime - timeOfBashStart > 2){
+		ableToBashAgain = true;
+	}
+	else{
+		ableToBashAgain = false;
+	}
 }
