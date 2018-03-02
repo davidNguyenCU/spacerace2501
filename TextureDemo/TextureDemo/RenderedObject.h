@@ -13,6 +13,8 @@ public:
 	RenderedObject(GLuint& aTexture);
 
 	void render(glm::vec3 position, glm::vec3 scale, float rotationAmount, float numElements, Shader& shader);
+
+	GLuint getTexture();
 	
 private:
 	GLuint * texture;

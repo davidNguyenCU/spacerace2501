@@ -29,7 +29,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[3];
+GLuint tex[6];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -104,14 +104,21 @@ void setthisTexture(GLuint w, char *fname)
 
 void setallTexture(void)
 {
-//	tex = new GLuint[3];
-	glGenTextures(4, tex);
+	//tex = new GLuint[6];
+	glGenTextures(6, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
 	setthisTexture(tex[3], "crosshairs.png");
+	setthisTexture(tex[4], "bullet.png");
+	setthisTexture(tex[5], "rocket.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
+	glBindTexture(GL_TEXTURE_2D, tex[1]);
+	glBindTexture(GL_TEXTURE_2D, tex[2]);
+	glBindTexture(GL_TEXTURE_2D, tex[3]);
+	glBindTexture(GL_TEXTURE_2D, tex[4]);
+	glBindTexture(GL_TEXTURE_2D, tex[5]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -163,8 +170,8 @@ int main(void){
 		// Setup game objects
 
 		//GameManager * gameManager = new GameManager();
-		GameManager gameManager = GameManager::GameManager(shader, size);
-		gameManager.setTextures(tex[3]);
+		GameManager gameManager = GameManager::GameManager();
+		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
 		Enemy enemy(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
@@ -206,14 +213,22 @@ int main(void){
 			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
 			// Update entities
-			player.update(deltaTime);
-			enemy.update(deltaTime);
-			gameManager.updateUI();
+			/*player.update(deltaTime);
+			enemy.update(deltaTime);*/
+			gameManager.update(deltaTime);
 
 			// Render entities
-			player.render(shader);
-			enemy.render(shader);
+			//player.render(shader);
+			//enemy.render(shader);
 			gameManager.renderAll(shader);
+
+			/*for (auto &bullet : player.getBullets()) {
+				bullet.render(shader);
+			}
+
+			for (auto &rocket : player.getRockets()) {
+				rocket.render(shader);
+			}*/
 			
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 

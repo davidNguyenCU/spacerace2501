@@ -6,8 +6,8 @@ RenderedObject::RenderedObject()
 }
 
 RenderedObject::RenderedObject(GLuint& aTexture) 
+	:texture(&aTexture)
 {
-	texture = &aTexture;
 }
 
 void RenderedObject::render(glm::vec3 position, glm::vec3 scale, float rotationAmount, float numElements, Shader& shader) {
@@ -23,4 +23,8 @@ void RenderedObject::render(glm::vec3 position, glm::vec3 scale, float rotationA
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+}
+
+GLuint RenderedObject::getTexture() {
+	return *texture;
 }

@@ -4,11 +4,20 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 	currentGun = MachineGun;
-	gunAmmo = 10;
-	rocketAmmo = 2;
+	gunAmmo = MAX_GUN_AMMO;
+	rocketAmmo = MAX_ROCKET_AMMO;
 }
 
 void Ship::update(double deltaTime) {
+	DynamicGameEntity::update(deltaTime);
+
+	/*for (auto &bullet : bullets) {
+		bullet.update(deltaTime);
+	}
+
+	for (auto &rocket : rockets) {
+		rocket.update(deltaTime);
+	}*/
 	//position.x = 0.8f * sin(glfwGetTime());
 } 
 
@@ -16,13 +25,23 @@ Ship::GunType Ship::getCurrentGun() {
 	return currentGun;
 }
 
-void Ship::shootRocket(glm::vec2 target) {
-	std::cout << "Shooting Rocket" << std::endl;
+/*void Ship::shootRocket(glm::vec2 target, GLuint texture, int size) {
+	if (rocketAmmo <= 0 || rockets.size() >= 5) return;
+	std::cout << "Num rockets " << rockets.size() << std::endl;
+
+	glm::vec3 direction = glm::normalize(glm::vec3(target, 0.0f) - position);
+	
+	rockets.push_back(RocketBullet(position, direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), rotationAmount, texture, size));
 }
 
-void Ship::shootGun(glm::vec2 target) {
-	std::cout << "Shooting Gun" << std::endl;
-}
+void Ship::shootGun(glm::vec2 target, GLuint texture, int size) {
+	if (gunAmmo <= 0 || bullets.size() >= 5) return;
+
+	glm::vec3 direction = glm::normalize(glm::vec3(target, 0.0f) - position);
+
+	bullets.push_back(MachineBullet(position, direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), rotationAmount, texture, size));
+	std::cout << "Num bullets: " << bullets.size() << std::endl;
+}*/
 
 void Ship::switchGun() {
 	switch (currentGun) {
@@ -31,6 +50,18 @@ void Ship::switchGun() {
 	case Rocket:
 		currentGun = MachineGun;
 	}
+}
+
+void Ship::render(Shader& shader) {
+	DynamicGameEntity::render(shader);
+
+	/*for (auto &bullet : bullets) {
+		bullet.render(shader);
+	}
+
+	for (auto &rocket : rockets) {
+		rocket.render(shader);
+	}*/
 }
 
 

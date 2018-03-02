@@ -9,10 +9,14 @@ DynamicGameEntity::DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVeloc
 }
 
 void DynamicGameEntity::update(double deltaTime) {
-
+	//forward = glm::normalize(position);
+	position += velocity * (float)deltaTime;
+	//std::cout << "Updating" << std::endl;
 }
 
 void DynamicGameEntity::goFASTER(int yesSPD, double deltaTime) {
+
+
 	if (yesSPD == 1) {
 		acceleration += 0.9 * deltaTime;
 	}

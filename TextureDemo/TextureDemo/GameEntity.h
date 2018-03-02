@@ -6,6 +6,11 @@
 #include <glm/glm.hpp>
 
 #include "Shader.h"
+#include "RenderedObject.h"
+
+#include <vector>
+
+using namespace std;
 
 class GameEntity {
 public:
@@ -15,6 +20,7 @@ public:
 	void render(Shader &shader);
 
 	inline glm::vec3 getPosition() { return position; }
+	inline float getRotation() { return rotationAmount; }
 protected:
 	glm::vec3 position, scale;
 	float rotationAmount;
