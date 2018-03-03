@@ -45,6 +45,7 @@ bool PRESSING_SHOOT_GUN;
 bool PRESSING_SHOOT_ROCKET;
 bool PRESSING_SWITCH_WEAPONS;
 
+//State variables for directional movement
 int PLAYER_ACCELERATION = 0;
 int PLAYER_LEFT_RIGHT = 0;
 int BASH_LEFT_RIGHT = 0;
@@ -187,7 +188,7 @@ int main(void){
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
 
-		//TESTING FOR PUSHING
+		//Key press states based on pressing and releasing with glfwGetKey
 		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
 		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
 		int GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
@@ -232,16 +233,10 @@ int main(void){
 
 
 			// BASHING MOVEMENT
-			
 			if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
 			else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
 			else BASH_LEFT_RIGHT = 0;
-
 			player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
-			//player.checkBashCoolDown(glfwGetTime());
-
-			printf("%d", player.bashCooldown);
-			printf("\n");
 
 			// Get mouse input for turret
 			double mouseX, mouseY;

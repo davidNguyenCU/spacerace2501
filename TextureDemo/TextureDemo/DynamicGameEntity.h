@@ -2,6 +2,8 @@
 
 #include "GameEntity.h"
 
+//YEET
+//Subclass, handles all game entities that have some form of (potential) movement 
 class DynamicGameEntity : public GameEntity {
 public:
 	DynamicGameEntity(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);

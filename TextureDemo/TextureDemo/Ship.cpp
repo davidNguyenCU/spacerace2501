@@ -10,6 +10,8 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	width = 0.175;
 	height = 0.175;
 
+	sideVelocity = 0.55;
+
 	bashStartPosition = 0;
 	bashVelocity = 0;
 	bashAccler = 50;
@@ -68,14 +70,16 @@ void Ship::render(Shader& shader) {
 	}*/
 }
 
-
+//Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {
-	if (state == 1) { position.x += 0.55 * deltaTime; }
-	else if (state == -1) { position.x -= 0.55 * deltaTime; }
+	if (state == 1) { position.x += sideVelocity * deltaTime; }
+	else if (state == -1) { position.x -= sideVelocity * deltaTime; }
 }
 
+//Side dashing with Q and E key
 void Ship::sideBash(int state, double currentTime, double deltaTime) {
 
+	//Initial state to begin dashing, check if not bashing and if cooldown is not going
 	if (state != 0
 		&& isBashing == false
 		&& bashStarted == false
@@ -87,19 +91,21 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 		bashDirection = state;
 	}
 
+	//Reset the bool if we started bashing, save the position of the bash start and time for cooldown
 	if (bashStarted == true) {
 		bashStartPosition = position.x;
 		timeOfBashStart = currentTime;
 		bashStarted = false;
 	}
 
+	//Check if cooldown time has passed, if has, uncheck cooldown boolean
 	if (bashCooldown == true){
 		if (currentTime - timeOfBashStart > 4.0)
 			bashCooldown = false;
 	}
 
+	//If in the midst of bashing, adjust the side velocity (and subsequently its position)
 	if (isBashing == true) {
-
 		if (bashDirection == 1 && position.x < bashStartPosition + 0.35)
 			bashVelocity += bashAccler * deltaTime;
 		else if (bashDirection == -1 && position.x > bashStartPosition - 0.35)
@@ -110,5 +116,6 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 		}
 	}
 
+	//Adjust side position constantly as check for side bashing is checked every frame
 	position.x += bashVelocity * deltaTime;
 }

@@ -4,6 +4,7 @@
 #include "MachineBullet.h"
 #include "RocketBullet.h"
 
+//Subclass of dynamic (moving) game entity, includes all spawned ships in the game
 class Ship : public DynamicGameEntity {
 public:
 	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
@@ -15,6 +16,7 @@ public:
 	bool bashCooldown;
 	int bashDirection;
 
+	float sideVelocity;
 	float width;
 	float height;
 
