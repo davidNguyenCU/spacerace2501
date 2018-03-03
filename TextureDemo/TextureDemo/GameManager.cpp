@@ -52,6 +52,8 @@ void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
 		
 		//printf("COLLIDING");
 
+
+
 	}
 }
 

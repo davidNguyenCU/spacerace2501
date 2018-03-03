@@ -10,11 +10,11 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	width = 0.175;
 	height = 0.175;
 
-	sideVelocity = 0.55;
+	sideVelocity = 0;
 
 	bashStartPosition = 0;
 	bashVelocity = 0;
-	bashAccler = 50;
+	bashAccler = 1500;
 	bashDirection = 0;
 
 	bashStarted = false;
@@ -72,8 +72,16 @@ void Ship::render(Shader& shader) {
 
 //Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {
-	if (state == 1) { position.x += sideVelocity * deltaTime; }
-	else if (state == -1) { position.x -= sideVelocity * deltaTime; }
+	if (state == 1) {
+		velocity.x = 0.55;
+		//position.x += sideVelocity * deltaTime; 
+	}
+	else if (state == -1) {
+		velocity.x = -0.55;
+		//position.x -= sideVelocity * deltaTime; 
+	}
+	else
+		velocity.x = 0;
 }
 
 //Side dashing with Q and E key
@@ -107,15 +115,12 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	//If in the midst of bashing, adjust the side velocity (and subsequently its position)
 	if (isBashing == true) {
 		if (bashDirection == 1 && position.x < bashStartPosition + 0.35)
-			bashVelocity += bashAccler * deltaTime;
+			velocity.x += bashAccler * deltaTime;
 		else if (bashDirection == -1 && position.x > bashStartPosition - 0.35)
-			bashVelocity -= bashAccler * deltaTime;
+			velocity.x -= bashAccler * deltaTime;
 		else if(position.x < bashStartPosition - 0.35 || position.x > bashStartPosition + 0.35){
-			bashVelocity = 0;
+			velocity.x = 0;
 			isBashing = false;
 		}
 	}
-
-	//Adjust side position constantly as check for side bashing is checked every frame
-	position.x += bashVelocity * deltaTime;
 }
