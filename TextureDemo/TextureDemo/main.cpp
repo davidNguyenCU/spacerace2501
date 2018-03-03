@@ -254,28 +254,15 @@ int main(void){
 			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 			
 			enemyaitest.update(deltaTime);
-			// Update entities
-			/*player.update(deltaTime);
-			enemy.update(deltaTime);*/
-
 			gameManager.update(deltaTime);
 			gameManager.checkCollisions(&player, &enemy);
-			//cout << enemy.getPosition().x << endl;
 			enemy.update(deltaTime);
 			map.update(deltaTime, player.getPosition());
+
 			// Render entities
-			//player.render(shader);
 			enemy.render(shader);
 			gameManager.renderAll(shader);
 			map.render(shader);
-
-			/*for (auto &bullet : player.getBullets()) {
-				bullet.render(shader);
-			}
-
-			for (auto &rocket : player.getRockets()) {
-				rocket.render(shader);
-			}*/
 			
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 
