@@ -1,4 +1,5 @@
 #include "GameEntity.h"
+#include "Globals.h"
 
 GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
 	: position(entityPos), scale(entityScale), rotationAmount(entityRotationAmount), texture(entityTexture), numElements(entityNumElements)
@@ -6,6 +7,11 @@ GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entit
 }
 
 void GameEntity::render(Shader &shader) {
+
+	// Do not draw offscreen objects
+	if (screenPosition.x < -1.0f || screenPosition.x > 1.0f ||
+		screenPosition.y < -1.0f || screenPosition.y > 1.0f) return;
+
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
 

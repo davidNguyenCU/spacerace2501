@@ -17,7 +17,8 @@ void EnemyAi::update(double deltaTime)
 		//glm::vec3 targetv = glm::normalize(TargetPosition - EnemyPosition);
 		//acceleration = AccelerationCap * (targetv - EnemyVelocity) / glm::length(targetv - EnemyVelocity);
 		enemy->setAcceleration(glm::vec3(0.5f, 0.5f, 0.5f) * (glm::normalize(enemy->getPlayer()->getPosition() - enemy->getPosition()) - enemy->getVelocity()) / glm::length(glm::normalize(enemy->getPlayer()->getPosition() - enemy->getPosition()) - enemy->getVelocity()));
-		//std::cout << glm::length(glm::normalize(enemy->getPlayer()->getPosition() - enemy->getPosition()) - enemy->getVelocity());
+		//std::
+		//<< glm::length(glm::normalize(enemy->getPlayer()->getPosition() - enemy->getPosition()) - enemy->getVelocity());
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime);
 	}
 	else if (behaviourController == stupidFlee) 

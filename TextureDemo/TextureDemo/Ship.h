@@ -17,25 +17,30 @@ public:
 	void recordShipBashStart(float startBashPosition, double bashTimeStart);
 	bool sideBash(bool bashing, int bashDirection, double deltaTime, double currentTime);
 
-	enum GunType
-	{
-		MachineGun,
-		Rocket
-	};
+	void hasShotGun();
+	void hasShotRocket();
 
-	GunType getCurrentGun();
-	//void shootGun(glm::vec2 target, GLuint texture, int size);
-	//void shootRocket(glm::vec2 target, GLuint texture, int size);
-	void switchGun();
+	//inline bool canShootGun() { return (gunAmmo > 0 && gunTimer <= 0.0f); };
+	//inline bool canShootRocket() { return (rocketAmmo > 0 && rocketTimer <= 0.0f);  };
+	bool canShootGun();
+	bool canShootRocket();
 
 	void render(Shader& shader);
 
 private:
-	GunType currentGun;
+
+	const float gunCooldown = 5.0f;
+	const float rocketCooldown = 10000.0f;
+
+	float gunTimer;
+	float rocketTimer;
+
+	void updateBulletTimers(double deltaTime);
+
 	int gunAmmo;
 	int rocketAmmo;
-	static const int MAX_GUN_AMMO = 1;
-	static const int MAX_ROCKET_AMMO = 1;
+	static const int MAX_GUN_AMMO = 10;
+	static const int MAX_ROCKET_AMMO = 10;
 
 	float bashVelocity;
 	float bashAccler;

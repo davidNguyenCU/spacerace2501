@@ -18,19 +18,19 @@
 #include "HUD.h"
 #include "GameManager.h"
 #include "EnemyAi.h"
+#include "Globals.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
 	std::cerr << exception_object.what() << std::endl
 
 // Globals that define the OpenGL window and viewport
-const std::string window_title_g = "Multiple Sprites Demo";
-const unsigned int window_width_g = 800;
-const unsigned int window_height_g = 600;
+const std::string window_title_g = "Space Race";
+
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[6];
+GLuint tex[7];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -110,13 +110,14 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(6, tex);
+	glGenTextures(7, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
 	setthisTexture(tex[3], "crosshairs.png");
 	setthisTexture(tex[4], "bullet.png");
 	setthisTexture(tex[5], "rocket.png");
+	setthisTexture(tex[6], "map.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -124,6 +125,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[3]);
 	glBindTexture(GL_TEXTURE_2D, tex[4]);
 	glBindTexture(GL_TEXTURE_2D, tex[5]);
+	glBindTexture(GL_TEXTURE_2D, tex[6]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -133,23 +135,23 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	PRESSING_FORWARD = (key == GLFW_KEY_W && action == GLFW_PRESS);
+	/*PRESSING_FORWARD = (key == GLFW_KEY_W && action == GLFW_PRESS);
 	PRESSING_BACK = (key == GLFW_KEY_S && action == GLFW_PRESS);
 	PRESSING_BASH_R = (key == GLFW_KEY_D && action == GLFW_PRESS);
-	PRESSING_BASH_L = (key == GLFW_KEY_A && action == GLFW_PRESS);
+	PRESSING_BASH_L = (key == GLFW_KEY_A && action == GLFW_PRESS);*/
 
 }
 
 void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-	PRESSING_SHOOT_GUN = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
-	PRESSING_SHOOT_ROCKET = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
+	/*PRESSING_SHOOT_GUN = (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS);
+	PRESSING_SHOOT_ROCKET = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);*/
 }
 
 // Main function that builds and runs the game
 int main(void){
     try {
 		// Setup window
-		Window window(window_width_g, window_height_g, window_title_g);
+		Window window(Globals::window_width_g, Globals::window_height_g, window_title_g);
 
         // Set up z-buffer for rendering
         glEnable(GL_DEPTH_TEST);
@@ -189,6 +191,8 @@ int main(void){
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
 
+		Player map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 0.0f), 0, tex[6], size);
+
 		//TESTING FOR PUSHING
 		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
 		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
@@ -196,6 +200,9 @@ int main(void){
 		int GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
 		int BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
 		int BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
+		//bool SHOOT_ROCKET = glfwGetKey(window.get)
+		bool SHOOT_ROCKET;
+		bool SHOOT_GUN;
 
         // Run the main loop
         bool animating = 1;
@@ -219,6 +226,8 @@ int main(void){
 			GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
 			BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
 			BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
+			SHOOT_GUN = glfwGetMouseButton(window.getWindow(), GLFW_MOUSE_BUTTON_LEFT);
+			SHOOT_ROCKET = glfwGetMouseButton(window.getWindow(), GLFW_MOUSE_BUTTON_RIGHT);
 
 			// Acceleration FORWARD AND BACK
 			if	(GO_FORWARD == 1)	   PLAYER_ACCELERATION =  1;
@@ -232,6 +241,7 @@ int main(void){
 			else					   PLAYER_LEFT_RIGHT = 0;
 			player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
 
+			cout << "ROCKET: " << SHOOT_ROCKET << endl;
 
 			// BASHING MOVEMENT
 			if (BASH_RIGHT == 1 || BASH_LEFT == 1 && BASHING == false && player.ableToBashAgain == true) { 
@@ -257,25 +267,29 @@ int main(void){
 			// Get mouse input for turret
 			double mouseX, mouseY;
 			glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
-			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
-			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
+			float screenSpaceMouseX = (mouseX / Globals::window_width_g) * 2 - 1;
+			float screenSpaceMouseY = -((mouseY / Globals::window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
 			// Shoot
-			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
+			gameManager.playerShoot(SHOOT_GUN, SHOOT_ROCKET);
 			
 			enemyaitest.update(deltaTime);
 			// Update entities
 			/*player.update(deltaTime);
 			enemy.update(deltaTime);*/
-
+			
 			gameManager.update(deltaTime);
-			cout << enemy.getPosition().x << endl;
+			//
+			//<< enemy.getPosition().x << endl;
+			map.update(deltaTime, player.getPosition());
 			enemy.update(deltaTime);
 			// Render entities
 			//player.render(shader);
 			enemy.render(shader);
 			gameManager.renderAll(shader);
+			
+			map.render(shader);
 
 			/*for (auto &bullet : player.getBullets()) {
 				bullet.render(shader);
