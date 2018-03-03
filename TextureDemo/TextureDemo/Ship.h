@@ -27,8 +27,6 @@ public:
 	void hasShotGun();
 	void hasShotRocket();
 
-	//inline bool canShootGun() { return (gunAmmo > 0 && gunTimer <= 0.0f); };
-	//inline bool canShootRocket() { return (rocketAmmo > 0 && rocketTimer <= 0.0f);  };
 	bool canShootGun();
 	bool canShootRocket();
 

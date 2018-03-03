@@ -30,7 +30,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[6];
+GLuint tex[7];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -109,13 +109,14 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(6, tex);
+	glGenTextures(7, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
 	setthisTexture(tex[3], "crosshairs.png");
 	setthisTexture(tex[4], "bullet.png");
 	setthisTexture(tex[5], "rocket.png");
+	setthisTexture(tex[6], "map.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -123,6 +124,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[3]);
 	glBindTexture(GL_TEXTURE_2D, tex[4]);
 	glBindTexture(GL_TEXTURE_2D, tex[5]);
+	glBindTexture(GL_TEXTURE_2D, tex[6]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -187,6 +189,9 @@ int main(void){
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
+
+		// Instantiated as player only for testing purposes
+		Player map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0, tex[6], size);
 
 		//Key press states based on pressing and releasing with glfwGetKey
 		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
@@ -257,10 +262,12 @@ int main(void){
 			gameManager.checkCollisions(&player, &enemy);
 			//cout << enemy.getPosition().x << endl;
 			enemy.update(deltaTime);
+			map.update(deltaTime, player.getPosition());
 			// Render entities
 			//player.render(shader);
 			enemy.render(shader);
 			gameManager.renderAll(shader);
+			map.render(shader);
 
 			/*for (auto &bullet : player.getBullets()) {
 				bullet.render(shader);

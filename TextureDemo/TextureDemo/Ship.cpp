@@ -3,7 +3,6 @@
 Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
-	currentGun = MachineGun;
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
@@ -27,47 +26,8 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	DynamicGameEntity::update(deltaTime, playerPosition);
 }
 
-Ship::GunType Ship::getCurrentGun() {
-	return currentGun;
-}
-
-/*void Ship::shootRocket(glm::vec2 target, GLuint texture, int size) {
-	if (rocketAmmo <= 0 || rockets.size() >= 5) return;
-	std::cout << "Num rockets " << rockets.size() << std::endl;
-
-	glm::vec3 direction = glm::normalize(glm::vec3(target, 0.0f) - position);
-	
-	rockets.push_back(RocketBullet(position, direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), rotationAmount, texture, size));
-}
-
-void Ship::shootGun(glm::vec2 target, GLuint texture, int size) {
-	if (gunAmmo <= 0 || bullets.size() >= 5) return;
-
-	glm::vec3 direction = glm::normalize(glm::vec3(target, 0.0f) - position);
-
-	bullets.push_back(MachineBullet(position, direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), rotationAmount, texture, size));
-	std::cout << "Num bullets: " << bullets.size() << std::endl;
-}*/
-
-void Ship::switchGun() {
-	switch (currentGun) {
-	case MachineGun:
-		currentGun = Rocket;
-	case Rocket:
-		currentGun = MachineGun;
-	}
-}
-
 void Ship::render(Shader& shader) {
 	DynamicGameEntity::render(shader);
-
-	/*for (auto &bullet : bullets) {
-		bullet.render(shader);
-	}
-
-	for (auto &rocket : rockets) {
-		rocket.render(shader);
-	}*/
 }
 
 //Side to side movement with A and D keys
@@ -123,4 +83,26 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 			isBashing = false;
 		}
 	}
+}
+
+void Ship::hasShotGun() {
+	gunTimer = gunCooldown;
+	gunAmmo--;
+}
+
+void Ship::hasShotRocket() {
+	rocketTimer = rocketCooldown;
+	rocketAmmo--;
+}
+
+void Ship::updateBulletTimers(double deltaTime) {
+	gunTimer -= deltaTime;
+	rocketTimer -= deltaTime;
+}
+
+bool Ship::canShootGun() {
+	return (gunTimer <= 0.0f && gunAmmo > 0);
+}
+bool Ship::canShootRocket() {
+	return (rocketTimer <= 0.0f && rocketAmmo > 0);
 }
