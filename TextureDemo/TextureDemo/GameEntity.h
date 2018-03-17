@@ -12,6 +12,7 @@
 
 using namespace std;
 
+//Class of all game entities in in the game
 class GameEntity {
 public:
 	GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);

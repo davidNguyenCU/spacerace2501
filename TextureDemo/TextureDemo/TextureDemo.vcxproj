@@ -186,6 +186,7 @@
     <ClInclude Include="EnemyAi.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Hazard.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Menu.h" />

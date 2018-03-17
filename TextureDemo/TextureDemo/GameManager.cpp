@@ -34,6 +34,29 @@ void GameManager::updateUI() {
 	
 }
 
+void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
+	float playerWidth = player->width;
+	float playerHeight = player->height;
+	float playerXpos = player->getPosition().x;
+	float playerYpos = player->getPosition().y;
+
+	float enemyWidth = theEnemy->width;
+	float enemyHeight = theEnemy->height;
+	float enemyXpos = theEnemy->getPosition().x;
+	float enemyYpos = theEnemy->getPosition().y;
+
+	if (playerXpos < enemyXpos + enemyWidth &&
+		enemyXpos < playerXpos + playerWidth &&
+		playerYpos < enemyYpos + enemyHeight &&
+		enemyYpos < playerYpos + playerHeight) {
+		
+		//printf("COLLIDING");
+
+
+
+	}
+}
+
 void GameManager::setPlayer(Player * aPlayer) {
 	player = aPlayer;
 }
@@ -87,7 +110,9 @@ void GameManager::renderAll(Shader& shader) {
 }
 
 void GameManager::playerShoot(bool readyGun, bool readyRocket) {
-	Ship::GunType currentGun = player->getCurrentGun();
+	//Ship::GunType currentGun = player->getCurrentGun();
+
+	cout << "READY ROCKET" << readyRocket << endl;
 
 	float globalX = player->getPosition().x + mouseX;
 	float globalY = player->getPosition().y + mouseY;
@@ -98,20 +123,24 @@ void GameManager::playerShoot(bool readyGun, bool readyRocket) {
 
 	if (readyRocket /*&& currentGun == Ship::Rocket*/) {
 		//player->shootRocket(target, rocketTexture.getTexture(), squareGeometry);
-		shootRocket(player->getPosition(), target);
+		if (player->canShootRocket()) {
+			shootRocket(player->getPosition(), target);
+			player->hasShotRocket();
+		}
 	}
-	else if (readyGun /*&& currentGun == Ship::MachineGun*/) {
-		shootGun(player->getPosition(), target);
+	
+	if (readyGun /*&& currentGun == Ship::MachineGun*/) {
+		if (player->canShootGun()) {
+			shootGun(player->getPosition(), target);
+			player->hasShotGun();
+		}
 		//player->shootGun(target, bulletTexture.getTexture(), squareGeometry);
 	}
 }
 
 void GameManager::shootRocket(glm::vec3 source, glm::vec3 target) {
 
-	cout << source.x << ", " << source.y << endl;
-
 	glm::vec3 direction = glm::normalize(target - source);
-	cout << direction.x << ", " << direction.y << endl;
 
 	float rotation = 180.0 / 3.14159 * atan2f(direction.y, direction.x);
 	rockets.push_back(RocketBullet(/*source.getPosition()*/source, direction, 0.0f, rocketTexture.getTexture(), squareGeometry));
@@ -123,5 +152,5 @@ void GameManager::shootGun(glm::vec3 source, glm::vec3 target) {
 
 	float rotation = 180.0 / 3.14159 * atan2f(direction.y, direction.x);
 	
-	bullets.push_back(MachineBullet(/*source.getPosition()*/source, direction, rotation, rocketTexture.getTexture(), squareGeometry));
+	bullets.push_back(MachineBullet(/*source.getPosition()*/source, direction, 0.0f, bulletTexture.getTexture(), squareGeometry));
 }

@@ -3,6 +3,7 @@
 #include "Ship.h"
 #include "Player.h"
 
+//Subclass of ships, handles enemy ships
 class Enemy : public Ship {
 public:
 	Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Player *playerEntity);
