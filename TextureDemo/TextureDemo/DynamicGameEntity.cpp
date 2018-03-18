@@ -23,7 +23,7 @@ void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
 	if (velocity.y < 0)
 		velocity.y = 0;
 
-	printf("%f", velocity.y);
+	//printf("%f", velocity.x);
 
 	position += velocity * (float) deltaTime;
 	screenPosition = position - playerPosition;

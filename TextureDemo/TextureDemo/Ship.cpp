@@ -47,23 +47,30 @@ void Ship::sideMovement(int state, double deltaTime) {
 
 //Side dashing with Q and E key
 void Ship::sideBash(int state, double currentTime, double deltaTime) {
-
+	//printf("%d", state);
 	//Initial state to begin dashing, check if not bashing and if cooldown is not going
 	if (state != 0
-		&& isBashing == false
 		&& bashStarted == false
 		&& bashCooldown == false) {
 	
-		isBashing = true;
 		bashStarted = true;
 		bashCooldown = true;
 		bashDirection = state;
+
+
 	}
 
+	
 	//Reset the bool if we started bashing, save the position of the bash start and time for cooldown
 	if (bashStarted == true) {
+		if (bashDirection == 1)
+			momentum.x += 1.5;
+		else if (bashDirection == -1)
+			momentum.x -= 1.5;
+
 		bashStartPosition = position.x;
 		timeOfBashStart = currentTime;
+		//momentum.x = 0;
 		bashStarted = false;
 	}
 
@@ -73,17 +80,19 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 			bashCooldown = false;
 	}
 
+	printf("%d", bashCooldown);
 	//If in the midst of bashing, adjust the side velocity (and subsequently its position)
+	/*
 	if (isBashing == true) {
 		if (bashDirection == 1 && position.x < bashStartPosition + 0.35)
-			momentum.x = 0.1;
+			momentum.x += 0.01;
 		else if (bashDirection == -1 && position.x > bashStartPosition - 0.35)
-			momentum.x = -0.1;
+			momentum.x += -0.01;
 		else if(position.x < bashStartPosition - 0.35 || position.x > bashStartPosition + 0.35){
 			momentum.x = 0;
 			isBashing = false;
 		}
-	}
+	}*/
 }
 
 void Ship::hasShotGun() {
