@@ -18,6 +18,7 @@
 #include "HUD.h"
 #include "GameManager.h"
 #include "EnemyAi.h"
+#include "Map.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -30,7 +31,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[7];
+GLuint tex[8];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -117,6 +118,7 @@ void setallTexture(void)
 	setthisTexture(tex[4], "bullet.png");
 	setthisTexture(tex[5], "rocket.png");
 	setthisTexture(tex[6], "map.png");
+	setthisTexture(tex[7], "road.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -125,6 +127,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[4]);
 	glBindTexture(GL_TEXTURE_2D, tex[5]);
 	glBindTexture(GL_TEXTURE_2D, tex[6]);
+	glBindTexture(GL_TEXTURE_2D, tex[7]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -190,8 +193,7 @@ int main(void){
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
 
-		// Instantiated as player only for testing purposes
-		Player map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0, tex[6], size);
+		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), glm::vec3(2.0f/3.0f, 6.0f, 0.0f), 0, tex[6], tex[7], size);
 
 		//Key press states based on pressing and releasing with glfwGetKey
 		int GO_FORWARD;
@@ -262,6 +264,7 @@ int main(void){
 			// Render entities
 			enemy.render(shader);
 			gameManager.renderAll(shader);
+			map.renderRoad(shader);
 			map.render(shader);
 			
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 

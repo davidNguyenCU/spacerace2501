@@ -9,8 +9,8 @@ GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entit
 void GameEntity::render(Shader &shader) {
 
 	// Do not draw offscreen objects
-	if (screenPosition.x < -1.0f || screenPosition.x > 1.0f ||
-		screenPosition.y < -1.0f || screenPosition.y > 1.0f) return;
+	if (screenPosition.x < -1.0f * 2 || screenPosition.x > 1.0f * 2 ||
+		screenPosition.y < -1.0f * 2 || screenPosition.y > 1.0f * 2) return;
 
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
