@@ -56,8 +56,6 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 		bashStarted = true;
 		bashCooldown = true;
 		bashDirection = state;
-
-
 	}
 
 	
@@ -79,8 +77,6 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 		if (currentTime - timeOfBashStart > 4.0)
 			bashCooldown = false;
 	}
-
-	printf("%d", bashCooldown);
 	//If in the midst of bashing, adjust the side velocity (and subsequently its position)
 	/*
 	if (isBashing == true) {
