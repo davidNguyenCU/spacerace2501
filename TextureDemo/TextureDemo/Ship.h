@@ -47,6 +47,10 @@ private:
 	static const int MAX_GUN_AMMO = 10;
 	static const int MAX_ROCKET_AMMO = 10;
 
+	static const int MAX_FORWARD_VELOCITY = 2.0f;
+	static const int MAX_FORWARD_ACCELERATION = 0.5f;
+
+
 	float bashVelocity;
 	float bashAccler;
 };
