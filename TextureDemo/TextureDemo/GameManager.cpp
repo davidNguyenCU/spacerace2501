@@ -49,24 +49,44 @@ void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
 		enemyXpos < playerXpos + playerWidth &&
 		playerYpos < enemyYpos + enemyHeight &&
 		enemyYpos < playerYpos + playerHeight) {
+
+		float xBound;
+		float yBound;
 		
 		if (playerXpos < enemyXpos) {
 			player->setXposition(playerXpos-0.015);
 			theEnemy->setXposition(enemyXpos+0.015);
+
+			xBound = playerXpos + playerWidth - enemyXpos;
 		}
 		if (enemyXpos < playerXpos) {
 			player->setXposition(playerXpos + 0.015);
 			theEnemy->setXposition(enemyXpos-0.015);
+
+			xBound = enemyXpos + enemyWidth - playerXpos;
 		}
 		
 		if (enemyYpos < playerYpos) {
 			player->setXposition(playerXpos + 0.015);
 			theEnemy->setYposition(enemyYpos - 0.015);
+
+			yBound = enemyYpos + enemyHeight - playerYpos;
 		}
 		if (playerYpos < enemyYpos) {
 			player->setYposition(playerYpos - 0.015);
 			theEnemy->setYposition(enemyYpos + 0.015);
+
+			yBound = playerYpos + playerHeight - enemyYpos;
 		}
+
+		if (xBound > yBound)
+			printf("XXX BOUND GREATER");
+		else if (yBound > xBound)
+			printf("YYY BOUND GREATER");
+
+		printf("\n");
+
+
 
 	}
 }
