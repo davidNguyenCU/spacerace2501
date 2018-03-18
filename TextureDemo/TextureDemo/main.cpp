@@ -194,12 +194,12 @@ int main(void){
 		Player map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0, tex[6], size);
 
 		//Key press states based on pressing and releasing with glfwGetKey
-		int GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
-		int GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
-		int GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
-		int GO_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_D);
-		int BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
-		int BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
+		int GO_FORWARD;
+		int GO_BACKWARD;
+		int GO_LEFT;
+		int GO_RIGHT;
+		int BASH_RIGHT;
+		int BASH_LEFT;
 
         // Run the main loop
         bool animating = 1;
