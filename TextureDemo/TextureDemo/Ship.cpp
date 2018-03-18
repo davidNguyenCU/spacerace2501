@@ -1,4 +1,5 @@
 #include "Ship.h"
+#include "Map.h"
 
 Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
@@ -20,6 +21,8 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	bashStarted = false;
 	isBashing = false;
 	bashCooldown = false;
+
+	health = MAX_HEALTH;
 }
 
 void Ship::update(double deltaTime, glm::vec3 playerPosition) {
@@ -37,9 +40,14 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 		acceleration.y = MAX_FORWARD_ACCELERATION;
 	}
 
-	std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
+	//std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
+	std::cout << "Health: " << health << std::endl;
 
 	DynamicGameEntity::update(deltaTime, playerPosition);
+
+	if (isOutOfBounds()) {
+		outOfBounds(deltaTime);
+	}
 }
 
 void Ship::render(Shader& shader) {
@@ -124,6 +132,18 @@ void Ship::updateBulletTimers(double deltaTime) {
 bool Ship::canShootGun() {
 	return (gunTimer <= 0.0f && gunAmmo > 0);
 }
+
 bool Ship::canShootRocket() {
 	return (rocketTimer <= 0.0f && rocketAmmo > 0);
 }
+
+void Ship::outOfBounds(double deltaTime) {
+	health -= asteroidDamagePerSecond * deltaTime;
+	if (health < 0) health = 0;
+}
+
+bool Ship::isOutOfBounds() {
+	return (position.x < -(0.5 * Map::getRoadWidth()) || position.x > 0.5 * Map::getRoadWidth());
+}
+
+

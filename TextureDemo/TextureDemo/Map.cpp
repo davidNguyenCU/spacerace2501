@@ -2,11 +2,10 @@
 #include "Globals.h"
 #include <math.h>
 
-Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, glm::vec3 &roadScaleIn, float entityRotationAmount, GLuint entityTexture, GLuint roadTex, GLint entityNumElements)
+Map::Map(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLuint roadTex, GLint entityNumElements)
 	: GameEntity(entityPos, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 	roadTexture = roadTex;
-	roadScale = roadScaleIn;
 }
 
 void Map::update(double deltaTime) {

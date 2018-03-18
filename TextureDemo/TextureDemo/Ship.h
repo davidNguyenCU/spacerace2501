@@ -32,6 +32,8 @@ public:
 
 	void render(Shader& shader);
 
+	float getHealth() { return health;  };
+
 private:
 
 	const float gunCooldown = 5.0f;
@@ -50,7 +52,12 @@ private:
 	static const int MAX_FORWARD_VELOCITY = 2.0f;
 	static const int MAX_FORWARD_ACCELERATION = 0.5f;
 
-
 	float bashVelocity;
 	float bashAccler;
+
+	const float MAX_HEALTH = 100.0f;
+	float health;
+	void outOfBounds(double deltaTime);
+	bool isOutOfBounds();
+	const float asteroidDamagePerSecond = 10.0f;
 };

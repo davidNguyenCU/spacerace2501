@@ -31,7 +31,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[8];
+GLuint tex[9];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -110,7 +110,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(7, tex);
+	glGenTextures(9, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
@@ -119,6 +119,7 @@ void setallTexture(void)
 	setthisTexture(tex[5], "rocket.png");
 	setthisTexture(tex[6], "map.png");
 	setthisTexture(tex[7], "road.png");
+	setthisTexture(tex[8], "gameover.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -128,6 +129,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[5]);
 	glBindTexture(GL_TEXTURE_2D, tex[6]);
 	glBindTexture(GL_TEXTURE_2D, tex[7]);
+	glBindTexture(GL_TEXTURE_2D, tex[8]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -184,7 +186,7 @@ int main(void){
 		//GameManager * gameManager = new GameManager();
 		GameManager gameManager = GameManager::GameManager();
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
-		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[0], size);
+		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
 		EnemyAi enemyaitest(&enemy, stupidChase);
 
@@ -193,7 +195,7 @@ int main(void){
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
 
-		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), glm::vec3(2.0f/3.0f, 6.0f, 0.0f), 0, tex[6], tex[7], size);
+		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), 0, tex[6], tex[7], size);
 
 		//Key press states based on pressing and releasing with glfwGetKey
 		int GO_FORWARD;
@@ -202,6 +204,8 @@ int main(void){
 		int GO_RIGHT;
 		int BASH_RIGHT;
 		int BASH_LEFT;
+
+		RenderedObject gameOverScreen(tex[8]);
 
         // Run the main loop
         bool animating = 1;
@@ -226,25 +230,6 @@ int main(void){
 			BASH_RIGHT = glfwGetKey(window.getWindow(), GLFW_KEY_E);
 			BASH_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_Q);
 
-			// Acceleration FORWARD AND BACK
-			if	(GO_FORWARD == 1)	   PLAYER_ACCELERATION =  1;
-			else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
-			else					   PLAYER_ACCELERATION =  0;
-			player.goFASTER(PLAYER_ACCELERATION, deltaTime);
-
-			// SIDEWAYS MOVEMENT (NON BASHING)
-			if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
-			else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
-			else					   PLAYER_LEFT_RIGHT = 0;
-			player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
-
-
-			// BASHING MOVEMENT
-			if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
-			else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
-			else BASH_LEFT_RIGHT = 0;
-			player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
-
 			// Get mouse input for turret
 			double mouseX, mouseY;
 			glfwGetCursorPos(window.getWindow(), &mouseX, &mouseY);
@@ -252,14 +237,40 @@ int main(void){
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
-			// Shoot
-			gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
-			
-			enemyaitest.update(deltaTime);
-			gameManager.update(deltaTime);
-			gameManager.checkCollisions(&player, &enemy);
-			enemy.update(deltaTime);
-			map.update(deltaTime, player.getPosition());
+			if (player.getHealth() > 0.0f) {
+
+				// Acceleration FORWARD AND BACK
+				if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
+				else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
+				else					   PLAYER_ACCELERATION = 0;
+				player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+
+				// SIDEWAYS MOVEMENT (NON BASHING)
+				if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
+				else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
+				else					   PLAYER_LEFT_RIGHT = 0;
+				player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
+
+
+				// BASHING MOVEMENT
+				if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
+				else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
+				else BASH_LEFT_RIGHT = 0;
+				player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
+
+				// Shoot
+				gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
+
+				enemyaitest.update(deltaTime);
+				gameManager.update(deltaTime);
+				gameManager.checkCollisions(&player, &enemy);
+				enemy.update(deltaTime);
+				map.update(deltaTime, player.getPosition());
+			}
+			else {
+				gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+			}
+
 
 			// Render entities
 			enemy.render(shader);
