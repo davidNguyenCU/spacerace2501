@@ -19,7 +19,7 @@ public:
 	float sideVelocity;
 	float width;
 	float height;
-	float mass; 
+	float mass; //Test Comment
 
 	void update(double deltaTime, glm::vec3 playerPosition);
 	void sideMovement(int state, double deltaTime);
