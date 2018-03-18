@@ -126,7 +126,7 @@ void GameManager::renderAll(Shader& shader) {
 void GameManager::playerShoot(bool readyGun, bool readyRocket) {
 	//Ship::GunType currentGun = player->getCurrentGun();
 
-	cout << "READY ROCKET" << readyRocket << endl;
+	//cout << "READY ROCKET" << readyRocket << endl;
 
 	float globalX = player->getPosition().x + mouseX;
 	float globalY = player->getPosition().y + mouseY;

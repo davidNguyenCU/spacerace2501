@@ -30,12 +30,15 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 		velocity.y = MAX_FORWARD_VELOCITY;
 	}
 
-	/*if (acceleration.y < 0.0f) {
+	if (acceleration.y < 0.0f) {
 		acceleration.y = 0.0f;
 	}
 	else if (acceleration.y > MAX_FORWARD_ACCELERATION) {
 		acceleration.y = MAX_FORWARD_ACCELERATION;
-	}*/
+	}
+
+	std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
+
 	DynamicGameEntity::update(deltaTime, playerPosition);
 }
 
