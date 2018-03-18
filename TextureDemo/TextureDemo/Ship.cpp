@@ -6,6 +6,7 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
+	mass = 1.0f;
 	width = 0.175;
 	height = 0.175;
 
@@ -33,15 +34,15 @@ void Ship::render(Shader& shader) {
 //Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {
 	if (state == 1) {
-		velocity.x = 0.55;
+		momentum.x += 0.0001;
 		//position.x += sideVelocity * deltaTime; 
 	}
 	else if (state == -1) {
-		velocity.x = -0.55;
+		momentum.x += -0.0001;
 		//position.x -= sideVelocity * deltaTime; 
 	}
 	else
-		velocity.x = 0;
+		momentum.x = 0;
 }
 
 //Side dashing with Q and E key
@@ -75,11 +76,11 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	//If in the midst of bashing, adjust the side velocity (and subsequently its position)
 	if (isBashing == true) {
 		if (bashDirection == 1 && position.x < bashStartPosition + 0.35)
-			velocity.x += bashAccler * deltaTime;
+			momentum.x = 0.1;
 		else if (bashDirection == -1 && position.x > bashStartPosition - 0.35)
-			velocity.x -= bashAccler * deltaTime;
+			momentum.x = -0.1;
 		else if(position.x < bashStartPosition - 0.35 || position.x > bashStartPosition + 0.35){
-			velocity.x = 0;
+			momentum.x = 0;
 			isBashing = false;
 		}
 	}

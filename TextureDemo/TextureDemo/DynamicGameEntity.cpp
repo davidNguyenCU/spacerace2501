@@ -17,21 +17,37 @@ void DynamicGameEntity::update(double deltaTime) {
 }
 
 void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
+	acceleration = momentum / mass;
+	velocity += acceleration;
+
+	if (velocity.y < 0)
+		velocity.y = 0;
+
+	printf("%f", velocity.y);
+
 	position += velocity * (float) deltaTime;
 	screenPosition = position - playerPosition;
+}
+
+void DynamicGameEntity::updateMomentum(glm::vec3 newMomentum){
+	momentum += newMomentum;
 }
 
 void DynamicGameEntity::goFASTER(int yesSPD, double deltaTime) {
 
 
 	if (yesSPD == 1) {
-		acceleration += 1.5 * deltaTime;
+		//acceleration += 1.5 * deltaTime;
+		//updateMomentum(glm::vec3(0, 0.00001, 0));
+		momentum.y += 0.0001;
 	}
 	else if (yesSPD == -1) {
-		acceleration.y -= 1.5 * deltaTime;
+		//acceleration.y -= 1.5 * deltaTime;
+		//updateMomentum(glm::vec3(0, -0.00001, 0));
+		momentum.y -= 0.0001;
 	}
 	else if (yesSPD == 0) {
-		acceleration.y = 0;
+		//updateMomentum(glm::vec3(0, 0, 0));
+		momentum.y = 0;
 	}
-	velocity.y += acceleration.y * (float)deltaTime;
 }
