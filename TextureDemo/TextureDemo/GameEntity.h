@@ -21,6 +21,8 @@ public:
 	void render(Shader &shader);
 
 	inline glm::vec3 getPosition() { return position; }
+	inline void setXposition(float newX) { position.x = newX; }
+	inline void setYposition(float newY) { position.y = newY; }
 	inline float getRotation() { return rotationAmount; }
 protected:
 	glm::vec3 position, scale;

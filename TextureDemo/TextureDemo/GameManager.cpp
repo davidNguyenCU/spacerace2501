@@ -50,9 +50,24 @@ void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
 		playerYpos < enemyYpos + enemyHeight &&
 		enemyYpos < playerYpos + playerHeight) {
 		
-		//printf("COLLIDING");
-
-
+		printf("COLLIDING");
+		if (playerXpos < enemyXpos) {
+			player->setXposition(playerXpos-0.015);
+			theEnemy->setXposition(enemyXpos+0.015);
+		}
+		if (enemyXpos < playerXpos) {
+			player->setXposition(playerXpos + 0.015);
+			theEnemy->setXposition(enemyXpos-0.015);
+		}
+		
+		if (enemyYpos < playerYpos) {
+			player->setXposition(playerXpos + 0.015);
+			theEnemy->setYposition(enemyYpos - 0.015);
+		}
+		if (playerYpos < enemyYpos) {
+			player->setYposition(playerYpos - 0.015);
+			theEnemy->setYposition(enemyYpos + 0.015);
+		}
 
 	}
 }
