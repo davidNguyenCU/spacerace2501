@@ -31,4 +31,6 @@ protected:
 
 	GLuint texture;
 	GLint numElements;
+
+	glm::vec3 tint;
 };
