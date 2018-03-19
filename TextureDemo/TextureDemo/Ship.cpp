@@ -51,6 +51,7 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 }
 
 void Ship::render(Shader& shader) {
+	shader.setUniform3f("color", glm::vec3(1.0f, 0.0f, 0.0f));
 	DynamicGameEntity::render(shader);
 }
 
