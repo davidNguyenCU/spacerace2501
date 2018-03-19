@@ -32,6 +32,11 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	else if (velocity.y > MAX_FORWARD_VELOCITY) {
 		velocity.y = MAX_FORWARD_VELOCITY;
 	}
+	if (velocity.x > MAX_SIDE_VELOCITY)
+		velocity.x = MAX_SIDE_VELOCITY;
+
+	if (velocity.x < -1 * MAX_SIDE_VELOCITY)
+		velocity.x = -1 * MAX_SIDE_VELOCITY;
 
 	if (acceleration.y < 0.0f) {
 		acceleration.y = 0.0f;
@@ -39,6 +44,7 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	else if (acceleration.y > MAX_FORWARD_ACCELERATION) {
 		acceleration.y = MAX_FORWARD_ACCELERATION;
 	}
+
 
 	//std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
 	std::cout << "Health: " << health << std::endl;

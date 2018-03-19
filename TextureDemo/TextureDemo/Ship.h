@@ -52,6 +52,8 @@ private:
 	static const int MAX_FORWARD_VELOCITY = 2.0f;
 	static const int MAX_FORWARD_ACCELERATION = 0.5f;
 
+	static const int MAX_SIDE_VELOCITY = 2.5f;
+
 	float bashVelocity;
 	float bashAccler;
 

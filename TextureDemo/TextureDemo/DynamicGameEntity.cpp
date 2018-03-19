@@ -20,12 +20,9 @@ void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
 	acceleration = momentum / mass;
 	velocity += acceleration;
 
-	if (velocity.y < 0)
-		velocity.y = 0;
-
 	//printf("%f", velocity.x);
 
-	position += velocity * (float) deltaTime;
+	position += velocity * (float)deltaTime;
 	screenPosition = position - playerPosition;
 }
 

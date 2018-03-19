@@ -188,7 +188,7 @@ int main(void){
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
-		EnemyAi enemyaitest(&enemy, stupidChase);
+		EnemyAi enemyaitest(&enemy, stupidStay);
 
 		Enemy enemies[] = { enemy };
 		

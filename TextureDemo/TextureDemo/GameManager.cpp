@@ -79,15 +79,18 @@ void GameManager::checkCollisions(Player * player, Enemy * theEnemy) {
 			yBound = playerYpos + playerHeight - enemyYpos;
 		}
 
-		if (xBound > yBound)
-			printf("XXX BOUND GREATER");
-		else if (yBound > xBound)
-			printf("YYY BOUND GREATER");
+		if (xBound > yBound || yBound > xBound) {
+			glm::vec3 deltaVelocity = player->getVelocity() - theEnemy->getVelocity();
+			glm::vec3 collisionNormal = glm::normalize(player->getPosition() - theEnemy->getPosition());
+			float invSumMasses = (1 / player->mass) + (1 / theEnemy->mass);
 
-		printf("\n");
+			float CO_OF_RESTITUTION = 0.95;
 
+			float force = -(1 + CO_OF_RESTITUTION) * glm::dot(collisionNormal, deltaVelocity) / invSumMasses; \
 
-
+				player->updateMomentum(force * collisionNormal);
+			theEnemy->updateMomentum(-force * collisionNormal);
+		}
 	}
 }
 

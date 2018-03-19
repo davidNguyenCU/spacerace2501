@@ -21,9 +21,11 @@ void EnemyAi::update(double deltaTime)
 		//<< glm::length(glm::normalize(enemy->getPlayer()->getPosition() - enemy->getPosition()) - enemy->getVelocity());
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime);
 	}
-	else if (behaviourController == stupidFlee) 
+	else if (behaviourController == stupidFlee)
 	{
-
+	}
+	else if (behaviourController == stupidStay) {
+		enemy->setVelocity(glm::vec3(0.0f, 0.0f, 0.0f));
 	}
 }
 
