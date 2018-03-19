@@ -30,7 +30,7 @@ public:
 	bool canShootGun();
 	bool canShootRocket();
 
-	void render(Shader& shader);
+	//void render(Shader& shader);
 
 	float getHealth() { return health;  };
 

@@ -196,6 +196,7 @@
     <ClInclude Include="MachineBullet.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Pickuph.h" />
     <ClInclude Include="RenderedObject.h" />
     <ClInclude Include="Player.h" />

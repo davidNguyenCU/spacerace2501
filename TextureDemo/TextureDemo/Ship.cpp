@@ -47,7 +47,7 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 
 
 	//std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
-	std::cout << "Health: " << health << std::endl;
+	//std::cout << "Health: " << health << std::endl;
 
 	DynamicGameEntity::update(deltaTime, playerPosition);
 
@@ -56,19 +56,15 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	}
 }
 
-void Ship::render(Shader& shader) {
-	shader.setUniform3f("color", glm::vec3(1.0f, 0.0f, 0.0f));
-	DynamicGameEntity::render(shader);
-}
 
 //Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {
 	if (state == 1) {
-		momentum.x += 0.0001;
+		momentum.x += 0.001;
 		//position.x += sideVelocity * deltaTime; 
 	}
 	else if (state == -1) {
-		momentum.x += -0.0001;
+		momentum.x += -0.001;
 		//position.x -= sideVelocity * deltaTime; 
 	}
 	else

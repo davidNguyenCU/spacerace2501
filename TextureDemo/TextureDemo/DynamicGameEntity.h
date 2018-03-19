@@ -14,6 +14,7 @@ public:
 
 	void goFASTER(int yesSPD, double deltaTime);
 	void updateMomentum(glm::vec3 newMomentum);
+	void render(Shader& shader);
 
 	inline glm::vec3 getAcceleration() { return acceleration; };
 	inline glm::vec3 getVelocity() { return velocity; };

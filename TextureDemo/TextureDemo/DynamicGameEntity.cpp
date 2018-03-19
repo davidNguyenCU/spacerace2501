@@ -26,6 +26,12 @@ void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
 	screenPosition = position - playerPosition;
 }
 
+void DynamicGameEntity::render(Shader& shader) {
+	shader.setUniform3f("color", glm::vec3(1.0f, 0.0f, 0.0f));
+	GameEntity::render(shader);
+}
+
+
 void DynamicGameEntity::updateMomentum(glm::vec3 newMomentum){
 	momentum += newMomentum;
 }

@@ -14,6 +14,7 @@
 #include "Window.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Asteroid.h"
 #include "Bullet.h"
 #include "HUD.h"
 #include "GameManager.h"
@@ -31,7 +32,7 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
 // Global texture info
-GLuint tex[9];
+GLuint tex[10];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -110,7 +111,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(9, tex);
+	glGenTextures(10, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
@@ -120,6 +121,7 @@ void setallTexture(void)
 	setthisTexture(tex[6], "map.png");
 	setthisTexture(tex[7], "road.png");
 	setthisTexture(tex[8], "gameover.png");
+	setthisTexture(tex[9], "asteroid.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -130,6 +132,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[6]);
 	glBindTexture(GL_TEXTURE_2D, tex[7]);
 	glBindTexture(GL_TEXTURE_2D, tex[8]);
+	glBindTexture(GL_TEXTURE_2D, tex[9]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -189,6 +192,7 @@ int main(void){
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], size, &player);
 		EnemyAi enemyaitest(&enemy, stupidStay);
+		Asteroid aster1(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 
 		Enemy enemies[] = { enemy };
 		
@@ -265,6 +269,7 @@ int main(void){
 				gameManager.update(deltaTime);
 				gameManager.checkCollisions(&player, &enemy);
 				enemy.update(deltaTime);
+				aster1.update(deltaTime);
 				map.update(deltaTime, player.getPosition());
 			}
 			else {
@@ -273,6 +278,7 @@ int main(void){
 
 
 			// Render entities
+			aster1.render(shader);
 			enemy.render(shader);
 			gameManager.renderAll(shader);
 			map.renderRoad(shader);
