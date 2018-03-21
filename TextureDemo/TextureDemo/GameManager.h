@@ -4,6 +4,7 @@
 #include "HUD.h"
 #include "RenderedObject.h"
 #include "Ship.h"
+#include "DynamicGameEntity.h"
 
 class GameManager {
 public:
@@ -11,7 +12,7 @@ public:
 	//GameManager(Shader& shader, int aSize);
 
 	void update(double deltaTime);
-	void checkCollisions(Player * player, Enemy * theEnemy);
+	void checkCollisions(Player * player, DynamicGameEntity * collided);
 
 	void setPlayer(Player * player);
 	void setEnemies(Enemy * enemies);

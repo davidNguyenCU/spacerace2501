@@ -4,6 +4,9 @@ Asteroid::Asteroid(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 ent
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 	player = playerEntity;
+	width = 0.1;
+	height = 0.1;
+	mass = 5;
 }
 
 void Asteroid::update(double deltaTime) {

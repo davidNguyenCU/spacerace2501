@@ -17,8 +17,6 @@ public:
 	int bashDirection;
 
 	float sideVelocity;
-	float width;
-	float height;
 
 	void update(double deltaTime, glm::vec3 playerPosition);
 	void sideMovement(int state, double deltaTime);

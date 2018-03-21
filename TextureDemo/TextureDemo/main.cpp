@@ -268,6 +268,7 @@ int main(void){
 				enemyaitest.update(deltaTime);
 				gameManager.update(deltaTime);
 				gameManager.checkCollisions(&player, &enemy);
+				gameManager.checkCollisions(&player, &aster1);
 				enemy.update(deltaTime);
 				aster1.update(deltaTime);
 				map.update(deltaTime, player.getPosition());
