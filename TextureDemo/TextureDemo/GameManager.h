@@ -12,7 +12,7 @@ public:
 	//GameManager(Shader& shader, int aSize);
 
 	void update(double deltaTime);
-	void checkCollisions(Player * player, DynamicGameEntity * collided);
+	void checkCollisions(DynamicGameEntity * colliding, DynamicGameEntity * collided);
 
 	void setPlayer(Player * player);
 	void setEnemies(Enemy * enemies);

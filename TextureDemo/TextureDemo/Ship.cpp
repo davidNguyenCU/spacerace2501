@@ -7,6 +7,7 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
+	type = ship;
 	mass = 1.0f;
 	width = 0.175;
 	height = 0.175;

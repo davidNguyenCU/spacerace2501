@@ -34,11 +34,11 @@ void GameManager::updateUI() {
 	
 }
 
-void GameManager::checkCollisions(Player * player, DynamicGameEntity * collided) {
-	float playerWidth = player->getWidth();
-	float playerHeight = player->getHeight();
-	float playerXpos = player->getPosition().x;
-	float playerYpos = player->getPosition().y;
+void GameManager::checkCollisions(DynamicGameEntity * colliding, DynamicGameEntity * collided) {
+	float playerWidth = colliding->getWidth();
+	float playerHeight = colliding->getHeight();
+	float playerXpos = colliding->getPosition().x;
+	float playerYpos = colliding->getPosition().y;
 
 	float enemyWidth = collided->getWidth();
 	float enemyHeight = collided->getHeight();
@@ -54,41 +54,49 @@ void GameManager::checkCollisions(Player * player, DynamicGameEntity * collided)
 		float yBound;
 		
 		if (playerXpos < enemyXpos) {
-			player->setXposition(playerXpos-0.001);
-			//collided->setXposition(enemyXpos+0.001);
+			colliding->setXposition(playerXpos-0.015);
+
+			if(collided->getType() == 0)
+				collided->setXposition(enemyXpos+0.015);
 
 			xBound = playerXpos + playerWidth - enemyXpos;
 		}
 		if (enemyXpos < playerXpos) {
-			player->setXposition(playerXpos + 0.001);
-			//collided->setXposition(enemyXpos-0.001);
+			colliding->setXposition(playerXpos + 0.015);
+
+			if (collided->getType() == 0)
+				collided->setXposition(enemyXpos-0.015);
 
 			xBound = enemyXpos + enemyWidth - playerXpos;
 		}
 		
 		if (enemyYpos < playerYpos) {
-			player->setXposition(playerXpos + 0.001);
-			//collided->setYposition(enemyYpos - 0.001);
+			colliding->setXposition(playerXpos + 0.015);
+
+			if (collided->getType() == 0)
+				collided->setYposition(enemyYpos - 0.015);
 
 			yBound = enemyYpos + enemyHeight - playerYpos;
 		}
 		if (playerYpos < enemyYpos) {
-			player->setYposition(playerYpos - 0.001);
-			//collided->setYposition(enemyYpos + 0.001);
+			colliding->setYposition(playerYpos - 0.015);
+
+			if (collided->getType() == 0)
+				collided->setYposition(enemyYpos + 0.015);
 
 			yBound = playerYpos + playerHeight - enemyYpos;
 		}
 
 		if (xBound > yBound || yBound > xBound) {
-			glm::vec3 deltaVelocity = player->getVelocity() - collided->getVelocity();
-			glm::vec3 collisionNormal = glm::normalize(player->getPosition() - collided->getPosition());
-			float invSumMasses = (1 / player->mass) + (1 / collided->mass);
+			glm::vec3 deltaVelocity = colliding->getVelocity() - collided->getVelocity();
+			glm::vec3 collisionNormal = glm::normalize(colliding->getPosition() - collided->getPosition());
+			float invSumMasses = (1 / colliding->mass) + (1 / collided->mass);
 
 			float CO_OF_RESTITUTION = 0.95;
 
 			float force = -(1 + CO_OF_RESTITUTION) * glm::dot(collisionNormal, deltaVelocity) / invSumMasses; \
 
-				player->updateMomentum(force * collisionNormal);
+				colliding->updateMomentum(force * collisionNormal);
 			collided->updateMomentum(-force * collisionNormal);
 		}
 	}
