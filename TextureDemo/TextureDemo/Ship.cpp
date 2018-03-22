@@ -7,6 +7,7 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	gunAmmo = MAX_GUN_AMMO;
 	rocketAmmo = MAX_ROCKET_AMMO;
 
+	type = ship;
 	mass = 1.0f;
 	width = 0.175;
 	height = 0.175;
@@ -102,9 +103,9 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	//Reset the bool if we started bashing, save the position of the bash start and time for cooldown
 	if (bashStarted == true) {
 		if (bashDirection == 1)
-			momentum.x += 1.5;
+			momentum.x += 1.0;
 		else if (bashDirection == -1)
-			momentum.x -= 1.5;
+			momentum.x -= 1.0;
 
 		bashStartPosition = position.x;
 		timeOfBashStart = currentTime;
@@ -114,7 +115,7 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 
 	//Check if cooldown time has passed, if has, uncheck cooldown boolean
 	if (bashCooldown == true){
-		if (currentTime - timeOfBashStart > 4.0)
+		if (currentTime - timeOfBashStart > 2.0)
 			bashCooldown = false;
 	}
 	//If in the midst of bashing, adjust the side velocity (and subsequently its position)

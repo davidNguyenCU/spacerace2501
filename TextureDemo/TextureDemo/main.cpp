@@ -192,12 +192,26 @@ int main(void){
 		//GameManager * gameManager = new GameManager();
 		GameManager gameManager = GameManager::GameManager();
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
+
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		EnemyAi enemyaitest(&enemy, stupidStay);
 		Asteroid aster1(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 
 		Enemy enemies[] = { enemy };
+
+		DynamicGameEntity * pPlayer = &player;
+		DynamicGameEntity * pEnemy = &enemy;
+		DynamicGameEntity * pAster = &aster1;
+
+		//DynamicGameEntity * things[3];
+
+		vector <DynamicGameEntity*> thingz;
+		thingz.push_back(pPlayer);
+		thingz.push_back(pEnemy);
+		thingz.push_back(pAster);
+
+		printf("%d",thingz[0]);
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
@@ -270,7 +284,17 @@ int main(void){
 
 				enemyaitest.update(deltaTime);
 				gameManager.update(deltaTime);
-				gameManager.checkCollisions(&player, &enemy);
+
+				
+				for (int i = 0; i < 3; i++) {
+					for (int z = i + 1; z < 3; z++) {
+						gameManager.checkCollisions(thingz[i], thingz[z]);
+					}
+				}
+				
+
+				//gameManager.checkCollisions(thingz[0], thingz[1]);
+				//gameManager.checkCollisions(pPlayer, pAster);
 				enemy.update(deltaTime);
 				aster1.update(deltaTime);
 				map.update(deltaTime, player.getPosition());
