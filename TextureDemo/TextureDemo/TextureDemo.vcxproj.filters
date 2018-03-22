@@ -178,5 +178,11 @@
     <None Include="shader.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="tintShader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="tintShader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

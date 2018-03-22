@@ -1,7 +1,7 @@
 #include "Ship.h"
 #include "Map.h"
 
-Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
+Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLuint &turretTex, GLint entityNumElements)
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
 {
 	gunAmmo = MAX_GUN_AMMO;
@@ -23,6 +23,10 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	bashCooldown = false;
 
 	health = MAX_HEALTH;
+
+	turretRot = 90.0f;
+
+	turretSprite = RenderedObject(turretTex);
 }
 
 void Ship::update(double deltaTime, glm::vec3 playerPosition) {
@@ -56,6 +60,16 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	}
 }
 
+void Ship::render(Shader &shader) {
+	//std::cout << turretRot << std::endl;
+	turretSprite.render(screenPosition, scale / 1.5f, turretRot, numElements, shader);
+	DynamicGameEntity::render(shader);
+}
+
+void Ship::setTurret(glm::vec3 aimingAt) {
+	glm::vec3 direction(aimingAt - position);
+	turretRot = 180.0 / 3.14159 * atan2f(direction.y, direction.x);
+}
 
 //Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {

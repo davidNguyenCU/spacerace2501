@@ -10,10 +10,12 @@ RenderedObject::RenderedObject(GLuint& aTexture)
 {
 }
 
+
 void RenderedObject::render(glm::vec3 position, glm::vec3 scale, float rotationAmount, float numElements, Shader& shader) {
 	//std::cout << "Render" << std::endl;
 	glBindTexture(GL_TEXTURE_2D, *texture);
 
+	//std::cout << rotationAmount << std::endl;
 	// Setup the transformation matrix for the shader 
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);

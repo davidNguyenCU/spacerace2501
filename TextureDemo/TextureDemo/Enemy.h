@@ -6,9 +6,9 @@
 //Subclass of ships, handles enemy ships
 class Enemy : public Ship {
 public:
-	Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Player *playerEntity);
+	Enemy(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLuint &turretTex, GLint entityNumElements, Player *playerEntity);
 
-	void update(double deltaTime) override;
+	void update(double deltaTime);
 	//setters
 	void setPosition(glm::vec3 updatedPosition);
 	void setVelocity(glm::vec3 updatedVelocity);

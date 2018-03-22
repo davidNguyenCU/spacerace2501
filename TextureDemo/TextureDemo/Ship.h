@@ -7,7 +7,7 @@
 //Subclass of dynamic (moving) game entity, includes all spawned ships in the game
 class Ship : public DynamicGameEntity {
 public:
-	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
+	Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLuint &turretTex, GLint entityNumElements);
 
 	float bashStartPosition;
 	double timeOfBashStart;
@@ -21,6 +21,8 @@ public:
 	float height;
 
 	void update(double deltaTime, glm::vec3 playerPosition);
+	void render(Shader &shader);
+
 	void sideMovement(int state, double deltaTime);
 	void sideBash(int state, double currentTime, double deltaTime);
 
@@ -33,6 +35,10 @@ public:
 	//void render(Shader& shader);
 
 	float getHealth() { return health;  };
+
+	void setTurret(glm::vec3 aimingAt);
+
+	float turretRot;
 
 private:
 
@@ -62,4 +68,6 @@ private:
 	void outOfBounds(double deltaTime);
 	bool isOutOfBounds();
 	const float asteroidDamagePerSecond = 10.0f;
+
+	RenderedObject turretSprite;
 };

@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 GameEntity::GameEntity(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements)
-	: position(entityPos), scale(entityScale), rotationAmount(entityRotationAmount), texture(entityTexture), numElements(entityNumElements), tint(glm::vec3(0.25f, 0.25f, 0.25f))
+	: position(entityPos), scale(entityScale), rotationAmount(entityRotationAmount), texture(entityTexture), numElements(entityNumElements), tint(glm::vec3())
 {
 }
 
@@ -12,7 +12,7 @@ void GameEntity::render(Shader &shader) {
 	if (screenPosition.x < -1.0f * 2 || screenPosition.x > 1.0f * 2 ||
 		screenPosition.y < -1.0f * 2 || screenPosition.y > 1.0f * 2) return;
 
-	shader.setUniform3f("tint", tint);
+	//shader.setUniform3f("tint", tint);
 
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -27,5 +27,5 @@ void GameEntity::render(Shader &shader) {
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 
-	shader.setUniform3f("tint", glm::vec3(0.25f, 0.25f, 0.25f));
+	//shader.setUniform3f("tint", glm::vec3(0.25f, 0.25f, 0.25f));
 }

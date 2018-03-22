@@ -13,7 +13,9 @@ GameManager::GameManager()
 
 void GameManager::update(double deltaTime) {
 
-	player->update(deltaTime, player->getPosition());
+	glm::vec3 mousePos = glm::vec3(mouseX, mouseY, 0.0f);
+
+	player->update(deltaTime, mousePos);
 
 	for (auto& enemy : enemies) {
 		enemy->update(deltaTime);
@@ -29,6 +31,7 @@ void GameManager::update(double deltaTime) {
 
 	updateUI();
 }
+
 
 void GameManager::updateUI() {
 	
