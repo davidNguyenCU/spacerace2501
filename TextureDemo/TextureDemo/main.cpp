@@ -196,22 +196,28 @@ int main(void){
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		EnemyAi enemyaitest(&enemy, stupidStay);
-		Asteroid aster1(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster2(glm::vec3(0.35f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster3(glm::vec3(0.0f, 0.75f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster4(glm::vec3(-0.2f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster5(glm::vec3(-0.4f, 0.85f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 
 		Enemy enemies[] = { enemy };
-
-		DynamicGameEntity * pPlayer = &player;
-		DynamicGameEntity * pEnemy = &enemy;
-		DynamicGameEntity * pAster = &aster1;
 
 		//DynamicGameEntity * things[3];
 
 		vector <DynamicGameEntity*> thingz;
-		thingz.push_back(pPlayer);
-		thingz.push_back(pEnemy);
-		thingz.push_back(pAster);
+		thingz.push_back(&player);
+		thingz.push_back(&enemy);
+		thingz.push_back(&aster1);
+		thingz.push_back(&aster2);
+		thingz.push_back(&aster3);
+		thingz.push_back(&aster4);
+		thingz.push_back(&aster5);
+		thingz.push_back(&aster6);
 
-		printf("%d",thingz[0]);
+		//printf("%d",thingz[0]);
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
@@ -286,8 +292,8 @@ int main(void){
 				gameManager.update(deltaTime);
 
 				
-				for (int i = 0; i < 3; i++) {
-					for (int z = i + 1; z < 3; z++) {
+				for (int i = 0; i < thingz.size(); i++) {
+					for (int z = i + 1; z < thingz.size(); z++) {
 						gameManager.checkCollisions(thingz[i], thingz[z]);
 					}
 				}
@@ -297,6 +303,11 @@ int main(void){
 				//gameManager.checkCollisions(pPlayer, pAster);
 				enemy.update(deltaTime);
 				aster1.update(deltaTime);
+				aster2.update(deltaTime);
+				aster3.update(deltaTime);
+				aster4.update(deltaTime);
+				aster5.update(deltaTime);
+				aster6.update(deltaTime);
 				map.update(deltaTime, player.getPosition());
 			}
 			else {
@@ -306,6 +317,11 @@ int main(void){
 
 			// Render entities
 			aster1.render(shader);
+			aster2.render(shader);
+			aster3.render(shader);
+			aster4.render(shader);
+			aster5.render(shader);
+			aster6.render(shader);
 			enemy.render(shader);
 			gameManager.renderAll(shader);
 			map.renderRoad(shader);
