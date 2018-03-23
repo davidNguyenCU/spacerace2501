@@ -31,8 +31,10 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
+static const int numTexs = 12;
+
 // Global texture info
-GLuint tex[11];
+GLuint tex[numTexs];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -111,7 +113,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(11, tex);
+	glGenTextures(numTexs, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
@@ -123,6 +125,7 @@ void setallTexture(void)
 	setthisTexture(tex[8], "gameover.png");
 	setthisTexture(tex[9], "asteroid.png");
 	setthisTexture(tex[10], "turret.png");
+	setthisTexture(tex[11], "youWin.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -135,6 +138,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[8]);
 	glBindTexture(GL_TEXTURE_2D, tex[9]);
 	glBindTexture(GL_TEXTURE_2D, tex[10]);
+	glBindTexture(GL_TEXTURE_2D, tex[11]);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -233,6 +237,7 @@ int main(void){
 		int BASH_LEFT;
 
 		RenderedObject gameOverScreen(tex[8]);
+		RenderedObject youWinScreen(tex[11]);
 
         // Run the main loop
         bool animating = 1;
@@ -264,7 +269,7 @@ int main(void){
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
-			if (player.getHealth() > 0.0f) {
+			if (player.getHealth() > 0.0f && player.getPosition().y < 5.0f) {
 
 				// Acceleration FORWARD AND BACK
 				if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
@@ -310,9 +315,16 @@ int main(void){
 				aster6.update(deltaTime);
 				map.update(deltaTime, player.getPosition());
 			}
+			else if (player.getHealth() > 0.0f && player.getPosition().y > 5) {
+				youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+				}
 			else {
 				gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 			}
+
+			printf("%f", player.getPosition().y);
+			printf("\n");
+
 
 
 			// Render entities
