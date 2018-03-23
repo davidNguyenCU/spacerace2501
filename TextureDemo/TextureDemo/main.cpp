@@ -92,6 +92,95 @@ int CreateSquare(void) {
 	return sizeof(face) / sizeof(GLuint);
 }
 
+/*---------------------------------------------------------------------------------*/
+// Creates the particle data -- note data layout and initialization
+// Each particle has four vertices (same as Square) and attributes -- direction,
+// aka velocity, and "time" (a per-particle random phase constant) -- set on a
+// per-particle basis
+//
+// Current initialization puts the velocities into a narrow angular band,
+// but you can easily modify it to get a circle, or change it completely
+// if you want something totally different
+//
+/*---------------------------------------------------------------------------------*/
+int CreateParticleArray(void) {
+
+	// Each particle is a square with four vertices and two triangles
+
+	// Number of attributes for vertices and faces
+	const int vertex_attr = 7;  // 7 attributes per vertex: 2D (or 3D)
+	//position(2), direction(2), 2D texture coordinates(2), time(1)
+		//   const int face_att = 3; // Vertex indices (3)
+
+		GLfloat vertex[] = {
+		//  square (two triangles)
+		//  Position      Color             Texcoords
+		-0.5f, 0.5f,   1.0f, 0.0f, 0.0f,		0.0f, 0.0f, // Top-left
+		0.5f, 0.5f,   	     0.0f, 1.0f, 0.0f,	      1.0f, 0.0f, // Top-right
+		0.5f, -0.5f,    0.0f, 0.0f, 1.0f,	      	    1.0f, 1.0f, // Bottom-right
+		-0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	    	  0.0f, 1.0f  // Bottom-left
+	};
+
+	GLfloat particleatt[1000 * vertex_attr];
+	float theta, r, tmod;
+
+	for (int i = 0; i < 1000; i++)
+	{
+		if (i % 4 == 0)
+		{
+			theta = (2 * (rand() % 10000) / 10000.0f - 1.0f)*0.13f;
+			r = 0.7f + 0.3*(rand() % 10000) / 10000.0f;
+			tmod = (rand() % 10000) / 10000.0f;
+		}
+
+		particleatt[i*vertex_attr + 0] = vertex[(i % 4) * 7 + 0];
+		particleatt[i*vertex_attr + 1] = vertex[(i % 4) * 7 + 1];
+
+		particleatt[i*vertex_attr + 2] = sin(theta)*r;
+		particleatt[i*vertex_attr + 3] = cos(theta)*r;
+
+
+		particleatt[i*vertex_attr + 4] = tmod;
+
+		particleatt[i*vertex_attr + 5] = vertex[(i % 4) * 7 + 5];
+		particleatt[i*vertex_attr + 6] = vertex[(i % 4) * 7 + 6];
+
+
+	}
+
+
+	GLuint face[] = {
+		0, 1, 2, // t1
+		2, 3, 0  //t2
+	};
+
+	GLuint manyface[1000 * 6];
+
+	for (int i = 0; i < 1000; i++)
+	{
+		for (int j = 0; j < 6; j++)
+			manyface[i * 6 + j] = face[j] + i * 4;
+	}
+
+	GLuint vbo, ebo;
+
+	// Create buffer for vertices
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particleatt), particleatt,
+		GL_STATIC_DRAW);
+
+	// Create buffer for faces (index buffer)
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface,
+		GL_STATIC_DRAW);
+
+	// Return number of elements in array buffer
+	return sizeof(manyface);
+}
+
+
 
 void setthisTexture(GLuint w, char *fname)
 {
@@ -137,6 +226,107 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[10]);
 }
 
+/*---------------------------------------------------------------------------------*/
+// A setup function for the particle shader program
+// Note, you have something like this already for the regular sprites --
+// YOU NEED BOTH, this is not a replacement.
+/*---------------------------------------------------------------------------------*/
+GLuint SetupParticleShaders() // returns ID of newly created program
+{
+
+	// Set up shaders
+	std::string vp = ResourceManager::LoadTextFile("particleShader.vert");
+	const char *source_vpart = vp.c_str();
+	std::string fp = ResourceManager::LoadTextFile("shader.frag");
+	const char *source_fp = fp.c_str();
+
+	// Create a shader from vertex program source code
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &source_vpart, NULL);
+	glCompileShader(vs);
+
+	// Check if shader compiled successfully
+	GLint status;
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(vs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling vertex shader:") + std::string(buffer)));
+	}
+
+	// Create a shader from the fragment program source code
+	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &source_fp, NULL);
+	glCompileShader(fs);
+
+	// Check if shader compiled successfully
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(fs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling fragmentshader: ") + std::string(buffer)));
+	}
+
+	// Create a shader program linking both vertex and fragment shaders
+	// together
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+
+	// Check if shaders were linked successfully
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(program, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error linking shaders: ") +
+			std::string(buffer)));
+	}
+
+	// Delete memory used by shaders, since they were already compiled
+	// and linked
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+
+
+}
+
+/*---------------------------------------------------------------------------------*/
+// Attribute binding for the current program -- note that the vertex data layout
+// has changed; I changed it for all vertices (including regular sprites)
+// because I was not using the color attribute, but if you are, you will need
+// to further change the layout or create a second layout and switch between them
+/*---------------------------------------------------------------------------------*/
+void AttributeBinding(GLuint program)
+{
+
+	// Set attributes for shaders
+	// Should be consistent with how we created the buffers for the particle elements
+	GLint vertex_att = glGetAttribLocation(program, "vertex");
+	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vertex_att);
+
+	GLint dir_att = glGetAttribLocation(program, "dir");
+	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(dir_att);
+
+	GLint time_att = glGetAttribLocation(program, "t");
+	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(time_att);
+
+	GLint tex_att = glGetAttribLocation(program, "uv");
+	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_att);
+
+	GLint color_att = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(color_att, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(color_att);
+
+}
+
+
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	// Quit the program when pressing 'q'
@@ -173,8 +363,13 @@ int main(void){
 		// Create geometry of the square
 		int size = CreateSquare();
 
+		// Create particle geometry
+		int particleSize = CreateParticleArray();
+
         // Set up shaders
 		Shader shader("shader.vert", "shader.frag"); 
+		Shader particleShader("particleShader.vert", "shader.frag");
+		//AttributeBinding(SetupParticleShaders());
 		//Shader tintShader("shader.vert", "tintShader.frag");
 
 		// Set event callbacks
@@ -183,6 +378,7 @@ int main(void){
 		//glfwSetFramebufferSizeCallback(window.getWindow(), ResizeCallback);
 
 		setallTexture();
+
 
 		// Disable cursor
 		glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

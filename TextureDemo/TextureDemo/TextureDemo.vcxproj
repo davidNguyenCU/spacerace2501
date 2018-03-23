@@ -169,6 +169,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pickuph.h" />
     <ClInclude Include="RenderedObject.h" />
     <ClInclude Include="Player.h" />
@@ -209,10 +211,14 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="particleShader.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="tintShader.frag" />
     <None Include="tintShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

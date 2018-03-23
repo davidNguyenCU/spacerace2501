@@ -1,0 +1,110 @@
+/*---------------------------------------------------------------------------------*/
+// A setup function for the particle shader program
+// Note, you have something like this already for the regular sprites --
+// YOU NEED BOTH, this is not a replacement.
+/*---------------------------------------------------------------------------------*/
+GLuint SetupParticleShaders() // returns ID of newly created program
+{
+
+	// Set up shaders
+	std::string vp = ResourceManager::LoadTextFile("particleShader.vert");
+	const char *source_vpart = vp.c_str();
+	std::string fp = ResourceManager::LoadTextFile("shader.frag");
+	const char *source_fp = fp.c_str();
+
+	// Create a shader from vertex program source code
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &source_vpart, NULL);
+	glCompileShader(vs);
+
+	// Check if shader compiled successfully
+	GLint status;
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(vs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling vertex shader:") + std::string(buffer)));
+	}
+
+	// Create a shader from the fragment program source code
+	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &source_fp, NULL);
+	glCompileShader(fs);
+
+	// Check if shader compiled successfully
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(fs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling fragmentshader: ") + std::string(buffer)));
+	}
+
+	// Create a shader program linking both vertex and fragment shaders
+	// together
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+
+	// Check if shaders were linked successfully
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(program, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error linking shaders: ") +
+			std::string(buffer)));
+	}
+
+	// Delete memory used by shaders, since they were already compiled
+	// and linked
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+
+
+}
+
+/*---------------------------------------------------------------------------------*/
+// Attribute binding for the current program -- note that the vertex data layout
+// has changed; I changed it for all vertices (including regular sprites)
+// because I was not using the color attribute, but if you are, you will need
+// to further change the layout or create a second layout and switch between them
+/*---------------------------------------------------------------------------------*/
+void AttributeBinding(GLuint program)
+{
+
+	// Set attributes for shaders
+	// Should be consistent with how we created the buffers for the particle elements
+	GLint vertex_att = glGetAttribLocation(program, "vertex");
+	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vertex_att);
+
+	GLint dir_att = glGetAttribLocation(program, "dir");
+	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(dir_att);
+
+	GLint time_att = glGetAttribLocation(program, "t");
+	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(time_att);
+
+	GLint tex_att = glGetAttribLocation(program, "uv");
+	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_att);
+
+	GLint color_att = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(color_att, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(color_att);
+
+}
+
+// Create geometry of the square
+int size = CreateSquare();
+
+// Create particle geometry
+int particleSize = CreateParticleArray();
+
+// Set up shaders
+Shader shader("shader.vert", "shader.frag"); 
+Shader particleShader("particleShader.vert", "shader.frag");
+AttributeBinding(SetupParticleShaders());
