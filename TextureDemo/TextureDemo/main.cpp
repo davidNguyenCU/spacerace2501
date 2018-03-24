@@ -194,8 +194,8 @@ int main(void){
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
-		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
-		EnemyAi enemyaitest(&enemy, stupidStay);
+		Enemy enemy(glm::vec3(0.0f, -1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
+		EnemyAi enemyaitest(&enemy, pacifistCompetitor);
 		Asteroid aster1(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 
 		Enemy enemies[] = { enemy };
@@ -257,6 +257,7 @@ int main(void){
 			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
+			enemyaitest.update(deltaTime);
 
 			if (player.getHealth() > 0.0f) {
 
