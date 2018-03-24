@@ -4,15 +4,14 @@
 enum Behaviour
 {
 	stupidChase,
-	stupidFlee,
-	stupidStay
+	stupidStay,
+	pacifistCompetitor
 };
 
 class EnemyAi {
 public:
 	EnemyAi(Enemy* controlledEnemy, Behaviour behaviour);
 	void update(double deltaTime);
-	void flip();
 private:
 	Enemy* enemy;
 	Behaviour behaviourController;
