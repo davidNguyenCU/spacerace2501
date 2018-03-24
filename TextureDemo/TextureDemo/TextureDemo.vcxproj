@@ -160,6 +160,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyAi.cpp" />
     <ClCompile Include="FlameParticle.cpp" />
+    <ClCompile Include="ObstacleMap.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Hazard.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="ObstacleMap.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pickuph.h" />
     <ClInclude Include="RenderedObject.h" />

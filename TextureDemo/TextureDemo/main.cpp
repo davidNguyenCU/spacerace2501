@@ -20,6 +20,8 @@
 #include "GameManager.h"
 #include "EnemyAi.h"
 #include "Map.h"
+#include "ObstacleMap.h"
+#include "ResourceManager.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -399,28 +401,41 @@ int main(void){
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
 		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		EnemyAi enemyaitest(&enemy, stupidStay);
-		Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+
+
+		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster2(glm::vec3(0.35f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster3(glm::vec3(0.0f, 0.75f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster4(glm::vec3(-0.2f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster5(glm::vec3(-0.4f, 0.85f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
-		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);*/
 
 		Enemy enemies[] = { enemy };
 
 		//DynamicGameEntity * things[3];
 
-		vector <DynamicGameEntity*> thingz;
-		thingz.push_back(&player);
-		thingz.push_back(&enemy);
-		thingz.push_back(&aster1);
-		thingz.push_back(&aster2);
-		thingz.push_back(&aster3);
-		thingz.push_back(&aster4);
-		thingz.push_back(&aster5);
-		thingz.push_back(&aster6);
+		vector <Asteroid*> asteroids;
+		vector <DynamicGameEntity*> physicsObjects;
+		physicsObjects.push_back(&player);
+		physicsObjects.push_back(&enemy);
 
-		//printf("%d",thingz[0]);
+		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
+
+		for (int i = 0; i < 2; i++)
+		{
+			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
+			std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+		}
+
+		physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
+		/*physicsObjects.push_back(&aster1);
+		physicsObjects.push_back(&aster2);
+		physicsObjects.push_back(&aster3);
+		physicsObjects.push_back(&aster4);
+		physicsObjects.push_back(&aster5);
+		physicsObjects.push_back(&aster6);*/
+
+		//printf("%d",physicsObjects[0]);
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
@@ -509,23 +524,26 @@ int main(void){
 					enemyaitest.update(deltaTime);
 					gameManager.update(deltaTime);
 
-
-					for (int i = 0; i < thingz.size(); i++) {
-						for (int z = i + 1; z < thingz.size(); z++) {
-							gameManager.checkCollisions(thingz[i], thingz[z]);
+					for (int i = 0; i < physicsObjects.size(); i++) {
+						for (int z = i + 1; z < physicsObjects.size(); z++) {
+							gameManager.checkCollisions(physicsObjects[i], physicsObjects[z]);
 						}
 					}
 
-
-					//gameManager.checkCollisions(thingz[0], thingz[1]);
+					//gameManager.checkCollisions(physicsObjects[0], physicsObjects[1]);
 					//gameManager.checkCollisions(pPlayer, pAster);
 					enemy.update(deltaTime);
-					aster1.update(deltaTime);
+					/*aster1.update(deltaTime);
 					aster2.update(deltaTime);
 					aster3.update(deltaTime);
 					aster4.update(deltaTime);
 					aster5.update(deltaTime);
-					aster6.update(deltaTime);
+					aster6.update(deltaTime);*/
+					for (int i = 0; i < asteroids.size(); i++)
+					{
+						asteroids.at(i)->update(deltaTime);
+					}
+
 					map.update(deltaTime, player.getPosition());
 				}
 				else if (player.getHealth() > 0.0f && player.getPosition().y > 5) {
@@ -541,12 +559,11 @@ int main(void){
 
 
 				// Render entities
-				aster1.render(shader);
-				aster2.render(shader);
-				aster3.render(shader);
-				aster4.render(shader);
-				aster5.render(shader);
-				aster6.render(shader);
+				for (int i = 0; i < asteroids.size(); i++)
+				{
+					asteroids.at(i)->render(shader);
+				}
+
 				enemy.render(shader);
 				gameManager.renderAll(shader);
 				map.renderRoad(shader);
