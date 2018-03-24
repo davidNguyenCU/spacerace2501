@@ -31,8 +31,11 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
+static const int numTexs = 13;
+unsigned int game_state = 0;
+
 // Global texture info
-GLuint tex[11];
+GLuint tex[numTexs];
 
 // Input bools
 bool PRESSING_FORWARD;
@@ -92,6 +95,95 @@ int CreateSquare(void) {
 	return sizeof(face) / sizeof(GLuint);
 }
 
+/*---------------------------------------------------------------------------------*/
+// Creates the particle data -- note data layout and initialization
+// Each particle has four vertices (same as Square) and attributes -- direction,
+// aka velocity, and "time" (a per-particle random phase constant) -- set on a
+// per-particle basis
+//
+// Current initialization puts the velocities into a narrow angular band,
+// but you can easily modify it to get a circle, or change it completely
+// if you want something totally different
+//
+/*---------------------------------------------------------------------------------*/
+int CreateParticleArray(void) {
+
+	// Each particle is a square with four vertices and two triangles
+
+	// Number of attributes for vertices and faces
+	const int vertex_attr = 7;  // 7 attributes per vertex: 2D (or 3D)
+	//position(2), direction(2), 2D texture coordinates(2), time(1)
+		//   const int face_att = 3; // Vertex indices (3)
+
+		GLfloat vertex[] = {
+		//  square (two triangles)
+		//  Position      Color             Texcoords
+		-0.5f, 0.5f,   1.0f, 0.0f, 0.0f,		0.0f, 0.0f, // Top-left
+		0.5f, 0.5f,   	     0.0f, 1.0f, 0.0f,	      1.0f, 0.0f, // Top-right
+		0.5f, -0.5f,    0.0f, 0.0f, 1.0f,	      	    1.0f, 1.0f, // Bottom-right
+		-0.5f, -0.5f,    1.0f, 1.0f, 1.0f,	    	  0.0f, 1.0f  // Bottom-left
+	};
+
+	GLfloat particleatt[1000 * vertex_attr];
+	float theta, r, tmod;
+
+	for (int i = 0; i < 1000; i++)
+	{
+		if (i % 4 == 0)
+		{
+			theta = (2 * (rand() % 10000) / 10000.0f - 1.0f)*0.13f;
+			r = 0.7f + 0.3*(rand() % 10000) / 10000.0f;
+			tmod = (rand() % 10000) / 10000.0f;
+		}
+
+		particleatt[i*vertex_attr + 0] = vertex[(i % 4) * 7 + 0];
+		particleatt[i*vertex_attr + 1] = vertex[(i % 4) * 7 + 1];
+
+		particleatt[i*vertex_attr + 2] = sin(theta)*r;
+		particleatt[i*vertex_attr + 3] = cos(theta)*r;
+
+
+		particleatt[i*vertex_attr + 4] = tmod;
+
+		particleatt[i*vertex_attr + 5] = vertex[(i % 4) * 7 + 5];
+		particleatt[i*vertex_attr + 6] = vertex[(i % 4) * 7 + 6];
+
+
+	}
+
+
+	GLuint face[] = {
+		0, 1, 2, // t1
+		2, 3, 0  //t2
+	};
+
+	GLuint manyface[1000 * 6];
+
+	for (int i = 0; i < 1000; i++)
+	{
+		for (int j = 0; j < 6; j++)
+			manyface[i * 6 + j] = face[j] + i * 4;
+	}
+
+	GLuint vbo, ebo;
+
+	// Create buffer for vertices
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(particleatt), particleatt,
+		GL_STATIC_DRAW);
+
+	// Create buffer for faces (index buffer)
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface,
+		GL_STATIC_DRAW);
+
+	// Return number of elements in array buffer
+	return sizeof(manyface);
+}
+
+
 
 void setthisTexture(GLuint w, char *fname)
 {
@@ -111,7 +203,7 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 	//tex = new GLuint[6];
-	glGenTextures(11, tex);
+	glGenTextures(numTexs, tex);
 	setthisTexture(tex[0], "blueships1.png");
 	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
@@ -123,6 +215,8 @@ void setallTexture(void)
 	setthisTexture(tex[8], "gameover.png");
 	setthisTexture(tex[9], "asteroid.png");
 	setthisTexture(tex[10], "turret.png");
+	setthisTexture(tex[11], "youWin.png");
+	setthisTexture(tex[12], "F for Brian.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -135,7 +229,110 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[8]);
 	glBindTexture(GL_TEXTURE_2D, tex[9]);
 	glBindTexture(GL_TEXTURE_2D, tex[10]);
+	glBindTexture(GL_TEXTURE_2D, tex[11]);
+	glBindTexture(GL_TEXTURE_2D, tex[12]);
 }
+
+/*---------------------------------------------------------------------------------*/
+// A setup function for the particle shader program
+// Note, you have something like this already for the regular sprites --
+// YOU NEED BOTH, this is not a replacement.
+/*---------------------------------------------------------------------------------*/
+GLuint SetupParticleShaders() // returns ID of newly created program
+{
+
+	// Set up shaders
+	std::string vp = ResourceManager::LoadTextFile("particleShader.vert");
+	const char *source_vpart = vp.c_str();
+	std::string fp = ResourceManager::LoadTextFile("shader.frag");
+	const char *source_fp = fp.c_str();
+
+	// Create a shader from vertex program source code
+	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vs, 1, &source_vpart, NULL);
+	glCompileShader(vs);
+
+	// Check if shader compiled successfully
+	GLint status;
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(vs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling vertex shader:") + std::string(buffer)));
+	}
+
+	// Create a shader from the fragment program source code
+	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fs, 1, &source_fp, NULL);
+	glCompileShader(fs);
+
+	// Check if shader compiled successfully
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(fs, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error compiling fragmentshader: ") + std::string(buffer)));
+	}
+
+	// Create a shader program linking both vertex and fragment shaders
+	// together
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+
+	// Check if shaders were linked successfully
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (status != GL_TRUE) {
+		char buffer[512];
+		glGetShaderInfoLog(program, 512, NULL, buffer);
+		throw(std::ios_base::failure(std::string("Error linking shaders: ") +
+			std::string(buffer)));
+	}
+
+	// Delete memory used by shaders, since they were already compiled
+	// and linked
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	return program;
+
+
+}
+
+/*---------------------------------------------------------------------------------*/
+// Attribute binding for the current program -- note that the vertex data layout
+// has changed; I changed it for all vertices (including regular sprites)
+// because I was not using the color attribute, but if you are, you will need
+// to further change the layout or create a second layout and switch between them
+/*---------------------------------------------------------------------------------*/
+void AttributeBinding(GLuint program)
+{
+
+	// Set attributes for shaders
+	// Should be consistent with how we created the buffers for the particle elements
+	GLint vertex_att = glGetAttribLocation(program, "vertex");
+	glVertexAttribPointer(vertex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(vertex_att);
+
+	GLint dir_att = glGetAttribLocation(program, "dir");
+	glVertexAttribPointer(dir_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(dir_att);
+
+	GLint time_att = glGetAttribLocation(program, "t");
+	glVertexAttribPointer(time_att, 1, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(4 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(time_att);
+
+	GLint tex_att = glGetAttribLocation(program, "uv");
+	glVertexAttribPointer(tex_att, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(tex_att);
+
+	GLint color_att = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(color_att, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(color_att);
+
+}
+
 
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
@@ -173,8 +370,13 @@ int main(void){
 		// Create geometry of the square
 		int size = CreateSquare();
 
+		// Create particle geometry
+		int particleSize = CreateParticleArray();
+
         // Set up shaders
 		Shader shader("shader.vert", "shader.frag"); 
+		Shader particleShader("particleShader.vert", "shader.frag");
+		//AttributeBinding(SetupParticleShaders());
 		//Shader tintShader("shader.vert", "tintShader.frag");
 
 		// Set event callbacks
@@ -183,6 +385,7 @@ int main(void){
 		//glfwSetFramebufferSizeCallback(window.getWindow(), ResizeCallback);
 
 		setallTexture();
+
 
 		// Disable cursor
 		glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -194,24 +397,30 @@ int main(void){
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
-		Enemy enemy(glm::vec3(0.0f, -1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
-		EnemyAi enemyaitest(&enemy, pacifistCompetitor);
-		Asteroid aster1(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
+		EnemyAi enemyaitest(&enemy, stupidStay);
+		Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster2(glm::vec3(0.35f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster3(glm::vec3(0.0f, 0.75f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster4(glm::vec3(-0.2f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster5(glm::vec3(-0.4f, 0.85f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
+		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 
 		Enemy enemies[] = { enemy };
-
-		DynamicGameEntity * pPlayer = &player;
-		DynamicGameEntity * pEnemy = &enemy;
-		DynamicGameEntity * pAster = &aster1;
 
 		//DynamicGameEntity * things[3];
 
 		vector <DynamicGameEntity*> thingz;
-		thingz.push_back(pPlayer);
-		thingz.push_back(pEnemy);
-		thingz.push_back(pAster);
+		thingz.push_back(&player);
+		thingz.push_back(&enemy);
+		thingz.push_back(&aster1);
+		thingz.push_back(&aster2);
+		thingz.push_back(&aster3);
+		thingz.push_back(&aster4);
+		thingz.push_back(&aster5);
+		thingz.push_back(&aster6);
 
-		printf("%d",thingz[0]);
+		//printf("%d",thingz[0]);
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
@@ -219,6 +428,8 @@ int main(void){
 		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), 0, tex[6], tex[7], size);
 
 		//Key press states based on pressing and releasing with glfwGetKey
+		int CHANGE_GAMESTATE;
+
 		int GO_FORWARD;
 		int GO_BACKWARD;
 		int GO_LEFT;
@@ -227,6 +438,8 @@ int main(void){
 		int BASH_LEFT;
 
 		RenderedObject gameOverScreen(tex[8]);
+		RenderedObject youWinScreen(tex[11]);
+		RenderedObject titleScreen(tex[12]);
 
         // Run the main loop
         bool animating = 1;
@@ -244,6 +457,8 @@ int main(void){
 			lastTime = currentTime;
 
 			// KEY PRESS/RELEASE HANDLING
+			CHANGE_GAMESTATE = glfwGetKey(window.getWindow(), GLFW_KEY_F);
+
 			GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
 			GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
 			GO_LEFT = glfwGetKey(window.getWindow(), GLFW_KEY_A);
@@ -257,60 +472,89 @@ int main(void){
 			float screenSpaceMouseX = (mouseX / window_width_g) * 2 - 1;
 			float screenSpaceMouseY = -((mouseY / window_height_g) * 2 - 1);
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
-			enemyaitest.update(deltaTime);
 
-			if (player.getHealth() > 0.0f) {
+			if (CHANGE_GAMESTATE == 1) {
+				game_state=1;
+			}
 
-				// Acceleration FORWARD AND BACK
-				if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
-				else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
-				else					   PLAYER_ACCELERATION = 0;
-				player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+			if (game_state == 0) {
+				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+			}
+			else if (game_state == 1) {
 
-				// SIDEWAYS MOVEMENT (NON BASHING)
-				if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
-				else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
-				else					   PLAYER_LEFT_RIGHT = 0;
-				player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
+				if (player.getHealth() > 0.0f && player.getPosition().y < 5.0f) {
+
+					// Acceleration FORWARD AND BACK
+					if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
+					else if (GO_BACKWARD == 1) PLAYER_ACCELERATION = -1;
+					else					   PLAYER_ACCELERATION = 0;
+					player.goFASTER(PLAYER_ACCELERATION, deltaTime);
+
+					// SIDEWAYS MOVEMENT (NON BASHING)
+					if (GO_LEFT == 1)		   PLAYER_LEFT_RIGHT = -1;
+					else if (GO_RIGHT == 1)	   PLAYER_LEFT_RIGHT = 1;
+					else					   PLAYER_LEFT_RIGHT = 0;
+					player.sideMovement(PLAYER_LEFT_RIGHT, deltaTime);
 
 
-				// BASHING MOVEMENT
-				if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
-				else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
-				else BASH_LEFT_RIGHT = 0;
-				player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
+					// BASHING MOVEMENT
+					if (BASH_RIGHT == 1) BASH_LEFT_RIGHT = 1;
+					else if (BASH_LEFT == 1) BASH_LEFT_RIGHT = -1;
+					else BASH_LEFT_RIGHT = 0;
+					player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
 
-				// Shoot
-				gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
+					// Shoot
+					gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
-				enemyaitest.update(deltaTime);
-				gameManager.update(deltaTime);
+					enemyaitest.update(deltaTime);
+					gameManager.update(deltaTime);
 
-				
-				for (int i = 0; i < 3; i++) {
-					for (int z = i + 1; z < 3; z++) {
-						gameManager.checkCollisions(thingz[i], thingz[z]);
+
+					for (int i = 0; i < thingz.size(); i++) {
+						for (int z = i + 1; z < thingz.size(); z++) {
+							gameManager.checkCollisions(thingz[i], thingz[z]);
+						}
 					}
+
+
+					//gameManager.checkCollisions(thingz[0], thingz[1]);
+					//gameManager.checkCollisions(pPlayer, pAster);
+					enemy.update(deltaTime);
+					aster1.update(deltaTime);
+					aster2.update(deltaTime);
+					aster3.update(deltaTime);
+					aster4.update(deltaTime);
+					aster5.update(deltaTime);
+					aster6.update(deltaTime);
+					map.update(deltaTime, player.getPosition());
 				}
-				
+				else if (player.getHealth() > 0.0f && player.getPosition().y > 5) {
+					youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+				}
+				else {
+					gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+				}
 
-				//gameManager.checkCollisions(thingz[0], thingz[1]);
-				//gameManager.checkCollisions(pPlayer, pAster);
-				enemy.update(deltaTime);
-				aster1.update(deltaTime);
-				map.update(deltaTime, player.getPosition());
+				printf("%f", player.getPosition().y);
+				printf("\n");
+
+
+
+				// Render entities
+				aster1.render(shader);
+				aster2.render(shader);
+				aster3.render(shader);
+				aster4.render(shader);
+				aster5.render(shader);
+				aster6.render(shader);
+				enemy.render(shader);
+				gameManager.renderAll(shader);
+				map.renderRoad(shader);
+				map.render(shader);
+
+
+			
 			}
-			else {
-				gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
-			}
-
-
-			// Render entities
-			aster1.render(shader);
-			enemy.render(shader);
-			gameManager.renderAll(shader);
-			map.renderRoad(shader);
-			map.render(shader);
 			
 		//	glDrawArrays(GL_TRIANGLES, 0, 6); // if glDrawArrays be used, glDrawElements will be ignored 
 

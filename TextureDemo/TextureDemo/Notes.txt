@@ -1,0 +1,42 @@
+#pragma once
+
+
+
+// Couple other basic things:
+//
+// Create two shader programs, one for regular objects and one for the particle system
+// (they can share a fragment shader, although they don't have to)
+//
+// Make sure you are using the proper shader for your objects;
+// compile the shader programs once only, and save the program ID
+// so you can later call glUseProgram(correctProgramID);
+// after setting the program, subsequent draw calls will use that
+// shader set
+//
+// Create the square and particle set using the supplied functions
+// before trying to draw anything
+
+
+
+
+/*---------------------------------------------------------------------------------*/
+// Fragments of code for particle system
+// DO NOT RUN -- integrate into your own codebase
+/*---------------------------------------------------------------------------------*/
+
+// Particle system vertex shader
+// DOES NOT REPLACE OLD VERTEX SHADER -- you will want both
+//
+// This version produces a parabolic trajectory (used for water fountain)
+//
+
+/* OLD SOURCE CODE\n
+	// Source code of vertex shader\n
+	#version 130
+
+	// Vertex buffer
+	in vec2 vertex;
+	in vec3 color;
+	in vec2 uv;
+	out vec2 uv_interp;
+*/

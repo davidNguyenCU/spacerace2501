@@ -1,10 +1,12 @@
-// Source code of vertex shader
 #version 130
 
 // Vertex buffer
 in vec2 vertex;
+in vec2 dir;
+in float t;
 in vec3 color;
 in vec2 uv;
+
 out vec2 uv_interp;
 
 // Uniform (global) buffer
@@ -12,7 +14,6 @@ uniform mat4 x;
 
 // Attributes forwarded to the fragment shader
 out vec4 color_interp;
-
 
 void main()
 {

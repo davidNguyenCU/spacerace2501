@@ -14,6 +14,8 @@ public:
 	Shader(const char *vertPath, const char *fragPath);
 	~Shader();
 
+	GLuint SetupParticleShaders();
+
 	void enable();
 	void disable();
 
