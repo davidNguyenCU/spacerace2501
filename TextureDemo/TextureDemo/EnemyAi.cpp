@@ -73,6 +73,7 @@ void EnemyAi::update(double deltaTime)
 		{
 			enemy->setAcceleration(glm::vec3(enemy->getAcceleration().x, 0.3, 0.0));
 		}
+		std::cout << enemy->getAcceleration().x << std::endl;
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime * glm::vec3(0.5, 0.5, 0.0));
 	}
 }

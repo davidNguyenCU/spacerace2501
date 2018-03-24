@@ -397,8 +397,8 @@ int main(void){
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
-		Enemy enemy(glm::vec3(0.1f, 0.1f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
-		EnemyAi enemyaitest(&enemy, stupidStay);
+		Enemy enemy(glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
+		EnemyAi enemyaitest(&enemy, pacifistCompetitor);
 		Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster2(glm::vec3(0.35f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster3(glm::vec3(0.0f, 0.75f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
@@ -519,7 +519,9 @@ int main(void){
 
 					//gameManager.checkCollisions(thingz[0], thingz[1]);
 					//gameManager.checkCollisions(pPlayer, pAster);
+
 					enemy.update(deltaTime);
+					enemyaitest.update(deltaTime);
 					aster1.update(deltaTime);
 					aster2.update(deltaTime);
 					aster3.update(deltaTime);
@@ -535,8 +537,9 @@ int main(void){
 					gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 				}
 
-				printf("%f", player.getPosition().y);
-				printf("\n");
+				printf("%f", enemy.getAcceleration().x);
+				//printf("%f", player.getPosition().y);
+				//printf("\n");
 
 
 
