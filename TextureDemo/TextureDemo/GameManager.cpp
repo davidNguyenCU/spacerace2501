@@ -53,8 +53,8 @@ void GameManager::checkCollisions(DynamicGameEntity * colliding, DynamicGameEnti
 		playerYpos < enemyYpos + enemyHeight &&
 		enemyYpos < playerYpos + playerHeight) {
 
-		float xBound;
-		float yBound;
+		float xBound = 0;
+		float yBound = 0;
 		
 		if (playerXpos < enemyXpos) {
 			colliding->setXposition(playerXpos-0.015);
