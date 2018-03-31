@@ -27,6 +27,9 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 
 	turretRot = 90.0f;
 
+	dashType = 0;
+	//Dash type 0 for bashing, 1 for blinking
+
 	turretSprite = RenderedObject(turretTex);
 }
 
@@ -102,10 +105,18 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	
 	//Reset the bool if we started bashing, save the position of the bash start and time for cooldown
 	if (bashStarted == true) {
-		if (bashDirection == 1)
-			momentum.x += 1.0;
-		else if (bashDirection == -1)
-			momentum.x -= 1.0;
+		if (bashDirection == 1){
+			if (dashType == 0)
+				momentum.x += 1.0;
+			else if (dashType == 1)
+				position.x += 0.375;
+		}
+		else if (bashDirection == -1){
+			if (dashType == 0)
+				momentum.x -= 1.0;
+			else if (dashType == 1)
+				position.x -= 0.375;
+		}
 
 		bashStartPosition = position.x;
 		timeOfBashStart = currentTime;

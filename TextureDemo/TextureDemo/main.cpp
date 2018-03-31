@@ -219,8 +219,9 @@ void setallTexture(void)
 	setthisTexture(tex[9], "asteroid.png");
 	setthisTexture(tex[10], "turret.png");
 	setthisTexture(tex[11], "youWin.png");
-	setthisTexture(tex[12], "F for Brian.png");
+	setthisTexture(tex[12], "titlescreen.png");
 	setthisTexture(tex[13], "fire.png");
+
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -759,7 +760,7 @@ int main(void){
 			lastTime = currentTime;
 
 			// KEY PRESS/RELEASE HANDLING
-			CHANGE_GAMESTATE = glfwGetKey(window.getWindow(), GLFW_KEY_F);
+			CHANGE_GAMESTATE = glfwGetKey(window.getWindow(), GLFW_KEY_SPACE);
 
 			GO_FORWARD = glfwGetKey(window.getWindow(), GLFW_KEY_W);
 			GO_BACKWARD = glfwGetKey(window.getWindow(), GLFW_KEY_S);
@@ -781,6 +782,31 @@ int main(void){
 
 			if (game_state == 0) {
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_S)) {
+					printf("Smol Mass \n");
+					player.mass = 0.5f;
+				}
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_M)) {
+					printf("Normie Mass \n");
+					player.mass = 1.0f;
+				}
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_B)) {
+					printf("THICC Mass \n");
+					player.mass = 2.0f;
+				}
+
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_T)) {
+					printf("Spoopy Blink \n");
+					player.dashType = 1;
+				}
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_Y)) {
+					printf("Non-Spoopy Dash \n");
+					player.dashType = 0;
+				}
+
+
+
 			}
 			else if (game_state == 1) {
 
@@ -821,12 +847,9 @@ int main(void){
 					//gameManager.checkCollisions(pPlayer, pAster);
 
 					enemy.update(deltaTime);
-//<<<<<<< HEAD
 					/*aster1.update(deltaTime);
-=======
 					enemyaitest.update(deltaTime);
 					aster1.update(deltaTime);
->>>>>>> 88b956d8b63b923b59b6ef6ee31e171880614d4f
 					aster2.update(deltaTime);
 					aster3.update(deltaTime);
 					aster4.update(deltaTime);
@@ -874,8 +897,6 @@ int main(void){
 				AttributeBinding(shader.getShaderID());
 				map.renderRoad(shader);
 				map.render(shader);
-
-
 			
 			}
 			
