@@ -216,6 +216,8 @@
     <None Include="particleShader.vert" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="shaderExplosion.frag" />
+    <None Include="shaderExplosion.vert" />
     <None Include="tintShader.frag" />
     <None Include="tintShader.vert" />
   </ItemGroup>

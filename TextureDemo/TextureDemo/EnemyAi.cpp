@@ -76,25 +76,40 @@ void EnemyAi::update(double deltaTime)
 		std::cout << enemy->getAcceleration().x << std::endl;
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime * glm::vec3(0.5, 0.5, 0.0));*/
 
-		if (enemyPosition.y < playerPosition.y && enemyPosition.y > playerPosition.y - 0.6f)
+		if (enemyPosition.y < playerPosition.y && enemyPosition.y > playerPosition.y - 0.8f)
 		{
+			enemy->setAcceleration(glm::vec3(0.0f, 0.2f, 0.0f));
 			if (abs(enemyPosition.x - playerPosition.x) < 0.2f)
 			{
-				if (enemyPosition.x > playerPosition.x)
+				if (enemyPosition.x >= playerPosition.x)
 				{
-					enemy->setAcceleration(glm::vec3(0.1f, 0.1f, 0.0f));
+					enemy->setVelocity(glm::vec3(0.2f, 0.2f, 0.0f));
 				}
 				else
 				{
-					enemy->setAcceleration(glm::vec3(-0.1f, 0.1f, 0.0f));
+					enemy->setAcceleration(glm::vec3(-0.2f, 0.2f, 0.0f));
 				}
 			}
 		}
 		else
 		{
-			enemy->setAcceleration(glm::vec3(0.0f, 0.1f, 0.0f));
-			glm::vec3 currVel = enemy->getVelocity();
-			enemy->setVelocity(glm::vec3(0.0f, currVel.y, 0.0f));
+			if (abs(enemyPosition.x) > 0.1)
+			{
+				if (enemyPosition.x > 0)
+				{
+					enemy->setAcceleration(glm::vec3(-0.2f, 0.2f, 0.0f));
+				}
+				else
+				{
+					enemy->setAcceleration(glm::vec3(0.2f, 0.2f, 0.0f));
+				}
+			}
+			else
+			{
+				enemy->setAcceleration(glm::vec3(0.0f, 0.1f, 0.0f));
+				glm::vec3 currVel = enemy->getVelocity();
+				enemy->setVelocity(glm::vec3(0.0f, currVel.y, 0.0f));
+			}
 		}
 
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime /** glm::vec3(0.5, 0.5, 0.0)*/);
