@@ -32,7 +32,7 @@ public:
 
 	//void render(Shader& shader);
 
-	float getHealth() { return health;  };
+	double getHealth() { return health;  };
 
 	void setTurret(glm::vec3 aimingAt);
 
@@ -61,11 +61,11 @@ private:
 	float bashVelocity;
 	float bashAccler;
 
-	const float MAX_HEALTH = 100.0f;
+	const double MAX_HEALTH = 100.0;
 	float health;
 	void outOfBounds(double deltaTime);
 	bool isOutOfBounds();
-	const float asteroidDamagePerSecond = 10.0f;
+	//const double asteroidDamagePerSecond = 1000000000.0;
 
 	RenderedObject turretSprite;
 };

@@ -9,7 +9,7 @@ void ObstacleMap::parseTextData(std::string mapString)
 {
 	//std::cout << mapString << std::endl;
 	const size_t n = std::count(mapString.begin(), mapString.end(), '\n');
-	std::cout << n << std::endl;
+	//std::cout << n << std::endl;
 
 	//std::cout << mapString << std::endl;
 	coordinatePairs = new glm::vec3[n];
@@ -60,7 +60,7 @@ void ObstacleMap::parseTextData(std::string mapString)
 
 	for (int i = 0; i < n; i++)
 	{
-		std::cout << coordinatePairs[i].x << "," << coordinatePairs[i].y << std::endl;
+		//std::cout << coordinatePairs[i].x << "," << coordinatePairs[i].y << std::endl;
 	}
 	
 	

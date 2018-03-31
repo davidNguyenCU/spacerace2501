@@ -156,8 +156,9 @@ bool Ship::canShootRocket() {
 }
 
 void Ship::outOfBounds(double deltaTime) {
-	health -= asteroidDamagePerSecond * deltaTime;
-	if (health < 0) health = 0;
+	std::cout << "To subtract: " << 100.0 * deltaTime << std::endl;
+	health = health - (100.0 * deltaTime);
+	if (health < 0.0) health = 0.0;
 }
 
 bool Ship::isOutOfBounds() {

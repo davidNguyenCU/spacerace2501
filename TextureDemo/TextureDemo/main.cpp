@@ -429,7 +429,7 @@ int main(void){
 		for (int i = 0; i < 2; i++)
 		{
 			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
-			std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+			//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
 		}
 
 		physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
@@ -502,7 +502,7 @@ int main(void){
 			}
 			else if (game_state == 1) {
 
-				if (player.getHealth() > 0.0f && player.getPosition().y < 5.0f) {
+				if (player.getHealth() > 0.0f && player.getPosition().y < 1000.0f) {
 
 					// Acceleration FORWARD AND BACK
 					if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
@@ -557,7 +557,7 @@ int main(void){
 
 					map.update(deltaTime, player.getPosition());
 				}
-				else if (player.getHealth() > 0.0f && player.getPosition().y > 5) {
+				else if (player.getHealth() > 0.0f && player.getPosition().y > 1000.0) {
 					youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 				}
 				else {
