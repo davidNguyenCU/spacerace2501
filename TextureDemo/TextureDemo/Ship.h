@@ -15,6 +15,7 @@ public:
 	bool isBashing;
 	bool bashCooldown;
 	int bashDirection;
+	int dashType;
 
 	float sideVelocity;
 
