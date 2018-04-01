@@ -33,7 +33,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 14;
+static const int numTexs = 15;
 unsigned int game_state = 0;
 
 // Global texture info
@@ -221,6 +221,9 @@ void setallTexture(void)
 	setthisTexture(tex[11], "youWin.png");
 	setthisTexture(tex[12], "titlescreen.png");
 	setthisTexture(tex[13], "fire.png");
+	setthisTexture(tex[14], "healthBar.png");
+
+	
 
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
@@ -237,6 +240,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[11]);
 	glBindTexture(GL_TEXTURE_2D, tex[12]);
 	glBindTexture(GL_TEXTURE_2D, tex[13]);
+	glBindTexture(GL_TEXTURE_2D, tex[14]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -373,59 +377,6 @@ void main()\n\
 // YOU NEED BOTH, this is not a replacement.
 /*---------------------------------------------------------------------------------*/
 /*
-GLuint SetupParticleShaders() // returns ID of newly created program
-{
-
-	// Set up shaders
-
-	// Create a shader from vertex program source code
-	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, 1, &source_vpart, NULL);
-	glCompileShader(vs);
-
-	// Check if shader compiled successfully
-	GLint status;
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(vs, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error compiling vertex shader:") + std::string(buffer)));
-	}
-
-	// Create a shader from the fragment program source code
-	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, 1, &source_fp, NULL);
-	glCompileShader(fs);
-
-	// Check if shader compiled successfully
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(fs, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error compiling fragment shader: ") + std::string(buffer)));
-	}
-
-	// Create a shader program linking both vertex and fragment shaders together
-	GLuint program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-
-	// Check if shaders were linked successfully
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (status != GL_TRUE) {
-		char buffer[512];
-		glGetShaderInfoLog(program, 512, NULL, buffer);
-		throw(std::ios_base::failure(std::string("Error linking shaders: ") + std::string(buffer)));
-	}
-
-	// Delete memory used by shaders, since they were already compiled
-	// and linked
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
-
 }*/
 
 /*---------------------------------------------------------------------------------*/
@@ -736,6 +687,12 @@ int main(void){
 		//Key press states based on pressing and releasing with glfwGetKey
 		int CHANGE_GAMESTATE;
 
+		enum gameStateType
+		{
+			titlescreen,
+			game
+		};
+
 		int GO_FORWARD;
 		int GO_BACKWARD;
 		int GO_LEFT;
@@ -746,6 +703,7 @@ int main(void){
 		RenderedObject gameOverScreen(tex[8]);
 		RenderedObject youWinScreen(tex[11]);
 		RenderedObject titleScreen(tex[12]);
+		RenderedObject healthBar(tex[14]);
 
 
         // Run the main loop
@@ -781,23 +739,23 @@ int main(void){
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
 			if (CHANGE_GAMESTATE == 1) {
-				game_state=1;
+				game_state=game;
 			}
 
-			if (game_state == 0) {
+			if (game_state == titlescreen) {
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_S)) {
 					printf("Smol Mass \n");
-					player.mass = 0.5f;
+					player.mass = 25.0f;
 				}
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_M)) {
 					printf("Normie Mass \n");
-					player.mass = 1.0f;
+					player.mass = 50.0f;
 				}
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_B)) {
 					printf("THICC Mass \n");
-					player.mass = 2.0f;
+					player.mass = 100.0f;
 				}
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_T)) {
@@ -812,7 +770,9 @@ int main(void){
 
 
 			}
-			else if (game_state == 1) {
+			else if (game_state == game) {
+
+				healthBar.render(glm::vec3(0.0f, 0.125f, 0.0f), glm::vec3(0.15f * (player.getHealth() / 100.0f), 0.025f, 1.0f), 0.0f, size, shader);
 
 				if (player.getHealth() > 0.0f && player.getPosition().y < 1000.0f) {
 
@@ -885,8 +845,8 @@ int main(void){
 				}
 
 				//printf("%f", enemy.getAcceleration().x);
-				//printf("%f", player.getPosition().y);
-				//printf("\n");
+				printf("%f", player.getVelocity().y);
+				printf("\n");
 
 
 

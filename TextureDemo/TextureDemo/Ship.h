@@ -4,6 +4,7 @@
 #include "MachineBullet.h"
 #include "RocketBullet.h"
 
+
 //Subclass of dynamic (moving) game entity, includes all spawned ships in the game
 class Ship : public DynamicGameEntity {
 public:
@@ -39,6 +40,12 @@ public:
 
 	float turretRot;
 
+	static const float MAX_FORWARD_VELOCITY;
+	static const float MAX_FORWARD_ACCELERATION;
+
+	static const float MAX_SIDE_VELOCITY;
+	static const float MAX_SIDE_ACCELERATION;
+
 private:
 
 	const float gunCooldown = 5.0f;
@@ -53,11 +60,6 @@ private:
 	int rocketAmmo;
 	static const int MAX_GUN_AMMO = 10;
 	static const int MAX_ROCKET_AMMO = 10;
-
-	static const int MAX_FORWARD_VELOCITY = 2.0f;
-	static const int MAX_FORWARD_ACCELERATION = 0.5f;
-
-	static const int MAX_SIDE_VELOCITY = 2.5f;
 
 	float bashVelocity;
 	float bashAccler;
