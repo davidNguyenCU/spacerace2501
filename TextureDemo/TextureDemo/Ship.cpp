@@ -53,15 +53,16 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 		acceleration.y = MAX_FORWARD_ACCELERATION;
 	}
 
+	if (isOutOfBounds()) {
+		velocity *= 0.85;
+		outOfBounds(deltaTime);
+	}
 
 	//std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
 	//std::cout << "Health: " << health << std::endl;
 
 	DynamicGameEntity::update(deltaTime, playerPosition);
 
-	if (isOutOfBounds()) {
-		outOfBounds(deltaTime);
-	}
 }
 
 void Ship::render(Shader &shader) {
@@ -167,8 +168,8 @@ bool Ship::canShootRocket() {
 }
 
 void Ship::outOfBounds(double deltaTime) {
-	std::cout << "To subtract: " << 100.0 * deltaTime << std::endl;
-	health = health - (100.0 * deltaTime);
+	std::cout << "To subtract: " << 20.0 * deltaTime << std::endl;
+	health = health - (20.0 * deltaTime);
 	if (health < 0.0) health = 0.0;
 }
 

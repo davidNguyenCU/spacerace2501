@@ -632,8 +632,10 @@ int main(void){
 		gameManager.setTextures(size, tex[3], tex[2], tex[2]);
 
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
-		Enemy enemy(glm::vec3(0.0f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
-		EnemyAi enemyaitest(&enemy, pacifistCompetitor);
+		Enemy enemy1(glm::vec3(0.2f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
+		Enemy enemy2(glm::vec3(-0.0f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
+		EnemyAi enemyaitest(&enemy1, pacifistCompetitor);
+		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
@@ -648,14 +650,15 @@ int main(void){
 		Asteroid aster5(glm::vec3(-0.4f, 0.85f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);*/
 
-		Enemy enemies[] = { enemy };
+		Enemy enemies[] = { enemy1, enemy2 };
 
 		//DynamicGameEntity * things[3];
 
 		vector <Asteroid*> asteroids;
 		vector <DynamicGameEntity*> physicsObjects;
 		physicsObjects.push_back(&player);
-		physicsObjects.push_back(&enemy);
+		physicsObjects.push_back(&enemy1);
+		physicsObjects.push_back(&enemy2);
 
 		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
 
@@ -789,6 +792,7 @@ int main(void){
 					gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
 					enemyaitest.update(deltaTime);
+					aggresiveEnemy.update(deltaTime);
 					gameManager.update(deltaTime);
 
 					for (int i = 0; i < physicsObjects.size(); i++) {
@@ -800,7 +804,8 @@ int main(void){
 					//gameManager.checkCollisions(physicsObjects[0], physicsObjects[1]);
 					//gameManager.checkCollisions(pPlayer, pAster);
 
-					enemy.update(deltaTime);
+					enemy1.update(deltaTime);
+					enemy2.update(deltaTime);
 					/*aster1.update(deltaTime);
 					enemyaitest.update(deltaTime);
 					aster1.update(deltaTime);
@@ -823,7 +828,7 @@ int main(void){
 					gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 				}
 
-				printf("%f", enemy.getAcceleration().x);
+				//printf("%f", enemy.getAcceleration().x);
 				//printf("%f", player.getPosition().y);
 				//printf("\n");
 
@@ -839,7 +844,8 @@ int main(void){
 				shader.enable();
 				AttributeBinding(shader.getShaderID());
 				
-				enemy.render(shader);
+				enemy1.render(shader);
+				enemy2.render(shader);
 				gameManager.renderAll(shader);
 
 				particleShader.enable();
