@@ -99,7 +99,7 @@ void GameManager::checkCollisions(DynamicGameEntity * colliding, DynamicGameEnti
 
 			float force = -(1 + CO_OF_RESTITUTION) * glm::dot(collisionNormal, deltaVelocity) / invSumMasses; \
 
-				colliding->updateMomentum(force * collisionNormal);
+			colliding->updateMomentum(force * collisionNormal);
 			collided->updateMomentum(-force * collisionNormal);
 		}
 	}

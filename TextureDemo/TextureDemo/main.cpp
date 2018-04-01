@@ -686,6 +686,12 @@ int main(void){
 		//Key press states based on pressing and releasing with glfwGetKey
 		int CHANGE_GAMESTATE;
 
+		enum gameStateType
+		{
+			titlescreen,
+			game
+		};
+
 		int GO_FORWARD;
 		int GO_BACKWARD;
 		int GO_LEFT;
@@ -732,23 +738,23 @@ int main(void){
 			gameManager.setMousePos(screenSpaceMouseX, screenSpaceMouseY);
 
 			if (CHANGE_GAMESTATE == 1) {
-				game_state=1;
+				game_state=game;
 			}
 
-			if (game_state == 0) {
+			if (game_state == titlescreen) {
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_S)) {
 					printf("Smol Mass \n");
-					player.mass = 0.5f;
+					player.mass = 25.0f;
 				}
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_M)) {
 					printf("Normie Mass \n");
-					player.mass = 1.0f;
+					player.mass = 50.0f;
 				}
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_B)) {
 					printf("THICC Mass \n");
-					player.mass = 2.0f;
+					player.mass = 100.0f;
 				}
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_T)) {
@@ -763,7 +769,7 @@ int main(void){
 
 
 			}
-			else if (game_state == 1) {
+			else if (game_state == game) {
 
 				healthBar.render(glm::vec3(0.0f, 0.125f, 0.0f), glm::vec3(0.15f * (player.getHealth() / 100.0f), 0.025f, 1.0f), 0.0f, size, shader);
 
@@ -829,8 +835,8 @@ int main(void){
 				}
 
 				//printf("%f", enemy.getAcceleration().x);
-				//printf("%f", player.getPosition().y);
-				//printf("\n");
+				printf("%f", player.getVelocity().y);
+				printf("\n");
 
 
 

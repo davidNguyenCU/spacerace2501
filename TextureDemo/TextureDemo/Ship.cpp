@@ -8,7 +8,7 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 	rocketAmmo = MAX_ROCKET_AMMO;
 
 	type = ship;
-	mass = 1.0f;
+	mass = 50.0f;
 	width = 0.175;
 	height = 0.175;
 
@@ -34,11 +34,12 @@ Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAccel
 }
 
 void Ship::update(double deltaTime, glm::vec3 playerPosition) {
-	if (velocity.y < 0.0f) {
-		velocity.y = 0.0f;
+	if (momentum.y < -5) {
+		momentum.y = -5;
 	}
-	else if (velocity.y > MAX_FORWARD_VELOCITY) {
-		velocity.y = MAX_FORWARD_VELOCITY;
+	else if (momentum.y > 170) {
+		momentum.y = 170;
+		//printf("REEEEEEEEE");
 	}
 	if (velocity.x > MAX_SIDE_VELOCITY)
 		velocity.x = MAX_SIDE_VELOCITY;
@@ -54,7 +55,7 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	}
 
 	if (isOutOfBounds()) {
-		velocity *= 0.85;
+		momentum *= 0.95;
 		outOfBounds(deltaTime);
 	}
 
@@ -79,15 +80,15 @@ void Ship::setTurret(glm::vec3 aimingAt) {
 //Side to side movement with A and D keys
 void Ship::sideMovement(int state, double deltaTime) {
 	if (state == 1) {
-		momentum.x += 0.001;
+		momentum.x += 5;
 		//position.x += sideVelocity * deltaTime; 
 	}
 	else if (state == -1) {
-		momentum.x += -0.001;
+		momentum.x -= 5;
 		//position.x -= sideVelocity * deltaTime; 
 	}
 	else
-		momentum.x = 0;
+		momentum.x += 0;
 }
 
 //Side dashing with Q and E key
@@ -108,13 +109,13 @@ void Ship::sideBash(int state, double currentTime, double deltaTime) {
 	if (bashStarted == true) {
 		if (bashDirection == 1){
 			if (dashType == 0)
-				momentum.x += 1.0;
+				momentum.x += 100.0;
 			else if (dashType == 1)
 				position.x += 0.375;
 		}
 		else if (bashDirection == -1){
 			if (dashType == 0)
-				momentum.x -= 1.0;
+				momentum.x -= 100.0;
 			else if (dashType == 1)
 				position.x -= 0.375;
 		}
