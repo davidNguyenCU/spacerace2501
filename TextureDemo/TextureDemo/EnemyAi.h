@@ -5,7 +5,8 @@ enum Behaviour
 {
 	stupidChase,
 	stupidStay,
-	pacifistCompetitor
+	pacifistCompetitor,
+	aggresive
 };
 
 class EnemyAi {

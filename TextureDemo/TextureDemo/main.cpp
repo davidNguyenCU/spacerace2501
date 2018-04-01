@@ -33,7 +33,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 13;
+static const int numTexs = 14;
 unsigned int game_state = 0;
 
 // Global texture info
@@ -208,7 +208,7 @@ void setallTexture(void)
 	//tex = new GLuint[6];
 	glGenTextures(numTexs, tex);
 	setthisTexture(tex[0], "blueships1.png");
-	setthisTexture(tex[1], "fiah.png");
+	setthisTexture(tex[1], "orb.png");
 	setthisTexture(tex[2], "saw.png");
 	setthisTexture(tex[3], "crosshairs.png");
 	setthisTexture(tex[4], "bullet.png");
@@ -220,6 +220,8 @@ void setallTexture(void)
 	setthisTexture(tex[10], "turret.png");
 	setthisTexture(tex[11], "youWin.png");
 	setthisTexture(tex[12], "titlescreen.png");
+	setthisTexture(tex[13], "fire.png");
+
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -234,6 +236,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[10]);
 	glBindTexture(GL_TEXTURE_2D, tex[11]);
 	glBindTexture(GL_TEXTURE_2D, tex[12]);
+	glBindTexture(GL_TEXTURE_2D, tex[13]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -564,7 +567,7 @@ void drawParticles(GLuint particleprogram, glm::vec3 position, int particlesize)
 	// get ready to draw, load matrix
 	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &rot[0][0]);
 	glUniform1f(timeLocation, k);
-	glBindTexture(GL_TEXTURE_2D, tex[1]);
+	glBindTexture(GL_TEXTURE_2D, tex[13]);
 
 	// Draw 
 	glDrawElements(GL_TRIANGLES, 6 * particlesize, GL_UNSIGNED_INT, 0);
@@ -587,7 +590,7 @@ void drawExplParticles(GLuint particleprogram, glm::vec3 position, int particles
 	// get ready to draw, load matrix
 	glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &rot[0][0]);
 	glUniform1f(timeLocation, glfwGetTime());
-	glBindTexture(GL_TEXTURE_2D, tex[1]);
+	glBindTexture(GL_TEXTURE_2D, tex[13]);
 	glDrawElements(GL_TRIANGLES, 6 * particlesize, GL_UNSIGNED_INT, 0);
 }
 
@@ -708,7 +711,7 @@ int main(void){
 		for (int i = 0; i < 2; i++)
 		{
 			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
-			std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+			//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
 		}
 
 		physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
@@ -807,7 +810,7 @@ int main(void){
 			}
 			else if (game_state == 1) {
 
-				if (player.getHealth() > 0.0f && player.getPosition().y < 5.0f) {
+				if (player.getHealth() > 0.0f && player.getPosition().y < 1000.0f) {
 
 					// Acceleration FORWARD AND BACK
 					if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
@@ -844,12 +847,9 @@ int main(void){
 					//gameManager.checkCollisions(pPlayer, pAster);
 
 					enemy.update(deltaTime);
-//<<<<<<< HEAD
 					/*aster1.update(deltaTime);
-=======
 					enemyaitest.update(deltaTime);
 					aster1.update(deltaTime);
->>>>>>> 88b956d8b63b923b59b6ef6ee31e171880614d4f
 					aster2.update(deltaTime);
 					aster3.update(deltaTime);
 					aster4.update(deltaTime);
@@ -862,7 +862,7 @@ int main(void){
 
 					map.update(deltaTime, player.getPosition());
 				}
-				else if (player.getHealth() > 0.0f && player.getPosition().y > 5) {
+				else if (player.getHealth() > 0.0f && player.getPosition().y > 1000.0) {
 					youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 				}
 				else {
@@ -882,16 +882,19 @@ int main(void){
 				}
 
 				
-				particleShader.enable();
-				AttributeBinding(particleShader.getShaderID());
-				drawParticles(particleShader.getShaderID(), glm::vec3(0, 0.01, 0), particleSize);
-				particleShader.disable();
-				
 				shader.enable();
 				AttributeBinding(shader.getShaderID());
 				
 				enemy.render(shader);
 				gameManager.renderAll(shader);
+
+				particleShader.enable();
+				AttributeBinding(particleShader.getShaderID());
+				drawParticles(particleShader.getShaderID(), glm::vec3(0, 0.01, 0), particleSize);
+				particleShader.disable();
+
+				shader.enable();
+				AttributeBinding(shader.getShaderID());
 				map.renderRoad(shader);
 				map.render(shader);
 			
