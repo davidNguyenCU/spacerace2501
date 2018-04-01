@@ -703,9 +703,9 @@ int main(void){
 		physicsObjects.push_back(&player);
 		physicsObjects.push_back(&enemy);
 
-		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
+		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map2.txt"));
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
 			std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
