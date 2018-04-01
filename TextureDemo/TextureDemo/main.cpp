@@ -479,6 +479,7 @@ int CreateParticleArray(void) {
 
 		//   const int face_att = 3; // Vertex indices (3)
 
+
 		GLfloat vertex[] = {
 		//  square (two triangles)
 		//  Position      Color             Texcoords
@@ -835,6 +836,15 @@ int main(void){
 					player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
 
 					// Shoot
+					if (PRESSING_SHOOT_GUN)
+					{
+						std::cout << "PRESSING GUN" << std::endl;
+					}
+					else
+					{
+						std::cout << "NOT" << std::endl;
+					}
+
 					gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
 					enemyaitest.update(deltaTime);

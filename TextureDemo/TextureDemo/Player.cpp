@@ -9,7 +9,7 @@ Player::Player(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityA
 void Player::update(double deltaTime, glm::vec3 mousePos) {
 	Ship::update(deltaTime, position);
 	setTurret(mousePos);
-	std::cout << "Player Health: " << getHealth() << std::endl;
+	//std::cout << "Player Health: " << getHealth() << std::endl;
 }
 
 void Player::render(Shader &shader)
