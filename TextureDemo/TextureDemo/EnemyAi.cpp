@@ -114,9 +114,10 @@ void EnemyAi::update(double deltaTime)
 
 		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime /** glm::vec3(0.5, 0.5, 0.0)*/);
 	}
-	/*else if (behaviourController == aggresive)
+
+	else if (behaviourController == aggresive)
 	{
-		if ((enemyPosition.x < playerPosition.x + playerWidthHalf && enemyPosition.x > playerPosition.x - playerWidthHalf) && enemyPosition.y < playerPosition.y + playerHeightHalf)
+		/*if ((enemyPosition.x < playerPosition.x + playerWidthHalf && enemyPosition.x > playerPosition.x - playerWidthHalf) && enemyPosition.y < playerPosition.y + playerHeightHalf)
 		{
 			if (playerPosition.x > 0)
 			{
@@ -126,6 +127,16 @@ void EnemyAi::update(double deltaTime)
 			{
 				enemy->setAcceleration(glm::vec3(0.3f, 0.0f, 0.0f));
 			}
+		}*/
+		if (abs(enemyPosition.y - playerPosition.y) < 0.2)
+		{
+			enemy->setAcceleration(glm::normalize(playerPosition - enemyPosition) * 0.4f);
 		}
-	}*/
+		else
+		{
+			enemy->setAcceleration(glm::vec3(0.0f, 0.2f, 0.0f));
+		}
+
+		enemy->setVelocity(enemy->getVelocity() + enemy->getAcceleration() * (float)deltaTime /** glm::vec3(0.5, 0.5, 0.0)*/);
+	}
 }
