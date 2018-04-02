@@ -22,8 +22,14 @@ void DynamicGameEntity::update(double deltaTime, glm::vec3 playerPosition) {
 
 	//printf("%f", velocity.x);
 
-	position += velocity * (float)deltaTime;
-	screenPosition = position - playerPosition;
+	/*if (velocity.x > MAX_SIDE_VELOCITY) {
+		velocity.x = MAX_SIDE_VELOCITY;
+	}
+	else if (velocity.x < -1 * MAX_SIDE_VELOCITY) {
+		velocity.x = -1 * MAX_SIDE_VELOCITY;
+	}*/
+
+
 }
 
 void DynamicGameEntity::render(Shader& shader) {

@@ -848,8 +848,11 @@ int main(void){
 				}
 
 				//printf("%f", enemy.getAcceleration().x);
+				printf("%f", enemy1.getVelocity().y);
+				printf("\n");
 				printf("%f", player.getVelocity().y);
 				printf("\n");
+
 
 
 

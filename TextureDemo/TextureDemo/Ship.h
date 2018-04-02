@@ -18,6 +18,7 @@ public:
 	int bashDirection;
 	int dashType;
 
+
 	float sideVelocity;
 
 	void update(double deltaTime, glm::vec3 playerPosition);

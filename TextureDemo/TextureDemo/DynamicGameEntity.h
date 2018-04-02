@@ -21,6 +21,7 @@ public:
 	inline void fastASTER() { momentum.y += 1.0; }
 	inline glm::vec3 getAcceleration() { return acceleration; };
 	inline glm::vec3 getVelocity() { return velocity; };
+	inline glm::vec3 getMomentum() { return momentum; };
 
 protected:
 	enum entityType {

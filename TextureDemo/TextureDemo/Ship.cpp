@@ -1,10 +1,10 @@
 #include "Ship.h"
 #include "Map.h"
 
-const float Ship::MAX_FORWARD_VELOCITY = 4.0f;
+const float Ship::MAX_FORWARD_VELOCITY = 2.0f;
 const float Ship::MAX_FORWARD_ACCELERATION = 0.5f;
-const float Ship::MAX_SIDE_VELOCITY = 0.000002f;
-const float Ship::MAX_SIDE_ACCELERATION = 0.0002f;
+const float Ship::MAX_SIDE_VELOCITY = 1.5f;
+const float Ship::MAX_SIDE_ACCELERATION = 4.0f;
 
 Ship::Ship(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceleration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLuint &turretTex, GLint entityNumElements)
 	: DynamicGameEntity(entityPos, entityVelocity, entityAcceleration, entityScale, entityRotationAmount, entityTexture, entityNumElements)
@@ -42,11 +42,11 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	if (momentum.y < -5) {
 		momentum.y = -5;
 	}
-	else if (momentum.y > 170) {
-		momentum.y = 170;
+	else if (velocity.y > MAX_FORWARD_VELOCITY) {
+		velocity.y = MAX_FORWARD_VELOCITY;
 	}
 
-	if (velocity.x > MAX_SIDE_VELOCITY) {
+	/*if (velocity.x > MAX_SIDE_VELOCITY) {
 		velocity.x = MAX_SIDE_VELOCITY;
 	}
 	else if (velocity.x < -1 * MAX_SIDE_VELOCITY) {
@@ -65,7 +65,7 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	}
 	else if (acceleration.x < -1 * MAX_SIDE_ACCELERATION) {
 		acceleration.x = -1 * MAX_SIDE_ACCELERATION;
-	}
+	}*/
 
 	if (isOutOfBounds()) {
 		momentum *= 0.95;
@@ -75,7 +75,29 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	//std::cout << "Vertical Motion ->  Accleration: " << acceleration.y << ", \tVelocity : " << velocity.y << std::endl;
 	//std::cout << "Health: " << health << std::endl;
 
-	DynamicGameEntity::update(deltaTime, playerPosition);
+	//DynamicGameEntity::update(deltaTime, playerPosition);
+
+	acceleration = momentum / mass;
+	velocity = momentum * 1.0f / mass;
+
+	if (velocity.x > MAX_SIDE_VELOCITY) {
+		velocity.x = MAX_SIDE_VELOCITY;
+	}
+	else if (velocity.x < -1 * MAX_SIDE_VELOCITY) {
+		velocity.x = -1 * MAX_SIDE_VELOCITY;
+	}
+
+	if (velocity.y < 0.0f)
+	{
+		velocity.y = 0.0f;
+	}
+	else if (velocity.y > MAX_FORWARD_VELOCITY)
+	{
+		velocity.y = MAX_FORWARD_VELOCITY;
+	}
+
+	position += velocity * (float)deltaTime;
+	screenPosition = position - playerPosition;
 
 }
 
