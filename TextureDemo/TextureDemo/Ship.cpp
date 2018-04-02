@@ -1,7 +1,7 @@
 #include "Ship.h"
 #include "Map.h"
 
-const float Ship::MAX_FORWARD_VELOCITY = 3.0f;
+const float Ship::MAX_FORWARD_VELOCITY = 2.0f;
 const float Ship::MAX_FORWARD_ACCELERATION = 0.5f;
 const float Ship::MAX_SIDE_VELOCITY = 1.5f;
 const float Ship::MAX_SIDE_ACCELERATION = 4.0f;
@@ -85,6 +85,15 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	}
 	else if (velocity.x < -1 * MAX_SIDE_VELOCITY) {
 		velocity.x = -1 * MAX_SIDE_VELOCITY;
+	}
+
+	if (velocity.y < 0.0f)
+	{
+		velocity.y = 0.0f;
+	}
+	else if (velocity.y > MAX_FORWARD_VELOCITY)
+	{
+		velocity.y = MAX_FORWARD_VELOCITY;
 	}
 
 	position += velocity * (float)deltaTime;
