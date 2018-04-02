@@ -845,7 +845,7 @@ int main(void){
 				}
 
 				//printf("%f", enemy.getAcceleration().x);
-				printf("%f", player.getVelocity().y);
+				printf("%f", enemy1.getMomentum().y);
 				printf("\n");
 
 
