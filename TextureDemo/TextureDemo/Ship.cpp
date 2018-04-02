@@ -42,8 +42,8 @@ void Ship::update(double deltaTime, glm::vec3 playerPosition) {
 	if (momentum.y < -5) {
 		momentum.y = -5;
 	}
-	else if (momentum.y > 170) {
-		momentum.y = 170;
+	else if (velocity.y > MAX_FORWARD_VELOCITY) {
+		velocity.y = MAX_FORWARD_VELOCITY;
 	}
 
 	/*if (velocity.x > MAX_SIDE_VELOCITY) {
