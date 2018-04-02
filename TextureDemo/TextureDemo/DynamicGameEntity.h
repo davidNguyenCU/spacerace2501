@@ -18,15 +18,15 @@ public:
 	float getWidth() { return width; }
 	float getHeight() { return height; }
 	int getType() { return type;}
-
+	inline void fastASTER() { momentum.y += 1.0; }
 	inline glm::vec3 getAcceleration() { return acceleration; };
 	inline glm::vec3 getVelocity() { return velocity; };
 
 protected:
 	enum entityType {
-	ship,
-	asteroid,
-	testCase
+		ship,
+		asteroid,
+		testCase
 	};
 
 	glm::vec3 velocity;

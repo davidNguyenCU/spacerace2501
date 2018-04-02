@@ -1,10 +1,18 @@
 #pragma once
 
-#include "GameEntity.h"
+#include "DynamicGameEntity.h"
 
-class PowerUp : public GameEntity {
+enum Type
+{
+	accelerate,
+	refill
+};
+
+class PowerUp : public DynamicGameEntity {
 public:
-	PowerUp(glm::vec3 &entityPos, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements);
-
-	virtual void update(double deltaTime) override;
+	void updatePos(double deltaTime);
+	PowerUp(glm::vec3 &entityPos, glm::vec3 entityVelocity, glm::vec3 entityAcceration, glm::vec3 &entityScale, float entityRotationAmount, GLuint entityTexture, GLint entityNumElements, Type typeOfPowerup);
+	Type type;
+	float height = 0.1;
+	float width = 0.1;
 };

@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "ObstacleMap.h"
 #include "ResourceManager.h"
+#include "PowerUp.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -637,6 +638,7 @@ int main(void){
 		Enemy enemy2(glm::vec3(-0.0f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		EnemyAi enemyaitest(&enemy1, pacifistCompetitor);
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
+		PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
 
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
@@ -681,6 +683,7 @@ int main(void){
 		
 		gameManager.setPlayer(&player);
 		gameManager.setEnemies(enemies);
+		gameManager.addPowerups(&powerup);
 
 		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), 0, tex[6], tex[7], size);
 
@@ -810,7 +813,7 @@ int main(void){
 					enemyaitest.update(deltaTime);
 					aggresiveEnemy.update(deltaTime);
 					gameManager.update(deltaTime);
-
+					gameManager.checkCollisionsPowerups(&player, &powerup);
 					for (int i = 0; i < physicsObjects.size(); i++) {
 						for (int z = i + 1; z < physicsObjects.size(); z++) {
 							gameManager.checkCollisions(physicsObjects[i], physicsObjects[z]);
@@ -862,6 +865,7 @@ int main(void){
 				
 				enemy1.render(shader);
 				enemy2.render(shader);
+				powerup.render(shader);
 				gameManager.renderAll(shader);
 
 				particleShader.enable();

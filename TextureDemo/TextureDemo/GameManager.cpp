@@ -29,12 +29,38 @@ void GameManager::update(double deltaTime) {
 		rocket.update(deltaTime, player->getPosition());
 	}
 
+	for (auto& powerup : powerups) {
+		powerup->update(deltaTime, player->getPosition());
+		powerup->updatePos(deltaTime);
+	}
+
 	updateUI();
 }
 
 
 void GameManager::updateUI() {
 	
+}
+
+void GameManager::checkCollisionsPowerups(Player * colliding, PowerUp * collided) {
+	float playerWidth = colliding->getWidth();
+	float playerHeight = colliding->getHeight();
+	float playerXpos = colliding->getPosition().x;
+	float playerYpos = colliding->getPosition().y;
+
+	float powerupWidth = collided->width;
+	float powerupHeight = collided->height;
+	float powerupXpos = collided->getPosition().x;
+	float powerupYpos = collided->getPosition().y;
+
+	if (playerXpos < powerupXpos + powerupWidth &&
+		powerupXpos < playerXpos + playerWidth &&
+		playerYpos < powerupYpos + powerupHeight &&
+		powerupYpos < playerYpos + playerHeight)
+	{
+		std::cout << "WORKINGGGG" << std::endl;
+		colliding->fastASTER();
+	}
 }
 
 void GameManager::checkCollisions(DynamicGameEntity * colliding, DynamicGameEntity * collided) {
@@ -125,13 +151,20 @@ void GameManager::addEnemy(Enemy * enemy) {
 	//std::cout << ships.size() << std::endl;
 }
 
+void GameManager::addPowerups(PowerUp * powerup) 
+{
+	powerups.push_back(powerup);
+	//std::cout << ships.size() << std::endl;
+}
+
 void GameManager::setMousePos(float aMouseX, float aMouseY)
 {
 	mouseX = aMouseX;
 	mouseY = aMouseY;
 }
 
-void GameManager::setTextures(int texSize, GLuint& mouseTex, GLuint& bulletTex, GLuint& rocketTex) {
+void GameManager::setTextures(int texSize, GLuint& mouseTex, GLuint& bulletTex, GLuint& rocketTex) 
+{
 	squareGeometry = texSize;
 	mousePointerTexture = RenderedObject(mouseTex);
 	bulletTexture = RenderedObject(bulletTex);
@@ -154,6 +187,10 @@ void GameManager::renderAll(Shader& shader) {
 
 	for (auto& rocket : rockets) {
 		rocket.render(shader);
+	}
+
+	for (auto& powerup : powerups) {
+		powerup->render(shader);
 	}
 }
 

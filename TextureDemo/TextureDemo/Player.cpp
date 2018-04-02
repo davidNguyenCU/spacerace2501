@@ -18,7 +18,8 @@ void Player::render(Shader &shader)
 	Ship::render(shader);
 }
 
-void Player::setTurret(glm::vec3 aimingAt) {
+void Player::setTurret(glm::vec3 aimingAt) 
+{
 	glm::vec3 modifiedPos(position + aimingAt);
 	Ship::setTurret(modifiedPos);
 }
