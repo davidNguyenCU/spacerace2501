@@ -635,7 +635,7 @@ int main(void){
 		Player player(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[0], tex[10], size);
 		Enemy enemy1(glm::vec3(0.2f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		Enemy enemy2(glm::vec3(-0.0f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
-		EnemyAi enemyaitest(&enemy1, pacifistCompetitor);
+		EnemyAi enemyaitest(&enemy1, stupidChase);
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 
 
