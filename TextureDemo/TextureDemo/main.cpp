@@ -23,6 +23,7 @@
 #include "ObstacleMap.h"
 #include "ResourceManager.h"
 #include "PowerUp.h"
+#include "Blackhole.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -34,7 +35,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 15;
+static const int numTexs = 16;
 unsigned int game_state = 0;
 
 // Global texture info
@@ -223,6 +224,7 @@ void setallTexture(void)
 	setthisTexture(tex[12], "titlescreen.png");
 	setthisTexture(tex[13], "fire.png");
 	setthisTexture(tex[14], "healthBar.png");
+	setthisTexture(tex[15], "bhole.png");
 
 	
 
@@ -242,6 +244,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[12]);
 	glBindTexture(GL_TEXTURE_2D, tex[13]);
 	glBindTexture(GL_TEXTURE_2D, tex[14]);
+	glBindTexture(GL_TEXTURE_2D, tex[15]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -639,7 +642,7 @@ int main(void){
 		EnemyAi enemyaitest(&enemy1, pacifistCompetitor);
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 		PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
-
+		Blackhole bhole(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 =======
@@ -825,6 +828,9 @@ int main(void){
 
 					enemy1.update(deltaTime);
 					enemy2.update(deltaTime);
+					bhole.update(deltaTime);
+
+					bhole.succ(&player);
 					/*aster1.update(deltaTime);
 					enemyaitest.update(deltaTime);
 					aster1.update(deltaTime);
@@ -868,6 +874,7 @@ int main(void){
 				
 				enemy1.render(shader);
 				enemy2.render(shader);
+				bhole.render(shader);
 				powerup.render(shader);
 				gameManager.renderAll(shader);
 
