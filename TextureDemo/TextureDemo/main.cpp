@@ -641,8 +641,8 @@ int main(void){
 		Enemy enemy2(glm::vec3(-0.0f, -0.6f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 0.0f, tex[1], tex[10], size, &player);
 		EnemyAi enemyaitest(&enemy1, pacifistCompetitor);
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
-		PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
-		Blackhole bhole(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
+		//PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
+		Blackhole bhole(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
 		PowerUp powerup(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[9], tex[1], size, accelerate);
 
 
