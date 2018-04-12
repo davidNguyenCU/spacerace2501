@@ -643,6 +643,8 @@ int main(void){
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 		PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
 		Blackhole bhole(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
+		PowerUp powerup(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[9], tex[1], size, accelerate);
+
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 =======
@@ -825,7 +827,6 @@ int main(void){
 
 					//gameManager.checkCollisions(physicsObjects[0], physicsObjects[1]);
 					//gameManager.checkCollisions(pPlayer, pAster);
-
 					enemy1.update(deltaTime);
 					enemy2.update(deltaTime);
 					bhole.update(deltaTime);
