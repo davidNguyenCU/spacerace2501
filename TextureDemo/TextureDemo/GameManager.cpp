@@ -30,8 +30,8 @@ void GameManager::update(double deltaTime) {
 	}
 
 	for (auto& powerup : powerups) {
-		powerup->update(deltaTime, player->getPosition());
 		powerup->updatePos(deltaTime);
+		powerup->update(deltaTime, player->getPosition());
 	}
 
 	updateUI();
@@ -58,7 +58,6 @@ void GameManager::checkCollisionsPowerups(Player * colliding, PowerUp * collided
 		playerYpos < powerupYpos + powerupHeight &&
 		powerupYpos < playerYpos + playerHeight)
 	{
-		std::cout << "WORKINGGGG" << std::endl;
 		colliding->fastASTER();
 	}
 }
