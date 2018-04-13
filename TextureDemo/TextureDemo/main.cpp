@@ -670,7 +670,7 @@ int main(void){
 
 		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < map1.getNumObjects(); i++)
 		{
 			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
 			//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;

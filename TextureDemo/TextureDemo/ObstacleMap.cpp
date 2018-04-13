@@ -9,6 +9,7 @@ void ObstacleMap::parseTextData(std::string mapString)
 {
 	//std::cout << mapString << std::endl;
 	const size_t n = std::count(mapString.begin(), mapString.end(), '\n');
+	numObjects = n;
 	//std::cout << n << std::endl;
 
 	//std::cout << mapString << std::endl;

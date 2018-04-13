@@ -93,10 +93,10 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObstacleMap.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Blackhole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
