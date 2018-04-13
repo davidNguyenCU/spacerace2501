@@ -221,7 +221,7 @@ void setallTexture(void)
 	setthisTexture(tex[9], "asteroid.png");
 	setthisTexture(tex[10], "turret.png");
 	setthisTexture(tex[11], "youWin.png");
-	setthisTexture(tex[12], "titlescreen.png");
+	setthisTexture(tex[12], "titlescreen2.png");
 	setthisTexture(tex[13], "fire.png");
 	setthisTexture(tex[14], "healthBar.png");
 	setthisTexture(tex[15], "bhole.png");
@@ -712,7 +712,8 @@ int main(void){
 		RenderedObject youWinScreen(tex[11]);
 		RenderedObject titleScreen(tex[12]);
 		RenderedObject healthBar(tex[14]);
-
+		RenderedObject selectBar1(tex[14]);
+		RenderedObject selectBar2(tex[14]);
 
         // Run the main loop
         bool animating = 1;
@@ -751,6 +752,23 @@ int main(void){
 			}
 
 			if (game_state == titlescreen) {
+				if (player.mass == 25.0f) {
+					selectBar1.render(glm::vec3(-0.8f, -0.06f, 0.0f), glm::vec3(0.16f, 0.21f, 1.0f), 0.0f, size, shader);
+				}
+				else if (player.mass == 50.0f) {
+					selectBar1.render(glm::vec3(-0.8f, -0.325f, 0.0f), glm::vec3(0.16f, 0.21f, 1.0f), 0.0f, size, shader);
+				}
+				else if (player.mass == 100.0f) {
+					selectBar1.render(glm::vec3(-0.8f, -0.58f, 0.0f), glm::vec3(0.16f, 0.21f, 1.0f), 0.0f, size, shader);
+				}
+
+				if (player.dashType == 1) {
+					selectBar2.render(glm::vec3(0.398f, -0.48f, 0.0f), glm::vec3(0.19f, 0.22f, 1.0f), 0.0f, size, shader);
+				}
+				else {
+					selectBar2.render(glm::vec3(0.398f, -0.18f, 0.0f), glm::vec3(0.19f, 0.22f, 1.0f), 0.0f, size, shader);
+				}
+
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 
 				if (glfwGetKey(window.getWindow(), GLFW_KEY_S)) {
@@ -775,6 +793,7 @@ int main(void){
 					player.dashType = 0;
 				}
 
+				
 
 
 			}
