@@ -861,7 +861,7 @@ int main(void){
 
 				healthBar.render(glm::vec3(0.0f, 0.125f, 0.0f), glm::vec3(0.15f * (player.getHealth() / 100.0f), 0.025f, 1.0f), 0.0f, size, shader);
 
-				if (player.getHealth() > 0.0f && player.getPosition().y < 1000.0f) {
+				if (player.getHealth() > 0.0f && player.getPosition().y < 50.0f) {
 
 					// Acceleration FORWARD AND BACK
 					if (GO_FORWARD == 1)	   PLAYER_ACCELERATION = 1;
@@ -926,8 +926,15 @@ int main(void){
 
 					map.update(deltaTime, player.getPosition());
 				}
-				else if (player.getHealth() > 0.0f && player.getPosition().y > 1000.0) {
-					youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+				else if (player.getHealth() > 0.0f && player.getPosition().y > 50.0f) {
+					if (player.getPlacement() == 1)
+					{
+						youWinScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+					}
+					else
+					{
+						gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
+					}
 				}
 				else {
 					gameOverScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
@@ -957,7 +964,8 @@ int main(void){
 				//std::cout << "Place: " << setPlayerStanding(&player, enemies, enemies.size()) << std::endl; 
 
 				setPlayerStanding(&player, enemies, enemies.size());
-				std::cout << "Place: " << player.getPlacement() << std::endl;
+				//std::cout << "Place: " << player.getPlacement() << std::endl;
+				std::cout << "Player Y Pos: " << player.getPosition().y << std::endl;
 				/*switch (player.getPlacement())
 				{
 				case 1:
