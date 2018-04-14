@@ -35,7 +35,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 16;
+static const int numTexs = 26;
 unsigned int game_state = 0;
 
 // Global texture info
@@ -757,19 +757,18 @@ int main(void){
 		RenderedObject selectBar1(tex[14]);
 		RenderedObject selectBar2(tex[14]);
 
-		RenderedObject
-			zero(tex[16]),
-			one(tex[17]),
-			two(tex[18]),
-			three(tex[19]),
-			four(tex[20]),
-			five(tex[21]),
-			six(tex[22]),
-			seven(tex[23]),
-			eight(tex[24]),
-			nine(tex[25]);
+		RenderedObject zero(tex[16]);
+		RenderedObject one(tex[17]);
+		RenderedObject two(tex[18]);
+		RenderedObject three(tex[19]);
+		RenderedObject four(tex[20]);
+		RenderedObject five(tex[21]);
+		RenderedObject six(tex[22]);
+		RenderedObject seven(tex[23]);
+		RenderedObject eight(tex[24]);
+		RenderedObject nine(tex[25]);
 
-		std::vector<RenderedObject> numbers = { 
+		RenderedObject numbers[10] = { 
 			zero, one, two, three, four, five, six, seven, eight, nine
 		};
 
@@ -956,9 +955,35 @@ int main(void){
 				AttributeBinding(shader.getShaderID());
 				
 				//std::cout << "Place: " << setPlayerStanding(&player, enemies, enemies.size()) << std::endl; 
+
 				setPlayerStanding(&player, enemies, enemies.size());
 				std::cout << "Place: " << player.getPlacement() << std::endl;
-				numbers[0].render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);//zero.render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
+				/*switch (player.getPlacement())
+				{
+				case 1:
+					one.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 2:
+					two.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 3:
+					three.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 4:
+					four.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 5:
+					five.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 6:
+					six.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 7:
+					seven.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 8:
+					eight.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				case 9:
+					nine.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
+				}*/
+				//numbers[player.getPlacement()].render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader);//zero.render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
+				numbers[player.getPlacement()].render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
+				slash.render(glm::vec3(0.8f, 0.775f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
+				numbers[enemies.size() + 1].render(glm::vec3(0.9f, 0.75f, 0.0f), glm::vec3(0.1f, 0.15f, 0.2f), 0.0f, size, shader);
+
 				enemy1.render(shader);
 				enemy2.render(shader);
 				bhole.render(shader);
