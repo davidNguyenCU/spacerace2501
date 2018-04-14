@@ -47,6 +47,14 @@ public:
 	static const float MAX_SIDE_VELOCITY;
 	static const float MAX_SIDE_ACCELERATION;
 
+	bool operator > (const Ship& ship) const
+	{
+		return (position.y > ship.getPosition().y);
+	}
+
+	int getPlacement() const { return placement; };
+	void setPlacement(int newPlacement) { placement = newPlacement; };
+
 private:
 
 	const float gunCooldown = 5.0f;
@@ -69,7 +77,10 @@ private:
 	float health;
 	void outOfBounds(double deltaTime);
 	bool isOutOfBounds();
+
 	//const double asteroidDamagePerSecond = 1000000000.0;
 
 	RenderedObject turretSprite;
+
+	int placement;
 };

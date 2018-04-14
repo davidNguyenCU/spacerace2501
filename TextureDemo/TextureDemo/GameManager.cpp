@@ -33,13 +33,12 @@ void GameManager::update(double deltaTime) {
 		powerup->updatePos(deltaTime);
 		powerup->update(deltaTime, player->getPosition());
 	}
-
-	updateUI();
 }
 
 
-void GameManager::updateUI() {
-	
+void GameManager::updateUI() 
+{
+
 }
 
 void GameManager::checkCollisionsPowerups(Player * colliding, PowerUp * collided) {

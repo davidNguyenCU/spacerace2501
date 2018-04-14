@@ -20,7 +20,7 @@ public:
 	virtual void update(double deltaTime) = 0;
 	void render(Shader &shader);
 
-	inline glm::vec3 getPosition() { return position; }
+	inline glm::vec3 getPosition() const { return position; }
 	inline void setXposition(float newX) { position.x = newX; }
 	inline void setYposition(float newY) { position.y = newY; }
 	inline float getRotation() { return rotationAmount; }

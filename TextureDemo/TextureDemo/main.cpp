@@ -225,9 +225,17 @@ void setallTexture(void)
 	setthisTexture(tex[13], "fire.png");
 	setthisTexture(tex[14], "healthBar.png");
 	setthisTexture(tex[15], "bhole.png");
-
-	
-
+	setthisTexture(tex[16], "0.png");
+	setthisTexture(tex[17], "1.png");
+	setthisTexture(tex[18], "2.png");
+	setthisTexture(tex[19], "3.png");
+	setthisTexture(tex[20], "4.png");
+	setthisTexture(tex[21], "5.png");
+	setthisTexture(tex[22], "6.png");
+	setthisTexture(tex[23], "7.png");
+	setthisTexture(tex[24], "8.png");
+	setthisTexture(tex[25], "9.png");
+	setthisTexture(tex[26], "_Slash.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -245,6 +253,17 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[13]);
 	glBindTexture(GL_TEXTURE_2D, tex[14]);
 	glBindTexture(GL_TEXTURE_2D, tex[15]);
+	glBindTexture(GL_TEXTURE_2D, tex[16]);
+	glBindTexture(GL_TEXTURE_2D, tex[17]);
+	glBindTexture(GL_TEXTURE_2D, tex[18]);
+	glBindTexture(GL_TEXTURE_2D, tex[19]);
+	glBindTexture(GL_TEXTURE_2D, tex[20]);
+	glBindTexture(GL_TEXTURE_2D, tex[21]);
+	glBindTexture(GL_TEXTURE_2D, tex[22]);
+	glBindTexture(GL_TEXTURE_2D, tex[23]);
+	glBindTexture(GL_TEXTURE_2D, tex[24]);
+	glBindTexture(GL_TEXTURE_2D, tex[25]);
+	glBindTexture(GL_TEXTURE_2D, tex[26]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -334,6 +353,21 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 	PRESSING_SHOOT_ROCKET = (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS);
 }
 
+int setPlayerStanding(Player *player, std::vector<Enemy*> enemies, int numEnemies)
+{
+	int standing = 1;
+
+	for (int i = 0; i < numEnemies; i++)
+	{
+		if ((Ship)*enemies[i] > (Ship) *player)
+		{
+			standing++;
+		}
+	}
+
+	player->setPlacement(standing);
+	return standing;
+}
 
 // Particle system vertex shader
 // DOES NOT REPLACE OLD VERTEX SHADER -- you will want both
@@ -658,7 +692,9 @@ int main(void){
 		Asteroid aster5(glm::vec3(-0.4f, 0.85f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
 		Asteroid aster6(glm::vec3(0.0f, 2.05f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);*/
 
-		Enemy enemies[] = { enemy1, enemy2 };
+		std::vector<Enemy*> enemies;
+		enemies.push_back(&enemy1);
+		enemies.push_back(&enemy2);
 
 		//DynamicGameEntity * things[3];
 
@@ -687,8 +723,14 @@ int main(void){
 		//printf("%d",physicsObjects[0]);
 		
 		gameManager.setPlayer(&player);
-		gameManager.setEnemies(enemies);
+		for (int i = 0; i < sizeof(enemies) / sizeof(Enemy); i++)
+		{
+			gameManager.setEnemies(enemies[i]);
+		}
+		
 		gameManager.addPowerups(&powerup);
+
+		//getPlayerStanding();
 
 		Map map(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(6.0f, 6.0f, 2.0f), 0, tex[6], tex[7], size);
 
@@ -714,6 +756,25 @@ int main(void){
 		RenderedObject healthBar(tex[14]);
 		RenderedObject selectBar1(tex[14]);
 		RenderedObject selectBar2(tex[14]);
+
+		RenderedObject
+			zero(tex[16]),
+			one(tex[17]),
+			two(tex[18]),
+			three(tex[19]),
+			four(tex[20]),
+			five(tex[21]),
+			six(tex[22]),
+			seven(tex[23]),
+			eight(tex[24]),
+			nine(tex[25]);
+
+		std::vector<RenderedObject> numbers = { 
+			zero, one, two, three, four, five, six, seven, eight, nine
+		};
+
+
+		RenderedObject slash(tex[26]);
 
         // Run the main loop
         bool animating = 1;
@@ -823,14 +884,14 @@ int main(void){
 					player.sideBash(BASH_LEFT_RIGHT, glfwGetTime(), deltaTime);
 
 					// Shoot
-					if (PRESSING_SHOOT_GUN)
+					/*if (PRESSING_SHOOT_GUN)
 					{
 						std::cout << "PRESSING GUN" << std::endl;
 					}
 					else
 					{
 						std::cout << "NOT" << std::endl;
-					}
+					}*/
 
 					gameManager.playerShoot(PRESSING_SHOOT_GUN, PRESSING_SHOOT_ROCKET);
 
@@ -874,12 +935,14 @@ int main(void){
 				}
 
 				//printf("%f", enemy.getAcceleration().x);
-				printf("%f", enemy1.getVelocity().y);
+				/*printf("%f", enemy1.getVelocity().y);
 				printf("\n");
 				printf("%f", player.getVelocity().y);
-				printf("\n");
+				printf("\n");*/
 
 
+				//slash.render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
+				//numbers[enemies.size()].render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
 
 
 				// Render entities
@@ -892,6 +955,10 @@ int main(void){
 				shader.enable();
 				AttributeBinding(shader.getShaderID());
 				
+				//std::cout << "Place: " << setPlayerStanding(&player, enemies, enemies.size()) << std::endl; 
+				setPlayerStanding(&player, enemies, enemies.size());
+				std::cout << "Place: " << player.getPlacement() << std::endl;
+				numbers[0].render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);//zero.render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
 				enemy1.render(shader);
 				enemy2.render(shader);
 				bhole.render(shader);
