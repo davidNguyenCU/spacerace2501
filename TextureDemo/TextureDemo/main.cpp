@@ -35,7 +35,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 26;
+static const int numTexs = 27;
 unsigned int game_state = 0;
 
 // Global texture info
