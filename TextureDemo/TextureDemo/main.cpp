@@ -706,7 +706,7 @@ int main(void){
 		physicsObjects.push_back(&enemy1);
 		physicsObjects.push_back(&enemy2);
 
-		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
+		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map2.txt"));
 
 		for (int i = 0; i < map1.getNumObjects(); i++)
 		{
