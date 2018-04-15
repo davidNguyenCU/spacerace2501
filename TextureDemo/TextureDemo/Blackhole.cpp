@@ -20,13 +20,15 @@ void Blackhole::update(double deltaTime) {
 
 void Blackhole::succ(DynamicGameEntity *succed) {
 
-	if (position.y - succed->getPosition().y < 1.5 &&
-		position.y - succed->getPosition().y > -1.5 &&
-		position.x - succed->getPosition().x < 1.5 &&
-		position.x - succed->getPosition().x > -1.5)
+	if (position.y - succed->getPosition().y < 1.0 &&
+		position.y - succed->getPosition().y > -1.0 &&
+		position.x - succed->getPosition().x < 1.0 &&
+		position.x - succed->getPosition().x > -1.0)
 	{
 		glm::vec3  vectored = glm::normalize(position - succed->getPosition());
-		succed->updateMomentum(vectored*6.5f);
+		if (succed->getMomentum().y > 20) {
+			succed->updateMomentum(vectored*5.5f);
+		}
 	}
 
 }
