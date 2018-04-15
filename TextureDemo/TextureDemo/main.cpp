@@ -236,6 +236,7 @@ void setallTexture(void)
 	setthisTexture(tex[24], "8.png");
 	setthisTexture(tex[25], "9.png");
 	setthisTexture(tex[26], "_Slash.png");
+	setthisTexture(tex[27], "Finish Line.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -264,6 +265,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[24]);
 	glBindTexture(GL_TEXTURE_2D, tex[25]);
 	glBindTexture(GL_TEXTURE_2D, tex[26]);
+	glBindTexture(GL_TEXTURE_2D, tex[27]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -704,7 +706,7 @@ int main(void){
 		physicsObjects.push_back(&enemy1);
 		physicsObjects.push_back(&enemy2);
 
-		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map1.txt"));
+		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map2.txt"));
 
 		for (int i = 0; i < map1.getNumObjects(); i++)
 		{
@@ -756,6 +758,8 @@ int main(void){
 		RenderedObject healthBar(tex[14]);
 		RenderedObject selectBar1(tex[14]);
 		RenderedObject selectBar2(tex[14]);
+
+		RenderedObject finishLine(tex[27]);
 
 		RenderedObject zero(tex[16]);
 		RenderedObject one(tex[17]);
@@ -989,9 +993,6 @@ int main(void){
 					nine.render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader); break;
 				}*/
 				//numbers[player.getPlacement()].render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.15f, 0.2f, 0.2f), 0.0f, size, shader);//zero.render(glm::vec3(), glm::vec3(1.0, 1.0, 1.0), 0, size, shader);
-				numbers[player.getPlacement()].render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
-				slash.render(glm::vec3(0.8f, 0.775f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
-				numbers[enemies.size() + 1].render(glm::vec3(0.9f, 0.75f, 0.0f), glm::vec3(0.1f, 0.15f, 0.2f), 0.0f, size, shader);
 
 				enemy1.render(shader);
 				enemy2.render(shader);
@@ -999,12 +1000,23 @@ int main(void){
 				powerup.render(shader);
 				gameManager.renderAll(shader);
 
+				numbers[player.getPlacement()].render(glm::vec3(0.7f, 0.8f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
+				slash.render(glm::vec3(0.8f, 0.775f, 0.0f), glm::vec3(0.1f, 0.15f, 0.0f), 0.0f, size, shader);
+				numbers[enemies.size() + 1].render(glm::vec3(0.9f, 0.75f, 0.0f), glm::vec3(0.1f, 0.15f, 0.2f), 0.0f, size, shader);
+
+				glm::vec3 finishLineScreenPos = glm::vec3(0.0f, 50.f, 0.0f) - player.getPosition();
+				finishLine.render(finishLineScreenPos, glm::vec3(1.25f, 0.07f, 0.0f), 0.0f, size, shader);
+
+
 				particleShader.enable();
 				AttributeBinding(particleShader.getShaderID());
 				drawParticles(particleShader.getShaderID(), glm::vec3(0, 0.01, 0), particleSize);
 				particleShader.disable();
 
 				shader.enable();
+
+
+
 				AttributeBinding(shader.getShaderID());
 				map.renderRoad(shader);
 				map.render(shader);
