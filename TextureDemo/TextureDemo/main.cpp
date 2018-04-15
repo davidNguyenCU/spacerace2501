@@ -677,7 +677,7 @@ int main(void){
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 		//PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
 		Blackhole bhole(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
-		PowerUp powerup(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[9], tex[1], size, accelerate);
+		PowerUp powerup(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[9], tex[1], size, accelerate);
 
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
@@ -957,6 +957,7 @@ int main(void){
 					asteroids.at(i)->render(shader);
 				}
 
+				std::cout << player.getVelocity().y << std::endl;
 				
 				shader.enable();
 				AttributeBinding(shader.getShaderID());

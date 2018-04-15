@@ -18,7 +18,7 @@ public:
 	float getWidth() { return width; }
 	float getHeight() { return height; }
 	int getType() { return type;}
-	inline void fastASTER() { momentum.y += 1000.0; }
+	inline void fastASTER() { momentum.y += 30.0; }
 	inline glm::vec3 getAcceleration() { return acceleration; }
 	inline glm::vec3 getVelocity() { return velocity; }
 	inline glm::vec3 getMomentum() { return momentum; }
