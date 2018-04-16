@@ -35,7 +35,7 @@ const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.2);
 
-static const int numTexs = 27;
+static const int numTexs = 29;
 unsigned int game_state = 0;
 
 // Global texture info
@@ -237,6 +237,7 @@ void setallTexture(void)
 	setthisTexture(tex[25], "9.png");
 	setthisTexture(tex[26], "_Slash.png");
 	setthisTexture(tex[27], "Finish Line.png");
+	setthisTexture(tex[28], "Speed.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 	glBindTexture(GL_TEXTURE_2D, tex[1]);
@@ -266,6 +267,7 @@ void setallTexture(void)
 	glBindTexture(GL_TEXTURE_2D, tex[25]);
 	glBindTexture(GL_TEXTURE_2D, tex[26]);
 	glBindTexture(GL_TEXTURE_2D, tex[27]);
+	glBindTexture(GL_TEXTURE_2D, tex[28]);
 }
 
 /*---------------------------------------------------------------------------------*/
@@ -679,7 +681,7 @@ int main(void){
 		EnemyAi aggresiveEnemy(&enemy2, aggresive);
 		//PowerUp powerup(glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[10], size, accelerate);
 		Blackhole bhole(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[15], size, &player);
-		PowerUp powerup(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[9], tex[1], size, accelerate);
+		PowerUp powerup(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), 90.0f, tex[28], tex[28], size, accelerate);
 
 
 		/*Asteroid aster1(glm::vec3(-0.25f, 1.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player);
@@ -702,13 +704,8 @@ int main(void){
 
 		vector <Asteroid*> asteroids;
 		vector <DynamicGameEntity*> physicsObjects;
-		physicsObjects.push_back(&player);
-		physicsObjects.push_back(&enemy1);
-		physicsObjects.push_back(&enemy2);
 
 		ObstacleMap obMap;
-
-		physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
 		/*physicsObjects.push_back(&aster1);
 		physicsObjects.push_back(&aster2);
 		physicsObjects.push_back(&aster3);
@@ -837,25 +834,24 @@ int main(void){
 				if (mapNum == 2) {
 					selectBar3.render(glm::vec3(0.85f, 0.07f, 0.0f), glm::vec3(0.16f, 0.18f, 1.0f), 0.0f, size, shader);
 					obMap = ObstacleMap(ResourceManager::LoadTextFile("Maps/Map2.txt"));
-
-					asteroids = {};
-					for (int i = 0; i < obMap.getNumObjects(); i++)
-					{
-						asteroids.push_back(new Asteroid(obMap.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
-						//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
-					}
 				}
 				else {
 					selectBar3.render(glm::vec3(0.69f, 0.07f, 0.0f), glm::vec3(0.16f, 0.18f, 1.0f), 0.0f, size, shader);
 					obMap = ObstacleMap(ResourceManager::LoadTextFile("Maps/Map1.txt"));
-
-					asteroids = {};
-					for (int i = 0; i < obMap.getNumObjects(); i++)
-					{
-						asteroids.push_back(new Asteroid(obMap.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
-						//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
-					}
 				}
+
+				asteroids = {};
+				for (int i = 0; i < obMap.getNumObjects(); i++)
+				{
+					asteroids.push_back(new Asteroid(obMap.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
+					//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+				}
+
+				physicsObjects = {};
+				physicsObjects.push_back(&player);
+				physicsObjects.push_back(&enemy1);
+				physicsObjects.push_back(&enemy2);
+				physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
 
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
 
