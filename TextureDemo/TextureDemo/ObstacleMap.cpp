@@ -1,5 +1,10 @@
 #include "ObstacleMap.h"
 
+ObstacleMap::ObstacleMap()
+{
+
+}
+
 ObstacleMap::ObstacleMap(std::string mapString)
 {
 	parseTextData(mapString);

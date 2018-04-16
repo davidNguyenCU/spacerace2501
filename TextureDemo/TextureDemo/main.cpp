@@ -221,7 +221,7 @@ void setallTexture(void)
 	setthisTexture(tex[9], "asteroid.png");
 	setthisTexture(tex[10], "turret.png");
 	setthisTexture(tex[11], "youWin.png");
-	setthisTexture(tex[12], "titlescreen2.png");
+	setthisTexture(tex[12], "titlescreen3.png");
 	setthisTexture(tex[13], "fire.png");
 	setthisTexture(tex[14], "healthBar.png");
 	setthisTexture(tex[15], "bhole.png");
@@ -706,13 +706,7 @@ int main(void){
 		physicsObjects.push_back(&enemy1);
 		physicsObjects.push_back(&enemy2);
 
-		ObstacleMap map1(ResourceManager::LoadTextFile("Maps/Map2.txt"));
-
-		for (int i = 0; i < map1.getNumObjects(); i++)
-		{
-			asteroids.push_back(new Asteroid(map1.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
-			//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
-		}
+		ObstacleMap obMap;
 
 		physicsObjects.insert(std::end(physicsObjects), std::begin(asteroids), std::end(asteroids));
 		/*physicsObjects.push_back(&aster1);
@@ -758,6 +752,7 @@ int main(void){
 		RenderedObject healthBar(tex[14]);
 		RenderedObject selectBar1(tex[14]);
 		RenderedObject selectBar2(tex[14]);
+		RenderedObject selectBar3(tex[14]);
 
 		RenderedObject finishLine(tex[27]);
 
@@ -778,6 +773,8 @@ int main(void){
 
 
 		RenderedObject slash(tex[26]);
+
+		int mapNum = 0;
 
         // Run the main loop
         bool animating = 1;
@@ -816,6 +813,7 @@ int main(void){
 			}
 
 			if (game_state == titlescreen) {
+
 				if (player.mass == 25.0f) {
 					selectBar1.render(glm::vec3(-0.8f, -0.06f, 0.0f), glm::vec3(0.16f, 0.21f, 1.0f), 0.0f, size, shader);
 				}
@@ -831,6 +829,32 @@ int main(void){
 				}
 				else {
 					selectBar2.render(glm::vec3(0.398f, -0.18f, 0.0f), glm::vec3(0.19f, 0.22f, 1.0f), 0.0f, size, shader);
+				}
+
+				numbers[1].render(glm::vec3(0.69f, 0.07f, 0.0f), glm::vec3(0.07, 0.1, 0.0f), 0.0f, size, shader);
+				numbers[2].render(glm::vec3(0.85f, 0.07f, 0.0f), glm::vec3(0.07, 0.1, 0.0f), 0.0f, size, shader);
+
+				if (mapNum == 2) {
+					selectBar3.render(glm::vec3(0.85f, 0.07f, 0.0f), glm::vec3(0.16f, 0.18f, 1.0f), 0.0f, size, shader);
+					obMap = ObstacleMap(ResourceManager::LoadTextFile("Maps/Map2.txt"));
+
+					asteroids = {};
+					for (int i = 0; i < obMap.getNumObjects(); i++)
+					{
+						asteroids.push_back(new Asteroid(obMap.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
+						//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+					}
+				}
+				else {
+					selectBar3.render(glm::vec3(0.69f, 0.07f, 0.0f), glm::vec3(0.16f, 0.18f, 1.0f), 0.0f, size, shader);
+					obMap = ObstacleMap(ResourceManager::LoadTextFile("Maps/Map1.txt"));
+
+					asteroids = {};
+					for (int i = 0; i < obMap.getNumObjects(); i++)
+					{
+						asteroids.push_back(new Asteroid(obMap.getObstaclePos(i), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), 0.0f, tex[9], size, &player));
+						//std::cout << asteroids.at(i)->getPosition().x << asteroids.at(i)->getPosition().y;
+					}
 				}
 
 				titleScreen.render(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(2.0f, 2.0f, 2.0f), 0.0f, size, shader);
@@ -857,8 +881,16 @@ int main(void){
 					player.dashType = 0;
 				}
 
-				
-
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_1)) {
+					printf("Map 1 \n");
+					mapNum = 1;
+					// Load map
+				}
+				if (glfwGetKey(window.getWindow(), GLFW_KEY_2)) {
+					printf("Map 2 \n");
+					mapNum = 2;
+					// Load map
+				}
 
 			}
 			else if (game_state == game) {

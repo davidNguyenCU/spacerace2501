@@ -7,6 +7,7 @@
 
 class ObstacleMap {
 public:
+	ObstacleMap();
 	ObstacleMap(std::string mapString);
 
 	glm::vec3 getObstaclePos(int index);
