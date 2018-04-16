@@ -48,12 +48,12 @@ void DynamicGameEntity::goFASTER(int yesSPD, double deltaTime) {
 	if (yesSPD == 1) {
 		//acceleration += 1.5 * deltaTime;
 		//updateMomentum(glm::vec3(0, 0.00001, 0));
-		momentum.y += 5;
+		momentum.y += 50*deltaTime;
 	}
 	else if (yesSPD == -1) {
 		//acceleration.y -= 1.5 * deltaTime;
 		//updateMomentum(glm::vec3(0, -0.00001, 0));
-		momentum.y -= 5;
+		momentum.y -= 50 * deltaTime;
 	}
 	else if (yesSPD == 0) {
 		//updateMomentum(glm::vec3(0, 0, 0));
