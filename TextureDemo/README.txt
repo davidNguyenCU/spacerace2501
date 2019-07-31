@@ -19,4 +19,6 @@ We hope you enjoy the game and would love to answer questions regarding any of t
 
 - Aaron, Brian, David
 
-Addendum: It appears that the exe file seems faulty. Running the application via the .sln file seems to work however. We're not sure as to how this came to be, but it's mostly the fact that this was heavily modified demo code from our class which has resulted in a lot of side effects we were't expecting.
+Addendum: It appears that the exe file seems faulty. Running the application via the .sln file seems to work however. We're not sure as to how this came to be, but it's mostly the fact that this was heavily modified demo code from our class which has resulted in a lot of side effects we were't expecting. The exe file for reference can be found in the Debug folder. 
+
+Addendum 2: If you are going to run the file via the .sln file, x64 has also proven troublesome, but x86 has no issues whatsoever. This has been a long standing bug ever since the source code was released and unfortunately we don't have much of an explanation for it.
