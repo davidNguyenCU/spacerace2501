@@ -18,3 +18,5 @@ In addition, the Q and E boosting can be swapped for an alternative blink displa
 We hope you enjoy the game and would love to answer questions regarding any of the mechanics.
 
 - Aaron, Brian, David
+
+Addendum: It appears that the exe file seems faulty. Running the application via the .sln file seems to work however. We're not sure as to how this came to be, but it's mostly the fact that this was heavily modified demo code from our class which has resulted in a lot of side effects we were't expecting.
